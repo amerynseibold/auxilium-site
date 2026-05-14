@@ -223,6 +223,7 @@ function StatusBadge({ status }: { status: string }) {
 export default function DashboardDemoPage() {
   const [activeScreen, setActiveScreen] = useState("Overview")
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null)
+  const [selectedQuote, setSelectedQuote] = useState<any>(null)
 
   return (
     <main className="min-h-screen bg-[#08090d] text-white">
@@ -687,7 +688,8 @@ export default function DashboardDemoPage() {
                     {quoteManagementData.map((quote) => (
                       <tr
                         key={quote.quoteNumber}
-                        className="border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
+                        onClick={() => setSelectedQuote(quote)}
+                        className="cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
                       >
                         <td className="px-5 py-5 font-medium text-white">
                           {quote.quoteNumber}
@@ -725,6 +727,148 @@ export default function DashboardDemoPage() {
                   </tbody>
                 </table>
               </div>
+              {/* =========================
+                  QUOTE DETAIL DRAWER
+              ========================== */}
+
+              {selectedQuote && (
+                <div
+                  className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm"
+                  onClick={() => setSelectedQuote(null)}
+                >
+
+                  {/* Drawer */}
+                  <div
+                    className="h-full w-full max-w-xl overflow-y-auto border-l border-white/10 bg-[#0d0f14] p-8 shadow-2xl"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+
+                    {/* Header */}
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                          Quote Detail
+                        </p>
+
+                        <h2 className="mt-3 text-3xl font-semibold text-white">
+                          {selectedQuote.quoteNumber}
+                        </h2>
+
+                        <p className="mt-2 text-zinc-400">
+                          {selectedQuote.customer}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => setSelectedQuote(null)}
+                        className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06]"
+                      >
+                        Close
+                      </button>
+                    </div>
+
+                    {/* Status */}
+                    <div className="mt-8">
+                      <p className="mb-3 text-sm text-zinc-500">
+                        Quote Status
+                      </p>
+
+                      <StatusBadge status={selectedQuote.status} />
+                    </div>
+
+                    {/* Quote Metrics */}
+                    <div className="mt-8 grid grid-cols-2 gap-4">
+
+                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                        <p className="text-sm text-zinc-500">
+                          Quote Amount
+                        </p>
+
+                        <p className="mt-2 text-2xl font-semibold text-white">
+                          {selectedQuote.amount}
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                        <p className="text-sm text-zinc-500">
+                          Assigned Owner
+                        </p>
+
+                        <p className="mt-2 text-2xl font-semibold text-white">
+                          {selectedQuote.owner}
+                        </p>
+                      </div>
+
+                    </div>
+
+                    {/* Services */}
+                    <div className="mt-8">
+                      <h3 className="text-lg font-semibold text-white">
+                        Scope of Work
+                      </h3>
+
+                      <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                          <div>
+                            <p className="font-medium text-white">
+                              {selectedQuote.service}
+                            </p>
+
+                            <p className="mt-1 text-sm text-zinc-500">
+                              Estimated materials and delivery included
+                            </p>
+                          </div>
+
+                          <p className="font-semibold text-white">
+                            {selectedQuote.amount}
+                          </p>
+                        </div>
+
+                        <div className="mt-4 flex items-center justify-between text-sm text-zinc-400">
+                          <span>Tax & Fees</span>
+                          <span>Included</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Timeline */}
+                    <div className="mt-8">
+                      <h3 className="text-lg font-semibold text-white">
+                        Activity Timeline
+                      </h3>
+
+                      <div className="mt-5 space-y-4">
+
+                        {[
+                          "Quote created and submitted",
+                          "Customer requested delivery adjustment",
+                          "Operations reviewed pricing",
+                          "Awaiting customer approval",
+                        ].map((event) => (
+                          <div
+                            key={event}
+                            className="flex gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                          >
+                            <div className="mt-1 h-2 w-2 rounded-full bg-white" />
+
+                            <div>
+                              <p className="text-sm text-white">
+                                {event}
+                              </p>
+
+                              <p className="mt-1 text-xs text-zinc-500">
+                                Recent activity
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )}                    
             </div>
           )}
 
@@ -836,10 +980,16 @@ export default function DashboardDemoPage() {
               ========================== */}
 
               {selectedCustomer && (
-                <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm">
+                <div
+                className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+                onClick={() => setSelectedCustomer(null)}
+                >
 
                   {/* Drawer Panel */}
-                  <div className="h-full w-full max-w-xl overflow-y-auto border-l border-white/10 bg-[#0d0f14] p-8 shadow-2xl">
+                  <div
+                    className="h-full w-full max-w-xl translate-x-0 overflow-y-auto border-l border-white/10 bg-[#0d0f14] p-8 shadow-2xl transition-transform duration-300 ease-out"
+                    onClick={(event) => event.stopPropagation()}
+                  >
 
                     {/* Header */}
                     <div className="flex items-start justify-between">
