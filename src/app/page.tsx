@@ -247,9 +247,7 @@ export default function Home() {
       ===================================================== */}
 
       <section id="work" className="max-w-7xl mx-auto px-6 pb-24 md:pb-32 scroll-mt-20">
-
         <div className="mb-10 md:mb-16">
-
           <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
             Featured Work
           </p>
@@ -257,31 +255,29 @@ export default function Home() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold">
             Real tools for real businesses.
           </h2>
-
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-
           <div className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]">
-
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Tree Service Tool
             </p>
 
-            <h3 className="text-3xl font-bold mb-4">
-              SnapQuote
-            </h3>
+            <div className="min-h-[96px]">
+              <h3 className="text-3xl font-bold leading-tight">
+                SnapQuote
+              </h3>
+            </div>
 
             <div className="relative w-full h-[230px] md:h-[260px] rounded-2xl overflow-hidden border border-white/10 mb-6">
-
               <Image
                 src="/snapquote-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="SnapQuote Preview"
                 fill
-                className="object-contain bg-white md:object-cover md:object-top transition duration-700 group-hover:scale-[1.03]"
+                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.03]"
               />
-
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-blue-400/30" />
             </div>
 
             <p className="text-base text-zinc-400 leading-relaxed">
@@ -289,29 +285,28 @@ export default function Home() {
               featuring dynamic pricing, PDF quote generation, customer history,
               and mobile-friendly workflows.
             </p>
-
           </div>
 
           <div className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]">
-
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Material Supplier Tool
             </p>
 
-            <h3 className="text-3xl font-bold mb-6">
-              Bulk Material Estimator
-            </h3>
+            <div className="min-h-[96px]">
+              <h3 className="text-3xl font-bold leading-tight">
+                Bulk Material Estimator
+              </h3>
+            </div>
 
             <div className="relative w-full h-[230px] md:h-[260px] rounded-2xl overflow-hidden border border-white/10 mb-6">
-
               <Image
                 src="/bulk-material-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="Bulk Material Estimator Preview"
                 fill
-                className="object-contain bg-white md:object-cover md:object-top transition duration-700 group-hover:scale-[1.03]"
+                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.03]"
               />
-
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-blue-400/30" />
             </div>
 
             <p className="text-base text-zinc-400 leading-relaxed">
@@ -319,57 +314,34 @@ export default function Home() {
               allowing customers to estimate delivery pricing and submit requests
               directly online.
             </p>
-
           </div>
 
-                    <a
+          <a
             href="/demo/dashboard"
             className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
           >
-
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Operations Dashboard
             </p>
 
-            <h3 className="text-3xl font-bold mb-4">
-              Operations Command Center
-            </h3>
+            <div className="min-h-[96px]">
+              <h3 className="text-3xl font-bold leading-tight">
+                Operations Command Center
+              </h3>
+            </div>
 
-            <div className="relative flex h-[230px] md:h-[260px] items-center justify-center rounded-2xl overflow-hidden border border-white/10 mb-6 bg-[#0d0f14]">
+            <div className="relative w-full h-[230px] md:h-[260px] rounded-2xl overflow-hidden border border-white/10 mb-6 bg-[#0d0f14]">
 
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_65%)]" />
+              <Image
+                src="/operations-dashboard-preview.png"
+                alt="Operations Dashboard Preview"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-contain bg-[#0d0f14] transition duration-700 group-hover:scale-[1.02]"
+              />
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-blue-400/30" />
 
-              <div className="relative z-10 grid grid-cols-2 gap-3 w-full max-w-[320px] px-4">
-
-                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                  <p className="text-xs text-zinc-500">Revenue</p>
-                  <p className="mt-2 text-xl font-semibold text-white">
-                    $158K
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                  <p className="text-xs text-zinc-500">Quotes</p>
-                  <p className="mt-2 text-xl font-semibold text-white">
-                    186
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                  <p className="text-xs text-zinc-500">Customers</p>
-                  <p className="mt-2 text-xl font-semibold text-white">
-                    73
-                  </p>
-                </div>
-
-                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-                  <p className="text-xs text-zinc-500">Jobs</p>
-                  <p className="mt-2 text-xl font-semibold text-white">
-                    28
-                  </p>
-                </div>
-
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0d0f14] via-transparent to-transparent" />
 
             </div>
 
@@ -379,14 +351,14 @@ export default function Home() {
               reporting, and workflow visibility.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition group-hover:gap-3">
-              View Live Demo →
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition">
+              <span>View Live Demo</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
             </div>
-
           </a>
-
         </div>
-
       </section>
 
       {/* =====================================================
@@ -602,19 +574,42 @@ export default function Home() {
       ===================================================== */}
 
       <footer className="max-w-7xl mx-auto px-6 pb-10">
+        <div className="border-t border-white/10 pt-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between text-sm text-zinc-500">
+          <div>
+            <p>
+              © 2026 Auxilium Business Solutions. All rights reserved.
+            </p>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between gap-4 text-sm text-zinc-500">
+            <p className="mt-2">
+              Business process modernization, automation, and custom operational tools.
+            </p>
+          </div>
 
-          <p>
-            © 2026 Auxilium Business Solutions. All rights reserved.
-          </p>
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="mailto:amerynseibold@hotmail.com"
+              className="transition hover:text-white"
+            >
+              Email
+            </a>
 
-          <p>
-            Business process modernization, automation, and custom operational tools.
-          </p>
+            <a
+              href="https://github.com/amerynseibold"
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:text-white"
+            >
+              GitHub
+            </a>
 
+            <a
+              href="#work"
+              className="transition hover:text-white"
+            >
+              Featured Work
+            </a>
+          </div>
         </div>
-
       </footer>
 
     </main>

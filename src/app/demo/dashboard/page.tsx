@@ -305,6 +305,13 @@ export default function DashboardDemoPage() {
             </p>
 
             <h2 className="mt-3 text-xl font-semibold">Command Center</h2>
+            
+            <a
+              href="/"
+              className="mt-4 inline-flex text-sm text-zinc-500 transition hover:text-white"
+            >
+              ← Back to Auxilium
+            </a>
           </div>
 
           <nav className="mt-10 space-y-2 text-sm">
@@ -331,11 +338,17 @@ export default function DashboardDemoPage() {
           </nav>
 
           <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-            <p className="text-sm font-medium text-white">Demo Environment</p>
-
-            <p className="mt-2 text-sm leading-6 text-zinc-500">
-              Sample data shown for a bulk materials and service business.
+            <p className="text-sm font-medium text-white">
+              Dashboard Highlights
             </p>
+
+            <div className="mt-4 space-y-3 text-sm text-zinc-400">
+              <p>• Quote & pipeline tracking</p>
+              <p>• Customer management workflows</p>
+              <p>• Operational reporting views</p>
+              <p>• Mobile-responsive UI system</p>
+              <p>• Interactive management screens</p>
+            </div>
           </div>
         </aside>
 
@@ -348,6 +361,12 @@ export default function DashboardDemoPage() {
                     Auxilium
                   </p>
                   <h2 className="mt-3 text-xl font-semibold">Command Center</h2>
+                  <a
+                    href="/"
+                    className="mt-4 inline-flex text-sm text-zinc-500 transition hover:text-white"
+                  >
+                    ← Back to Auxilium
+                  </a>
                 </div>
 
                 <button
@@ -428,6 +447,13 @@ export default function DashboardDemoPage() {
                 AS
               </div>
             </div>
+          </div>
+
+          <div className="mb-8 rounded-2xl border border-blue-500/20 bg-blue-500/10 px-5 py-4 text-sm text-blue-100">
+            <span className="font-medium">Demo Mode:</span>{" "}
+            This dashboard uses sample data to showcase how Auxilium can organize quotes,
+            customers, jobs, reporting, and operational workflows for service-based
+            businesses.
           </div>
 
           {/* =====================================================
@@ -1354,6 +1380,93 @@ export default function DashboardDemoPage() {
                   </tbody>
                 </table>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* =====================================================
+              FOLLOW-UP SCREEN
+          ====================================================== */}
+
+
+          {activeScreen === "Follow-Up" && (
+            <div>
+              <div className="border-b border-white/10 pb-8">
+                <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                  Follow-Up Management
+                </p>
+
+                <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                  Follow-Up Queue
+                </h1>
+
+                <p className="mt-4 max-w-2xl text-zinc-400">
+                  Prioritize open quotes, delayed responses, revised pricing requests,
+                  and customer outreach before opportunities go cold.
+                </p>
+              </div>
+
+              <div className="mt-8 grid gap-4 md:grid-cols-3">
+                <KpiCard title="Due Today" value="8" detail="Require outreach" icon={FileText} />
+                <KpiCard title="High Value" value="3" detail="Commercial opportunities" icon={DollarSign} />
+                <KpiCard title="Overdue" value="5" detail="Past recommended follow-up" icon={Activity} />
+              </div>
+
+              <div className="mt-6 grid gap-4">
+                {[
+                  "Call North Ridge Homes about pending mason sand quote.",
+                  "Send revised gravel delivery pricing to Oakline Outdoor Living.",
+                  "Confirm delivery window with Cedar Creek Pools.",
+                  "Follow up on commercial bid with Miller Landscape Co.",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-zinc-300"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* =====================================================
+              REPORTS SCREEN
+          ====================================================== */}
+          
+
+          {activeScreen === "Reports" && (
+            <div>
+              <div className="border-b border-white/10 pb-8">
+                <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                  Business Reporting
+                </p>
+
+                <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                  Reports
+                </h1>
+
+                <p className="mt-4 max-w-2xl text-zinc-400">
+                  Turn quote, customer, and job activity into practical performance
+                  visibility for owners and operators.
+                </p>
+              </div>
+
+              <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <KpiCard title="Monthly Revenue" value="$38.9K" detail="June performance" icon={DollarSign} />
+                <KpiCard title="Quote Conversion" value="64%" detail="Approved quote ratio" icon={TrendingUp} />
+                <KpiCard title="Avg Job Size" value="$2,180" detail="Across active jobs" icon={FileText} />
+                <KpiCard title="Repeat Customers" value="41%" detail="Customers with 2+ quotes" icon={Users} />
+              </div>
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+                <h2 className="text-xl font-semibold">Reporting Snapshot</h2>
+
+                <p className="mt-4 leading-7 text-zinc-400">
+                  This view would typically summarize trends from the client’s available
+                  data sources, such as quote history, completed jobs, customer records,
+                  invoice exports, or operational spreadsheets.
+                </p>
               </div>
             </div>
           )}
