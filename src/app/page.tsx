@@ -18,14 +18,15 @@ export default function Home() {
 
           <div className="flex items-center justify-between gap-4">
 
+           <div className="w-[240px] md:w-[320px]"> 
             <Image
               src="/auxilium-logo-tight.png"
               alt="Auxilium Logo"
               width={320}
               height={60}
               priority
-              className="w-[240px] md:w-[320px] h-auto"
             />
+           </div>
 
             <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
               <a href="#work" className="hover:text-white transition">
@@ -259,7 +260,7 @@ export default function Home() {
 
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
           <div className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]">
 
@@ -275,6 +276,7 @@ export default function Home() {
 
               <Image
                 src="/snapquote-preview.png"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 alt="SnapQuote Preview"
                 fill
                 className="object-contain bg-white md:object-cover md:object-top transition duration-700 group-hover:scale-[1.03]"
@@ -304,6 +306,7 @@ export default function Home() {
 
               <Image
                 src="/bulk-material-preview.png"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 alt="Bulk Material Estimator Preview"
                 fill
                 className="object-contain bg-white md:object-cover md:object-top transition duration-700 group-hover:scale-[1.03]"
@@ -318,6 +321,69 @@ export default function Home() {
             </p>
 
           </div>
+
+                    <a
+            href="/demo/dashboard"
+            className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
+          >
+
+            <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
+              Operations Dashboard
+            </p>
+
+            <h3 className="text-3xl font-bold mb-4">
+              Operations Command Center
+            </h3>
+
+            <div className="relative flex h-[230px] md:h-[260px] items-center justify-center rounded-2xl overflow-hidden border border-white/10 mb-6 bg-[#0d0f14]">
+
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_65%)]" />
+
+              <div className="relative z-10 grid grid-cols-2 gap-3 w-full max-w-[320px] px-4">
+
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-xs text-zinc-500">Revenue</p>
+                  <p className="mt-2 text-xl font-semibold text-white">
+                    $158K
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-xs text-zinc-500">Quotes</p>
+                  <p className="mt-2 text-xl font-semibold text-white">
+                    186
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-xs text-zinc-500">Customers</p>
+                  <p className="mt-2 text-xl font-semibold text-white">
+                    73
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+                  <p className="text-xs text-zinc-500">Jobs</p>
+                  <p className="mt-2 text-xl font-semibold text-white">
+                    28
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+
+            <p className="text-base text-zinc-400 leading-relaxed">
+              A modern operational dashboard concept for service-based businesses,
+              featuring quote management, customer tracking, job scheduling,
+              reporting, and workflow visibility.
+            </p>
+
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition group-hover:gap-3">
+              View Live Demo →
+            </div>
+
+          </a>
 
         </div>
 

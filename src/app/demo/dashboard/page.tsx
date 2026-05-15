@@ -286,7 +286,7 @@ export default function DashboardDemoPage() {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setChartsReady(true)
-    }, 150)
+    }, 500)
 
     return () => window.clearTimeout(timer)
   }, [])
