@@ -587,13 +587,6 @@ export default function Home() {
 
           <div className="flex flex-wrap gap-4">
             <a
-              href="mailto:amerynseibold@hotmail.com"
-              className="transition hover:text-white"
-            >
-              Email
-            </a>
-
-            <a
               href="https://github.com/amerynseibold"
               target="_blank"
               rel="noreferrer"
