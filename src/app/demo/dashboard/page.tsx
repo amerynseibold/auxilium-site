@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
   BarChart,
@@ -281,6 +281,15 @@ export default function DashboardDemoPage() {
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null)
   const [selectedQuote, setSelectedQuote] = useState<any>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [chartsReady, setChartsReady] = useState(false)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setChartsReady(true)
+    }, 150)
+
+    return () => window.clearTimeout(timer)
+  }, [])
 
   return (
     <main className="min-h-screen bg-[#08090d] text-white">
@@ -479,7 +488,7 @@ export default function DashboardDemoPage() {
                 />
               </div>
 
-              <div className="mt-6 grid gap-6 xl:grid-cols-[2fr_1fr]">
+              <div className="mt-6 grid min-w-0 gap-6 xl:grid-cols-[2fr_1fr]">
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                   <div className="mb-6 flex items-center justify-between">
                     <div>
@@ -492,21 +501,23 @@ export default function DashboardDemoPage() {
                     <Activity className="h-5 w-5 text-zinc-500" />
                   </div>
 
-                  <div className="h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={revenueData}>
-                        <XAxis dataKey="month" stroke="#71717a" />
-                        <YAxis stroke="#71717a" />
-                        <Tooltip />
-                        <Line
-                          type="monotone"
-                          dataKey="revenue"
-                          stroke="#e5e7eb"
-                          strokeWidth={3}
-                          dot={false}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+                  <div className="h-72 min-h-[288px] min-w-0">
+                    {chartsReady && (
+                      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                        <LineChart data={revenueData}>
+                          <XAxis dataKey="month" stroke="#71717a" />
+                          <YAxis stroke="#71717a" />
+                          <Tooltip />
+                          <Line
+                            type="monotone"
+                            dataKey="revenue"
+                            stroke="#e5e7eb"
+                            strokeWidth={3}
+                            dot={false}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    )}
                   </div>
                 </div>
 
@@ -522,19 +533,21 @@ export default function DashboardDemoPage() {
                     <CalendarDays className="h-5 w-5 text-zinc-500" />
                   </div>
 
-                  <div className="h-72">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={serviceData}>
-                        <XAxis dataKey="service" stroke="#71717a" />
-                        <YAxis stroke="#71717a" />
-                        <Tooltip />
-                        <Bar
-                          dataKey="jobs"
-                          fill="#e5e7eb"
-                          radius={[8, 8, 0, 0]}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
+                  <div className="h-72 min-h-[288px] min-w-0">
+                    {chartsReady && (
+                      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                        <BarChart data={serviceData}>
+                          <XAxis dataKey="service" stroke="#71717a" />
+                          <YAxis stroke="#71717a" />
+                          <Tooltip />
+                          <Bar
+                            dataKey="jobs"
+                            fill="#e5e7eb"
+                            radius={[8, 8, 0, 0]}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    )}
                   </div>
                 </div>
               </div>
