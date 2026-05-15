@@ -21,6 +21,8 @@ import {
   TrendingUp,
   Users,
   MoreHorizontal,
+  Menu,
+  X,
 } from "lucide-react"
 
 /* =========================================================
@@ -278,6 +280,7 @@ export default function DashboardDemoPage() {
   const [activeScreen, setActiveScreen] = useState("Overview")
   const [selectedCustomer, setSelectedCustomer] = useState<any>(null)
   const [selectedQuote, setSelectedQuote] = useState<any>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <main className="min-h-screen bg-[#08090d] text-white">
@@ -327,6 +330,49 @@ export default function DashboardDemoPage() {
           </div>
         </aside>
 
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden">
+            <div className="h-full w-80 border-r border-white/10 bg-[#0d0f14] p-6 shadow-2xl">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.35em] text-zinc-500">
+                    Auxilium
+                  </p>
+                  <h2 className="mt-3 text-xl font-semibold">Command Center</h2>
+                </div>
+
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-xl border border-white/10 bg-white/[0.04] p-2 text-zinc-300"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <nav className="mt-10 space-y-2 text-sm">
+                {["Overview", "Quotes", "Customers", "Jobs", "Follow-Up", "Reports"].map(
+                  (item) => (
+                    <button
+                      key={item}
+                      onClick={() => {
+                        setActiveScreen(item)
+                        setMobileMenuOpen(false)
+                      }}
+                      className={`w-full rounded-xl px-4 py-3 text-left transition ${
+                        activeScreen === item
+                          ? "bg-white text-black"
+                          : "text-zinc-400 hover:bg-white/[0.06] hover:text-white"
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                )}
+              </nav>
+            </div>
+          </div>
+        )}
+
         {/* =========================
             MAIN CONTENT
         ========================== */}
@@ -337,6 +383,21 @@ export default function DashboardDemoPage() {
           ========================== */}
 
           <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center justify-between lg:hidden">
+              <div>
+                <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">
+                  Auxilium
+                </p>
+                <p className="mt-1 font-semibold text-white">Command Center</p>
+              </div>
+
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-zinc-300"
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+            </div>
             <div className="flex-1">
               <input
                 type="text"
@@ -645,7 +706,7 @@ export default function DashboardDemoPage() {
 
                 <div className="overflow-hidden rounded-xl border border-white/10">
                   <table className="w-full text-left text-sm">
-                    <thead className="bg-white/[0.04] text-zinc-400">
+                    <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
                       <tr>
                         <th className="px-4 py-3 font-medium">Customer</th>
                         <th className="px-4 py-3 font-medium">Service</th>
@@ -722,8 +783,9 @@ export default function DashboardDemoPage() {
               </div>
 
               <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg">
+               <div className="max-h-[650px] overflow-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-white/[0.04] text-zinc-400">
+                  <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
                     <tr>
                       <th className="px-5 py-4 font-medium">Quote #</th>
                       <th className="px-5 py-4 font-medium">Customer</th>
@@ -780,6 +842,7 @@ export default function DashboardDemoPage() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
               {/* =========================
                   QUOTE DETAIL DRAWER
@@ -977,8 +1040,9 @@ export default function DashboardDemoPage() {
               </div>
 
               <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg">
+               <div className="max-h-[650px] overflow-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-white/[0.04] text-zinc-400">
+                  <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
                     <tr>
                       <th className="px-5 py-4 font-medium">Customer</th>
                       <th className="px-5 py-4 font-medium">Type</th>
@@ -1028,6 +1092,7 @@ export default function DashboardDemoPage() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
               {/* =========================
                   CUSTOMER DETAIL DRAWER
@@ -1211,8 +1276,9 @@ export default function DashboardDemoPage() {
               </div>
 
               <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg">
+               <div className="max-h-[650px] overflow-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-white/[0.04] text-zinc-400">
+                  <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
                     <tr>
                       <th className="px-5 py-4 font-medium">Job #</th>
                       <th className="px-5 py-4 font-medium">Customer</th>
@@ -1274,6 +1340,7 @@ export default function DashboardDemoPage() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           )}
