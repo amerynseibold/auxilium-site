@@ -258,7 +258,12 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          <div className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]">
+          <a
+            href="https://snapquote-gilt.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
+          >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Tree Service Tool
             </p>
@@ -285,9 +290,21 @@ export default function Home() {
               featuring dynamic pricing, PDF quote generation, customer history,
               and mobile-friendly workflows.
             </p>
-          </div>
 
-          <div className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]">
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition-all duration-300 group-hover:gap-3">
+              <span>View Live Demo</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </div>            
+          </a>
+
+          <a
+            href="https://bulk-material-demo-app.vercel.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
+          >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Material Supplier Tool
             </p>
@@ -314,7 +331,14 @@ export default function Home() {
               allowing customers to estimate delivery pricing and submit requests
               directly online.
             </p>
-          </div>
+
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition-all duration-300 group-hover:gap-3">
+              <span>View Live Demo</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </div>
+          </a>
 
           <a
             href="/demo/dashboard"
@@ -351,7 +375,7 @@ export default function Home() {
               reporting, and workflow visibility.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition">
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition-all duration-300 group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →

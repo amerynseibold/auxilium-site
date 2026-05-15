@@ -277,12 +277,25 @@ function KpiCard({
   value,
   detail,
   icon: Icon,
+  trend,
+  trendLabel,
+  trendDirection = "up",
 }: {
   title: string
   value: string
   detail: string
   icon: React.ElementType
+  trend?: string
+  trendLabel?: string
+  trendDirection?: "up" | "down" | "neutral"
 }) {
+  const trendStyles =
+    trendDirection === "up"
+      ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-300"
+      : trendDirection === "down"
+      ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
+      : "border-zinc-500/20 bg-zinc-500/10 text-zinc-300"
+
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
       <div className="flex items-center justify-between">
@@ -290,11 +303,28 @@ function KpiCard({
         <Icon className="h-5 w-5 text-zinc-500" />
       </div>
 
-      <p className="mt-4 text-3xl font-semibold tracking-tight text-white">
-        {value}
-      </p>
+      <div className="mt-4 flex items-end justify-between gap-4">
+        <p className="text-3xl font-semibold tracking-tight text-white">
+          {value}
+        </p>
+
+        {trend && (
+          <span
+            className={`rounded-full border px-2.5 py-1 text-xs font-medium ${trendStyles}`}
+          >
+            {trendDirection === "down" ? "↓" : trendDirection === "up" ? "↑" : "•"}{" "}
+            {trend}
+          </span>
+        )}
+      </div>
 
       <p className="mt-2 text-sm text-zinc-500">{detail}</p>
+
+      {trendLabel && (
+        <p className="mt-3 text-xs text-zinc-500">
+          {trendLabel}
+        </p>
+      )}
     </div>
   )
 }
@@ -383,13 +413,19 @@ export default function DashboardDemoPage() {
               <button
                 key={item}
                 onClick={() => setActiveScreen(item)}
-                className={`w-full rounded-xl px-4 py-3 text-left transition ${
+                className={`relative w-full rounded-xl px-4 py-3 text-left transition ${
                   activeScreen === item
-                    ? "bg-white text-black"
+                    ? "bg-white text-black shadow-lg shadow-white/10"
                     : "text-zinc-400 hover:bg-white/[0.06] hover:text-white"
                 }`}
               >
-                {item}
+                <span className="flex items-center gap-3">
+                  {activeScreen === item && (
+                    <span className="h-2 w-2 rounded-full bg-black" />
+                  )}
+
+                  {item}
+                </span>
               </button>
             ))}
           </nav>
@@ -435,24 +471,35 @@ export default function DashboardDemoPage() {
               </div>
 
               <nav className="mt-10 space-y-2 text-sm">
-                {["Overview", "Quotes", "Customers", "Jobs", "Follow-Up", "Reports"].map(
-                  (item) => (
-                    <button
-                      key={item}
-                      onClick={() => {
-                        setActiveScreen(item)
-                        setMobileMenuOpen(false)
-                      }}
-                      className={`w-full rounded-xl px-4 py-3 text-left transition ${
-                        activeScreen === item
-                          ? "bg-white text-black"
-                          : "text-zinc-400 hover:bg-white/[0.06] hover:text-white"
-                      }`}
-                    >
+                {[
+                  "Overview",
+                  "Quotes",
+                  "Customers",
+                  "Jobs",
+                  "Follow-Up",
+                  "Reports",
+                ].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      setActiveScreen(item)
+                      setMobileMenuOpen(false)
+                    }}
+                    className={`relative w-full rounded-xl px-4 py-3 text-left transition ${
+                      activeScreen === item
+                        ? "bg-white text-black shadow-lg shadow-white/10"
+                        : "text-zinc-400 hover:bg-white/[0.06] hover:text-white"
+                    }`}
+                  >
+                    <span className="flex items-center gap-3">
+                      {activeScreen === item && (
+                        <span className="h-2 w-2 rounded-full bg-black" />
+                      )}
+
                       {item}
-                    </button>
-                  )
-                )}
+                    </span>
+                  </button>
+                ))}
               </nav>
             </div>
           </div>
@@ -506,7 +553,7 @@ export default function DashboardDemoPage() {
             </div>
           </div>
 
-          <div className="mb-8 rounded-2xl border border-blue-500/20 bg-blue-500/10 px-5 py-4 text-sm text-blue-100">
+          <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-zinc-300">
             <span className="font-medium">Demo Mode:</span>{" "}
             This dashboard uses sample data to showcase how Auxilium can organize quotes,
             customers, jobs, reporting, and operational workflows for service-based
@@ -554,6 +601,9 @@ export default function DashboardDemoPage() {
                   title="Revenue"
                   value="$158.2K"
                   detail="+18.4% from previous period"
+                  trend="18.4%"
+                  trendLabel="Compared to prior 6 months"
+                  trendDirection="up"
                   icon={DollarSign}
                 />
 
@@ -561,6 +611,9 @@ export default function DashboardDemoPage() {
                   title="Quotes Sent"
                   value="186"
                   detail="42 awaiting customer response"
+                  trend="12.1%"
+                  trendLabel="Quote volume increased"
+                  trendDirection="up"
                   icon={FileText}
                 />
 
@@ -568,6 +621,9 @@ export default function DashboardDemoPage() {
                   title="Conversion Rate"
                   value="64%"
                   detail="Approved quote ratio"
+                  trend="3.2%"
+                  trendLabel="Slight improvement in approvals"
+                  trendDirection="up"
                   icon={TrendingUp}
                 />
 
@@ -575,6 +631,9 @@ export default function DashboardDemoPage() {
                   title="Active Customers"
                   value="73"
                   detail="Across residential and commercial"
+                  trend="8"
+                  trendLabel="New active accounts"
+                  trendDirection="up"
                   icon={Users}
                 />
               </div>
@@ -595,11 +654,19 @@ export default function DashboardDemoPage() {
                   <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                     <div className="mb-6 flex items-center justify-between">
                       <div>
-                        <h2 className="text-lg font-semibold">
-                          Revenue Trend
-                        </h2>
-                        <p className="text-sm text-zinc-500">
-                          Monthly quoted and approved revenue
+                        <div className="flex items-center gap-2">
+                          <h2 className="text-lg font-semibold">
+                            Revenue Trend
+                          </h2>
+
+                          <div className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-emerald-300">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            Live
+                          </div>
+                        </div>
+
+                        <p className="mt-1 text-sm text-zinc-500">
+                          Monthly quoted and approved revenue • Updated 2 min ago
                         </p>
                       </div>
 
@@ -1063,9 +1130,19 @@ export default function DashboardDemoPage() {
                       {recentQuotes.map((quote) => (
                         <tr
                           key={quote.customer}
-                          className="border-t border-white/10 text-zinc-300"
+                          className="group cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
                         >
-                          <td className="px-4 py-4">{quote.customer}</td>
+                          <td className="px-4 py-4">
+                            <div className="flex items-center justify-between gap-4">
+                              <span className="font-medium text-white">
+                                {quote.customer}
+                              </span>
+
+                              <span className="text-xs font-medium text-blue-400 opacity-0 transition group-hover:opacity-100">
+                                View →
+                              </span>
+                            </div>  
+                          </td>
                           <td className="px-4 py-4 text-zinc-400">
                             {quote.service}
                           </td>
@@ -1759,14 +1836,8 @@ export default function DashboardDemoPage() {
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
-                  <button className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06]">
-                    Last 6 Months
-                  </button>
-
-                  <button className="rounded-xl bg-white px-4 py-3 text-sm font-medium text-black transition hover:bg-zinc-200">
-                    Export Report
-                  </button>
+                <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-400">
+                  Updated automatically every 15 minutes
                 </div>
               </div>
 
