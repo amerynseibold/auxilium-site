@@ -297,31 +297,41 @@ function KpiCard({
       : "border-zinc-500/20 bg-zinc-500/10 text-zinc-300"
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-400">{title}</p>
-        <Icon className="h-5 w-5 text-zinc-500" />
+    <div className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] p-3 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:p-5">
+      
+      <div className="flex items-center justify-between gap-2">
+        <p className="truncate text-xs text-zinc-400 sm:text-sm">
+          {title}
+        </p>
+
+        <Icon className="h-4 w-4 shrink-0 text-zinc-500 sm:h-5 sm:w-5" />
       </div>
 
-      <div className="mt-4 flex items-end justify-between gap-4">
-        <p className="text-3xl font-semibold tracking-tight text-white">
+      <div className="mt-3 flex items-end justify-between gap-2 sm:mt-4">
+        <p className="text-xl font-semibold tracking-tight text-white sm:text-3xl">
           {value}
         </p>
 
         {trend && (
           <span
-            className={`rounded-full border px-2.5 py-1 text-xs font-medium ${trendStyles}`}
+            className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-medium sm:px-2.5 sm:py-1 sm:text-xs ${trendStyles}`}
           >
-            {trendDirection === "down" ? "↓" : trendDirection === "up" ? "↑" : "•"}{" "}
+            {trendDirection === "down"
+              ? "↓"
+              : trendDirection === "up"
+              ? "↑"
+              : "•"}{" "}
             {trend}
           </span>
         )}
       </div>
 
-      <p className="mt-2 text-sm text-zinc-500">{detail}</p>
+      <p className="mt-2 text-[11px] leading-4 text-zinc-500 sm:text-sm sm:leading-5">
+        {detail}
+      </p>
 
       {trendLabel && (
-        <p className="mt-3 text-xs text-zinc-500">
+        <p className="mt-2 text-[10px] leading-4 text-zinc-600 sm:mt-3 sm:text-xs">
           {trendLabel}
         </p>
       )}
@@ -576,7 +586,7 @@ export default function DashboardDemoPage() {
                     Auxilium Demo
                   </p>
 
-                  <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                  <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
                     Operations Command Center
                   </h1>
 
@@ -594,9 +604,11 @@ export default function DashboardDemoPage() {
 
               {/* =========================
                   KPI SUMMARY CARDS
+                  Mobile: 2-column compact layout
+                  Desktop: unchanged
               ========================== */}
 
-              <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="mt-8 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 md:gap-4 xl:grid-cols-4">
                 <KpiCard
                   title="Revenue"
                   value="$158.2K"
