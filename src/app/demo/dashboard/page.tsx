@@ -161,6 +161,54 @@ const customerData = [
   },
 ]
 
+const jobData = [
+  {
+    jobNumber: "J-2201",
+    customer: "Miller Landscape Co.",
+    service: "Pea Gravel Delivery",
+    scheduledDate: "Jun 20",
+    crew: "Dispatch Team A",
+    status: "Scheduled",
+    priority: "High",
+  },
+  {
+    jobNumber: "J-2200",
+    customer: "Cedar Creek Pools",
+    service: "River Rock Delivery",
+    scheduledDate: "Jun 20",
+    crew: "Dispatch Team B",
+    status: "In Progress",
+    priority: "Normal",
+  },
+  {
+    jobNumber: "J-2199",
+    customer: "Hawthorne Builders",
+    service: "Fill Sand Delivery",
+    scheduledDate: "Jun 19",
+    crew: "Dispatch Team A",
+    status: "Completed",
+    priority: "Normal",
+  },
+  {
+    jobNumber: "J-2198",
+    customer: "Oakline Outdoor Living",
+    service: "Gravel Delivery",
+    scheduledDate: "Jun 21",
+    crew: "Pending Assignment",
+    status: "Needs Review",
+    priority: "High",
+  },
+  {
+    jobNumber: "J-2197",
+    customer: "North Ridge Homes",
+    service: "Mason Sand Pickup",
+    scheduledDate: "Jun 22",
+    crew: "Customer Pickup",
+    status: "Scheduled",
+    priority: "Normal",
+  },
+]
+
 /* =========================================================
    REUSABLE COMPONENTS
 ========================================================= */
@@ -208,6 +256,12 @@ function StatusBadge({ status }: { status: string }) {
           ? "border-orange-500/20 bg-orange-500/10 text-orange-300"
           : status === "Needs Review"
           ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
+          : status === "Scheduled"
+          ? "border-blue-500/20 bg-blue-500/10 text-blue-300"
+          : status === "In Progress"
+          ? "border-yellow-500/20 bg-yellow-500/10 text-yellow-300"
+          : status === "Completed"
+          ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-300"
           : "border-zinc-500/20 bg-zinc-500/10 text-zinc-300"
       }`}
     >
@@ -1103,6 +1157,124 @@ export default function DashboardDemoPage() {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* =====================================================
+              JOBS SCREEN
+          ====================================================== */}
+
+          {activeScreen === "Jobs" && (
+            <div>
+              <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                    Job Operations
+                  </p>
+
+                  <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                    Scheduled Jobs
+                  </h1>
+
+                  <p className="mt-4 max-w-2xl text-zinc-400">
+                    Track scheduled deliveries, crew assignments, completion
+                    status, and operational issues from one dispatch-ready view.
+                  </p>
+                </div>
+
+                <button className="rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200">
+                  Schedule Job
+                </button>
+              </div>
+
+              <div className="mt-8 grid gap-4 md:grid-cols-3">
+                <KpiCard
+                  title="Jobs Scheduled"
+                  value="28"
+                  detail="Next 7 operating days"
+                  icon={CalendarDays}
+                />
+
+                <KpiCard
+                  title="In Progress"
+                  value="6"
+                  detail="Currently assigned to crews"
+                  icon={Activity}
+                />
+
+                <KpiCard
+                  title="Needs Review"
+                  value="3"
+                  detail="Missing schedule or crew detail"
+                  icon={FileText}
+                />
+              </div>
+
+              <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-white/[0.04] text-zinc-400">
+                    <tr>
+                      <th className="px-5 py-4 font-medium">Job #</th>
+                      <th className="px-5 py-4 font-medium">Customer</th>
+                      <th className="px-5 py-4 font-medium">Service</th>
+                      <th className="px-5 py-4 font-medium">Scheduled</th>
+                      <th className="px-5 py-4 font-medium">Crew</th>
+                      <th className="px-5 py-4 font-medium">Priority</th>
+                      <th className="px-5 py-4 font-medium">Status</th>
+                      <th className="px-5 py-4 text-right font-medium"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {jobData.map((job) => (
+                      <tr
+                        key={job.jobNumber}
+                        className="border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
+                      >
+                        <td className="px-5 py-5 font-medium text-white">
+                          {job.jobNumber}
+                        </td>
+
+                        <td className="px-5 py-5">{job.customer}</td>
+
+                        <td className="px-5 py-5 text-zinc-400">
+                          {job.service}
+                        </td>
+
+                        <td className="px-5 py-5 text-zinc-400">
+                          {job.scheduledDate}
+                        </td>
+
+                        <td className="px-5 py-5 text-zinc-400">
+                          {job.crew}
+                        </td>
+
+                        <td className="px-5 py-5">
+                          <span
+                            className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                              job.priority === "High"
+                                ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
+                                : "border-zinc-500/20 bg-zinc-500/10 text-zinc-300"
+                            }`}
+                          >
+                            {job.priority}
+                          </span>
+                        </td>
+
+                        <td className="px-5 py-5">
+                          <StatusBadge status={job.status} />
+                        </td>
+
+                        <td className="px-5 py-5 text-right">
+                          <button className="rounded-lg p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
+                            <MoreHorizontal className="h-5 w-5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </section>

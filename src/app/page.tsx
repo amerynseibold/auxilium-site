@@ -98,50 +98,132 @@ export default function Home() {
 
               </div>
 
-              {/* RIGHT: HERO VALUE PANEL */}
+              {/* RIGHT: HERO DASHBOARD VISUAL */}
               <div className="hidden lg:block">
 
-                <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-8 backdrop-blur-sm shadow-[0_0_80px_rgba(33,168,255,0.08)]">
+                <div className="relative">
 
-                  <p className="uppercase tracking-[0.3em] text-xs text-blue-400 mb-6">
-                    Common Pain Points
-                  </p>
+                  {/* Soft dashboard glow */}
+                  <div className="absolute inset-0 bg-blue-500/10 blur-[90px] rounded-full" />
 
-                  <div className="space-y-4 mb-8">
+                  <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-6 backdrop-blur-sm shadow-[0_0_80px_rgba(33,168,255,0.08)]">
 
-                    {[
-                      "Manual quote requests",
-                      "Repeated data entry",
-                      "Disconnected spreadsheets",
-                      "Slow reporting",
-                    ].map((item) => (
-                      <div key={item} className="flex items-center gap-3 text-zinc-300">
-                        <span className="h-2 w-2 rounded-full bg-red-400/80" />
-                        <span>{item}</span>
+                    {/* Dashboard Header */}
+                    <div className="flex items-center justify-between mb-6">
+
+                      <div>
+                        <p className="text-sm text-zinc-400">
+                          Operations Dashboard
+                        </p>
+
+                        <h3 className="text-2xl font-semibold mt-1">
+                          Workflow Overview
+                        </h3>
                       </div>
-                    ))}
 
-                  </div>
+                      <span className="rounded-full bg-green-400/10 border border-green-400/20 px-3 py-1 text-xs text-green-300">
+                        Live
+                      </span>
 
-                  <div className="border-t border-white/10 pt-8">
+                    </div>
 
-                    <p className="uppercase tracking-[0.3em] text-xs text-blue-400 mb-6">
-                      What We Build
-                    </p>
+                    {/* Metrics */}
+                    <div className="grid grid-cols-3 gap-3 mb-6">
 
-                    <div className="space-y-4">
+                      <div className="rounded-2xl bg-black/20 border border-white/10 p-4">
+                        <p className="text-xs text-zinc-500 mb-2">
+                          Requests
+                        </p>
+                        <p className="text-2xl font-semibold">
+                          42
+                        </p>
+                      </div>
 
-                      {[
-                        "Automated workflows",
-                        "Custom quote tools",
-                        "Cleaner reporting systems",
-                        "Operational dashboards",
-                      ].map((item) => (
-                        <div key={item} className="flex items-center gap-3 text-white">
-                          <span className="h-2 w-2 rounded-full bg-green-400 shadow-[0_0_16px_rgba(74,222,128,0.8)]" />
-                          <span>{item}</span>
+                      <div className="rounded-2xl bg-black/20 border border-white/10 p-4">
+                        <p className="text-xs text-zinc-500 mb-2">
+                          Automated
+                        </p>
+                        <p className="text-2xl font-semibold">
+                          86%
+                        </p>
+                      </div>
+
+                      <div className="rounded-2xl bg-black/20 border border-white/10 p-4">
+                        <p className="text-xs text-zinc-500 mb-2">
+                          Saved
+                        </p>
+                        <p className="text-2xl font-semibold">
+                          12h
+                        </p>
+                      </div>
+
+                    </div>
+
+                    {/* Workflow */}
+                    <div className="rounded-2xl bg-black/20 border border-white/10 p-5 mb-6">
+
+                      <div className="flex items-center justify-between mb-5">
+                        <p className="text-sm font-medium">
+                          Quote Request Workflow
+                        </p>
+
+                        <p className="text-xs text-blue-300">
+                          4 steps
+                        </p>
+                      </div>
+
+                      <div className="space-y-4">
+
+                        {[
+                          "Customer request received",
+                          "Pricing logic applied",
+                          "Estimate generated",
+                          "Follow-up task created",
+                        ].map((item, index) => (
+                          <div key={item} className="flex items-center gap-3">
+
+                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/20 border border-blue-400/30 text-xs text-blue-200">
+                              {index + 1}
+                            </div>
+
+                            <div className="h-2 flex-1 rounded-full bg-white/10 overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-blue-400/70"
+                                style={{ width: `${95 - index * 14}%` }}
+                              />
+                            </div>
+
+                          </div>
+                        ))}
+
+                      </div>
+
+                    </div>
+
+                    {/* Reporting Strip */}
+                    <div className="grid grid-cols-2 gap-3">
+
+                      <div className="rounded-2xl bg-blue-500/10 border border-blue-400/20 p-4">
+                        <p className="text-xs text-blue-200 mb-2">
+                          Reporting
+                        </p>
+
+                        <div className="space-y-2">
+                          <div className="h-2 rounded-full bg-blue-300/60 w-full" />
+                          <div className="h-2 rounded-full bg-blue-300/30 w-2/3" />
                         </div>
-                      ))}
+                      </div>
+
+                      <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-4">
+                        <p className="text-xs text-zinc-400 mb-2">
+                          Admin Load
+                        </p>
+
+                        <div className="space-y-2">
+                          <div className="h-2 rounded-full bg-white/10 w-full" />
+                          <div className="h-2 rounded-full bg-green-400/50 w-1/2" />
+                        </div>
+                      </div>
 
                     </div>
 
