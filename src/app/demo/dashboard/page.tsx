@@ -11,6 +11,9 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts"
 
 import {
@@ -38,11 +41,20 @@ const revenueData = [
   { month: "Jun", revenue: 38900 },
 ]
 
+const cogsData = [
+  { month: "Jan", cogs: 8200 },
+  { month: "Feb", cogs: 9700 },
+  { month: "Mar", cogs: 9100 },
+  { month: "Apr", cogs: 11800 },
+  { month: "May", cogs: 13600 },
+  { month: "Jun", cogs: 15900 },
+]
+
 const serviceData = [
-  { service: "Delivery", jobs: 32 },
-  { service: "Pickup", jobs: 18 },
-  { service: "Bulk Sand", jobs: 24 },
-  { service: "Gravel", jobs: 29 },
+  { service: "Sand", yards: 1280 },
+  { service: "Gravel", yards: 1640 },
+  { service: "River Rock", yards: 920},
+  { service: "Fill Dirt", yards: 740 },
 ]
 
 const recentQuotes = [
@@ -211,9 +223,54 @@ const jobData = [
   },
 ]
 
+const reportTrendData = [
+  { month: "Jan", revenue: 18400, cogs: 8200 },
+  { month: "Feb", revenue: 22100, cogs: 9700 },
+  { month: "Mar", revenue: 19800, cogs: 9100 },
+  { month: "Apr", revenue: 27400, cogs: 11800 },
+  { month: "May", revenue: 31600, cogs: 13600 },
+  { month: "Jun", revenue: 38900, cogs: 15900 },
+]
+
+const savedReports = [
+  {
+    name: "Monthly Revenue Summary",
+    type: "Financial",
+    updated: "Today",
+    status: "Ready",
+  },
+  {
+    name: "Quote Conversion Review",
+    type: "Sales",
+    updated: "Yesterday",
+    status: "Ready",
+  },
+  {
+    name: "Delivery Efficiency Snapshot",
+    type: "Operations",
+    updated: "2 days ago",
+    status: "Ready",
+  },
+  {
+    name: "Customer Retention Report",
+    type: "Customer",
+    updated: "3 days ago",
+    status: "Processing",
+  },
+]
+
+const fulfillmentData = [
+  { name: "Delivery", value: 72 },
+  { name: "Pickup", value: 28 },
+]
+
+const fulfillmentColors = ["#e5e7eb", "#3f3f46"]
+
 /* =========================================================
    REUSABLE COMPONENTS
 ========================================================= */
+
+const formatNumber = (value: number) => value.toLocaleString("en-US")
 
 function KpiCard({
   title,
@@ -462,6 +519,10 @@ export default function DashboardDemoPage() {
 
           {activeScreen === "Overview" && (
             <>
+              {/* =========================
+                  OVERVIEW HEADER
+              ========================== */}
+
               <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
@@ -483,6 +544,10 @@ export default function DashboardDemoPage() {
                   Last 6 months
                 </div>
               </div>
+
+              {/* =========================
+                  KPI SUMMARY CARDS
+              ========================== */}
 
               <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <KpiCard
@@ -514,71 +579,299 @@ export default function DashboardDemoPage() {
                 />
               </div>
 
+              {/* =========================
+                  CHART GRID
+                  Left column = financial trends
+                  Right column = operational mix charts
+              ========================== */}
+
               <div className="mt-6 grid min-w-0 gap-6 xl:grid-cols-[2fr_1fr]">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                  <div className="mb-6 flex items-center justify-between">
-                    <div>
-                      <h2 className="text-lg font-semibold">Revenue Trend</h2>
-                      <p className="text-sm text-zinc-500">
-                        Monthly quoted and approved revenue
-                      </p>
+                {/* =========================
+                    LEFT COLUMN: FINANCIAL TRENDS
+                ========================== */}
+
+                <div className="space-y-6">
+                  {/* Revenue Trend */}
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                    <div className="mb-6 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-lg font-semibold">
+                          Revenue Trend
+                        </h2>
+                        <p className="text-sm text-zinc-500">
+                          Monthly quoted and approved revenue
+                        </p>
+                      </div>
+
+                      <Activity className="h-5 w-5 text-zinc-500" />
                     </div>
 
-                    <Activity className="h-5 w-5 text-zinc-500" />
+                    <div className="h-72 min-h-[288px] min-w-0">
+                      {chartsReady && (
+                        <ResponsiveContainer
+                          width="100%"
+                          height="100%"
+                          minWidth={0}
+                        >
+                          <LineChart
+                            data={revenueData}
+                            margin={{ top: 10, right: 10, left: -10, bottom: 10 }}
+                          >
+                            <XAxis
+                              dataKey="month"
+                              stroke="#71717a"
+                              tickLine={false}
+                              axisLine={false}
+                              tick={{ fontSize: 13 }}
+                            />
+
+                            <YAxis
+                              stroke="#71717a"
+                              tickLine={false}
+                              axisLine={false}
+                              tick={{ fontSize: 12 }}
+                              tickFormatter={(value) => formatNumber(Number(value))}
+                            />
+
+                            <Tooltip
+                              formatter={(value) => [`$${formatNumber(Number(value))}`, "Amount"]}
+                              contentStyle={{
+                                backgroundColor: "#111318",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                borderRadius: "12px",
+                                color: "#fff",
+                              }}
+                              cursor={{ stroke: "rgba(255,255,255,0.08)" }}
+                            />
+
+                            <Line
+                              type="monotone"
+                              dataKey="revenue"
+                              stroke="#e5e7eb"
+                              strokeWidth={3}
+                              dot={false}
+                              activeDot={{ r: 5 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="h-72 min-h-[288px] min-w-0">
-                    {chartsReady && (
-                      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-                        <LineChart data={revenueData}>
-                          <XAxis dataKey="month" stroke="#71717a" />
-                          <YAxis stroke="#71717a" />
-                          <Tooltip />
-                          <Line
-                            type="monotone"
-                            dataKey="revenue"
-                            stroke="#e5e7eb"
-                            strokeWidth={3}
-                            dot={false}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
-                    )}
+                  {/* COGS Trend */}
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                    <div className="mb-6 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-lg font-semibold">COGS Trend</h2>
+                        <p className="text-sm text-zinc-500">
+                          Estimated material, delivery, and operating costs
+                        </p>
+                      </div>
+
+                      <TrendingUp className="h-5 w-5 text-zinc-500" />
+                    </div>
+
+                    <div className="h-64 min-h-[256px] min-w-0">
+                      {chartsReady && (
+                        <ResponsiveContainer
+                          width="100%"
+                          height="100%"
+                          minWidth={0}
+                        >
+                          <LineChart
+                            data={cogsData}
+                            margin={{ top: 10, right: 10, left: -10, bottom: 10 }}
+                          >
+                            <XAxis
+                              dataKey="month"
+                              stroke="#71717a"
+                              tickLine={false}
+                              axisLine={false}
+                              tick={{ fontSize: 13 }}
+                            />
+
+                            <YAxis
+                              stroke="#71717a"
+                              tickLine={false}
+                              axisLine={false}
+                              tick={{ fontSize: 12 }}
+                              tickFormatter={(value) => formatNumber(Number(value))}
+                            />
+
+                            <Tooltip
+                              formatter={(value) => [`$${formatNumber(Number(value))}`, "Amount"]}
+                              contentStyle={{
+                                backgroundColor: "#111318",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                borderRadius: "12px",
+                                color: "#fff",
+                              }}
+                              cursor={{ stroke: "rgba(255,255,255,0.08)" }}
+                            />
+
+                            <Line
+                              type="monotone"
+                              dataKey="cogs"
+                              stroke="#a1a1aa"
+                              strokeWidth={3}
+                              dot={false}
+                              activeDot={{ r: 5 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                  <div className="mb-6 flex items-center justify-between">
-                    <div>
-                      <h2 className="text-lg font-semibold">Job Mix</h2>
-                      <p className="text-sm text-zinc-500">
-                        Volume by service type
-                      </p>
+                {/* =========================
+                    RIGHT COLUMN: OPERATIONAL MIX
+                ========================== */}
+
+                <div className="space-y-6">
+                  {/* Product Mix */}
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                    <div className="mb-6 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-lg font-semibold">Product Mix</h2>
+                        <p className="text-sm text-zinc-500">
+                          Volume by material type
+                        </p>
+                      </div>
+
+                      <CalendarDays className="h-5 w-5 text-zinc-500" />
                     </div>
 
-                    <CalendarDays className="h-5 w-5 text-zinc-500" />
+                    <div className="h-72 min-h-[288px] min-w-0">
+                      {chartsReady && (
+                        <ResponsiveContainer
+                          width="100%"
+                          height="100%"
+                          minWidth={0}
+                        >
+                          <BarChart
+                            data={serviceData}
+                            margin={{ top: 10, right: 10, left: -10, bottom: 10 }}
+                            barCategoryGap="22%"
+                          >
+                            <XAxis
+                              dataKey="service"
+                              stroke="#71717a"
+                              tickLine={false}
+                              axisLine={false}
+                              tick={{ fontSize: 13 }}
+                            />
+
+                            <YAxis
+                              stroke="#71717a"
+                              tickLine={false}
+                              axisLine={false}
+                              tick={{ fontSize: 12 }}
+                              tickFormatter={(value) => formatNumber(Number(value))}
+                            />
+
+                            <Tooltip
+                              contentStyle={{
+                                backgroundColor: "#111318",
+                                border: "1px solid rgba(255,255,255,0.08)",
+                                borderRadius: "12px",
+                                color: "#fff",
+                              }}
+                              cursor={{ fill: "rgba(255,255,255,0.04)" }}
+                            />
+
+                            <Bar
+                              dataKey="yards"
+                              fill="#e5e7eb"
+                              radius={[10, 10, 0, 0]}
+                            />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="h-72 min-h-[288px] min-w-0">
-                    {chartsReady && (
-                      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-                        <BarChart data={serviceData}>
-                          <XAxis dataKey="service" stroke="#71717a" />
-                          <YAxis stroke="#71717a" />
-                          <Tooltip />
-                          <Bar
-                            dataKey="jobs"
-                            fill="#e5e7eb"
-                            radius={[8, 8, 0, 0]}
-                          />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    )}
+                  {/* Fulfillment Mix */}
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                    <div className="mb-6 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-lg font-semibold">
+                          Fulfillment Mix
+                        </h2>
+
+                        <p className="text-sm text-zinc-500">
+                          Delivery vs. pickup requests
+                        </p>
+                      </div>
+
+                      <CalendarDays className="h-5 w-5 text-zinc-500" />
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="h-56 w-full">
+                        {chartsReady && (
+                          <ResponsiveContainer
+                            width="100%"
+                            height="100%"
+                            minWidth={0}
+                          >
+                            <PieChart>
+                              <Tooltip
+                                formatter={(value, name) => [`${value}%`, name]}
+                                contentStyle={{
+                                  backgroundColor: "#111318",
+                                  border: "1px solid rgba(255,255,255,0.08)",
+                                  borderRadius: "12px",
+                                  color: "#fff",
+                                  fontSize: "13px",
+                                }}
+                                labelStyle={{ color: "#fff" }}
+                                itemStyle={{ color: "#fff" }}
+                              />
+
+                              <Pie
+                                data={fulfillmentData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={50}
+                                outerRadius={75}
+                                paddingAngle={4}
+                                dataKey="value"
+                              >
+                                {fulfillmentData.map((entry, index) => (
+                                  <Cell
+                                    key={`cell-${index}`}
+                                    fill={fulfillmentColors[index % fulfillmentColors.length]}
+                                  />
+                                ))}
+                              </Pie>
+                            </PieChart>
+                          </ResponsiveContainer>
+                        )}
+                      </div>
+
+                      <div className="mt-2 flex gap-6 text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="h-3 w-3 rounded-full bg-zinc-200" />
+                          <span className="text-zinc-400">Delivery 72%</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <div className="h-3 w-3 rounded-full bg-zinc-700" />
+                          <span className="text-zinc-400">Pickup 28%</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 grid gap-6 lg:grid-cols-3">
+              {/* =========================
+                  OPERATIONAL SNAPSHOT CARDS
+              ========================== */}
+
+              <div className="mt-6 grid gap-6 xl:grid-cols-[2fr_1fr_1fr]">
+                {/* Quote Pipeline */}
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                   <h2 className="text-lg font-semibold">Quote Pipeline</h2>
                   <p className="mt-1 text-sm text-zinc-500">
@@ -610,6 +903,7 @@ export default function DashboardDemoPage() {
                   </div>
                 </div>
 
+                {/* Follow-Up Queue */}
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                   <h2 className="text-lg font-semibold">Follow-Up Queue</h2>
                   <p className="mt-1 text-sm text-zinc-500">
@@ -633,6 +927,7 @@ export default function DashboardDemoPage() {
                   </div>
                 </div>
 
+                {/* Owner Insights */}
                 <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                   <h2 className="text-lg font-semibold">Owner Insights</h2>
                   <p className="mt-1 text-sm text-zinc-500">
@@ -670,6 +965,10 @@ export default function DashboardDemoPage() {
                   </div>
                 </div>
               </div>
+
+              {/* =========================
+                  LIVE ACTIVITY FEED
+              ========================== */}
 
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                 <div className="flex items-center justify-between">
@@ -731,6 +1030,10 @@ export default function DashboardDemoPage() {
                   ))}
                 </div>
               </div>
+
+              {/* =========================
+                  RECENT QUOTE ACTIVITY TABLE
+              ========================== */}
 
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                 <div className="mb-5">
@@ -1433,40 +1736,262 @@ export default function DashboardDemoPage() {
           {/* =====================================================
               REPORTS SCREEN
           ====================================================== */}
-          
 
           {activeScreen === "Reports" && (
             <div>
-              <div className="border-b border-white/10 pb-8">
-                <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
-                  Business Reporting
-                </p>
+              {/* =========================
+                  REPORTS HEADER
+              ========================== */}
 
-                <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
-                  Reports
-                </h1>
+              <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                    Business Reporting
+                  </p>
 
-                <p className="mt-4 max-w-2xl text-zinc-400">
-                  Turn quote, customer, and job activity into practical performance
-                  visibility for owners and operators.
-                </p>
+                  <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                    Reports
+                  </h1>
+
+                  <p className="mt-4 max-w-2xl text-zinc-400">
+                    Turn quote, customer, job, and financial activity into
+                    practical performance visibility for owners and operators.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <button className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06]">
+                    Last 6 Months
+                  </button>
+
+                  <button className="rounded-xl bg-white px-4 py-3 text-sm font-medium text-black transition hover:bg-zinc-200">
+                    Export Report
+                  </button>
+                </div>
               </div>
+
+              {/* =========================
+                  REPORT KPI CARDS
+              ========================== */}
 
               <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <KpiCard title="Monthly Revenue" value="$38.9K" detail="June performance" icon={DollarSign} />
-                <KpiCard title="Quote Conversion" value="64%" detail="Approved quote ratio" icon={TrendingUp} />
-                <KpiCard title="Avg Job Size" value="$2,180" detail="Across active jobs" icon={FileText} />
-                <KpiCard title="Repeat Customers" value="41%" detail="Customers with 2+ quotes" icon={Users} />
+                <KpiCard
+                  title="Monthly Revenue"
+                  value="$38.9K"
+                  detail="June performance"
+                  icon={DollarSign}
+                />
+
+                <KpiCard
+                  title="Gross Margin"
+                  value="59%"
+                  detail="Revenue less estimated COGS"
+                  icon={TrendingUp}
+                />
+
+                <KpiCard
+                  title="Avg Job Size"
+                  value="$2,180"
+                  detail="Across active jobs"
+                  icon={FileText}
+                />
+
+                <KpiCard
+                  title="Repeat Customers"
+                  value="41%"
+                  detail="Customers with 2+ quotes"
+                  icon={Users}
+                />
               </div>
 
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                <h2 className="text-xl font-semibold">Reporting Snapshot</h2>
+              {/* =========================
+                  FINANCIAL PERFORMANCE CHART
+              ========================== */}
 
-                <p className="mt-4 leading-7 text-zinc-400">
-                  This view would typically summarize trends from the client’s available
-                  data sources, such as quote history, completed jobs, customer records,
-                  invoice exports, or operational spreadsheets.
-                </p>
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                <div className="mb-6 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-lg font-semibold">
+                      Revenue vs. COGS
+                    </h2>
+
+                    <p className="text-sm text-zinc-500">
+                      Monthly revenue compared against estimated operating cost.
+                    </p>
+                  </div>
+
+                  <Activity className="h-5 w-5 text-zinc-500" />
+                </div>
+
+                <div className="h-80 min-h-[320px] min-w-0">
+                  {chartsReady && (
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+                      <LineChart
+                        data={reportTrendData}
+                        margin={{ top: 10, right: 10, left: -10, bottom: 10 }}
+                      >
+                        <XAxis
+                          dataKey="month"
+                          stroke="#71717a"
+                          tickLine={false}
+                          axisLine={false}
+                          tick={{ fontSize: 13 }}
+                        />
+
+                        <YAxis
+                          stroke="#71717a"
+                          tickLine={false}
+                          axisLine={false}
+                          tick={{ fontSize: 12 }}
+                          tickFormatter={(value) =>
+                            formatNumber(Number(value))
+                          }
+                        />
+
+                        <Tooltip
+                          itemSorter={(item) => {
+                            if (item.dataKey === "revenue") return -1
+                            if (item.dataKey === "cogs") return 1
+                            return 0
+                          }}
+                          formatter={(value, name) => [
+                            `$${formatNumber(Number(value))}`,
+                            name === "revenue" ? "Revenue" : "COGS",
+                          ]}
+                          labelFormatter={(label, payload) => {
+                            if (!payload || payload.length < 2) return ""
+
+                            const revenue =
+                              payload.find((p) => p.dataKey === "revenue")?.value ?? 0
+
+                            const cogs =
+                              payload.find((p) => p.dataKey === "cogs")?.value ?? 0
+
+                            const margin = Math.round(
+                              ((Number(revenue) - Number(cogs)) / Number(revenue)) * 100
+                            )
+
+                            return `Margin ${margin}%`
+                          }}
+                          contentStyle={{
+                            backgroundColor: "#111318",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            borderRadius: "12px",
+                            color: "#fff",
+                            fontSize: "13px",
+                          }}
+                          labelStyle={{
+                            color: "#fff",
+                            fontWeight: 600,
+                            marginBottom: "6px",
+                          }}
+                          itemStyle={{ color: "#fff" }}
+                          cursor={{ stroke: "rgba(255,255,255,0.08)" }}
+                        />
+
+                        <Line
+                          type="monotone"
+                          dataKey="cogs"
+                          stroke="#71717a"
+                          strokeWidth={3}
+                          dot={false}
+                          activeDot={{ r: 5 }}
+                        />
+
+                        <Line
+                          type="monotone"
+                          dataKey="revenue"
+                          stroke="#e5e7eb"
+                          strokeWidth={3}
+                          dot={false}
+                          activeDot={{ r: 5 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+              </div>
+
+              {/* =========================
+                  INSIGHTS + REPORT LIBRARY
+              ========================== */}
+
+              <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_2fr]">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <h2 className="text-lg font-semibold">
+                    Generated Insights
+                  </h2>
+
+                  <p className="mt-1 text-sm text-zinc-500">
+                    Practical takeaways from recent operational activity.
+                  </p>
+
+                  <div className="mt-5 space-y-4">
+                    {[
+                      "Gravel deliveries generated the highest revenue contribution this period.",
+                      "COGS increased in June, but margin remained healthy due to larger job size.",
+                      "Repeat customers are driving a meaningful share of approved quotes.",
+                      "Follow-up delays remain the largest visible conversion risk.",
+                    ].map((insight) => (
+                      <div
+                        key={insight}
+                        className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm leading-6 text-zinc-300"
+                      >
+                        {insight}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <div className="mb-5">
+                    <h2 className="text-lg font-semibold">
+                      Report Library
+                    </h2>
+
+                    <p className="text-sm text-zinc-500">
+                      Saved operational and financial reporting views.
+                    </p>
+                  </div>
+
+                  <div className="overflow-hidden rounded-xl border border-white/10">
+                    <table className="w-full text-left text-sm">
+                      <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
+                        <tr>
+                          <th className="px-4 py-3 font-medium">Report</th>
+                          <th className="px-4 py-3 font-medium">Type</th>
+                          <th className="px-4 py-3 font-medium">Updated</th>
+                          <th className="px-4 py-3 font-medium">Status</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {savedReports.map((report) => (
+                          <tr
+                            key={report.name}
+                            className="border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
+                          >
+                            <td className="px-4 py-4 font-medium text-white">
+                              {report.name}
+                            </td>
+
+                            <td className="px-4 py-4 text-zinc-400">
+                              {report.type}
+                            </td>
+
+                            <td className="px-4 py-4 text-zinc-400">
+                              {report.updated}
+                            </td>
+
+                            <td className="px-4 py-4">
+                              <StatusBadge status={report.status} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           )}
