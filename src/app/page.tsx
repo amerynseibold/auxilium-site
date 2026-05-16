@@ -61,16 +61,16 @@ export default function Home() {
 
           <div className="pt-12 pb-20 md:pt-20 md:pb-28">
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-12 items-center">
 
               {/* LEFT: HERO TEXT */}
-              <div className="max-w-5xl">
+              <div className="max-w-3xl">
 
                 <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-6">
                   Business Process Modernization
                 </p>
 
-                <h1 className="text-[2.25rem] sm:text-5xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl">
+                <h1 className="text-[2.25rem] sm:text-6xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl">
                   Helping businesses modernize outdated systems and workflows.
                 </h1>
 
@@ -99,147 +99,139 @@ export default function Home() {
 
               </div>
 
-              {/* RIGHT: HERO DASHBOARD VISUAL */}
+              {/* RIGHT: HERO OPERATIONS VISUAL */}
               <div className="hidden lg:block">
-
                 <div className="relative">
-
                   {/* Soft dashboard glow */}
-                  <div className="absolute inset-0 bg-blue-500/10 blur-[90px] rounded-full" />
+                  <div className="absolute inset-0 rounded-full bg-blue-500/1 blur-[60px]" />
 
-                  <div className="relative bg-white/[0.04] border border-white/10 rounded-3xl p-6 backdrop-blur-sm shadow-[0_0_80px_rgba(33,168,255,0.08)]">
-
+                  <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_0_80px_rgba(33,168,255,0.08)] backdrop-blur-sm">
                     {/* Dashboard Header */}
-                    <div className="flex items-center justify-between mb-6">
-
+                    <div className="mb-6 flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-zinc-400">
-                          Operations Dashboard
-                        </p>
-
-                        <h3 className="text-2xl font-semibold mt-1">
-                          Workflow Overview
-                        </h3>
+                        <p className="text-sm text-zinc-400">Operations Command Center</p>
+                        <h3 className="mt-1 text-2xl font-semibold">Quote Workflow System</h3>
                       </div>
 
-                      <span className="rounded-full bg-green-400/10 border border-green-400/20 px-3 py-1 text-xs text-green-300">
+                      <span className="rounded-full border border-green-400/20 bg-green-400/10 px-3 py-1 text-xs text-green-300">
                         Live
                       </span>
-
                     </div>
 
                     {/* Metrics */}
-                    <div className="grid grid-cols-3 gap-3 mb-6">
-
-                      <div className="rounded-2xl bg-black/20 border border-white/10 p-4">
-                        <p className="text-xs text-zinc-500 mb-2">
-                          Requests
-                        </p>
-                        <p className="text-2xl font-semibold">
-                          42
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl bg-black/20 border border-white/10 p-4">
-                        <p className="text-xs text-zinc-500 mb-2">
-                          Automated
-                        </p>
-                        <p className="text-2xl font-semibold">
-                          86%
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl bg-black/20 border border-white/10 p-4">
-                        <p className="text-xs text-zinc-500 mb-2">
-                          Saved
-                        </p>
-                        <p className="text-2xl font-semibold">
-                          12h
-                        </p>
-                      </div>
-
+                    <div className="mb-6 grid grid-cols-3 gap-3">
+                      {[
+                        ["Active Jobs", "18"],
+                        ["Time Saved", "12h/wk"],
+                        ["Automated", "86%"],
+                      ].map(([label, value]) => (
+                        <div key={label} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                          <p className="mb-2 text-xs text-zinc-500">{label}</p>
+                          <p className="text-2xl font-semibold">{value}</p>
+                        </div>
+                      ))}
                     </div>
 
                     {/* Workflow */}
-                    <div className="rounded-2xl bg-black/20 border border-white/10 p-5 mb-6">
-
-                      <div className="flex items-center justify-between mb-5">
-                        <p className="text-sm font-medium">
-                          Quote Request Workflow
-                        </p>
-
-                        <p className="text-xs text-blue-300">
-                          4 steps
-                        </p>
+                    <div className="mb-5 rounded-2xl border border-white/10 bg-black/20 p-4">
+                      <div className="mb-5 flex items-center justify-between">
+                        <p className="text-sm font-medium">Customer Request Workflow</p>
+                        <p className="text-xs text-blue-300">5 steps</p>
                       </div>
 
-                      <div className="space-y-4">
-
+                      <div className="space-y-3">
                         {[
-                          "Customer request received",
-                          "Pricing logic applied",
-                          "Estimate generated",
-                          "Follow-up task created",
-                        ].map((item, index) => (
-                          <div key={item} className="flex items-center gap-3">
-
-                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/20 border border-blue-400/30 text-xs text-blue-200">
+                          ["Request received", "Complete"],
+                          ["Quote generated", "Complete"],
+                          ["Team assigned", "In progress"],
+                          ["Customer follow-up", "Queued"],
+                          ["Job scheduled", "Pending"],
+                        ].map(([title, status], index) => (
+                          <div key={title} className="flex items-center gap-3">
+                            <div
+                              className={`flex h-7 w-7 items-center justify-center rounded-full border text-xs ${
+                                index < 2
+                                  ? "border-blue-400/40 bg-blue-400/20 text-blue-200"
+                                  : index === 2
+                                    ? "border-green-400/40 bg-green-400/20 text-green-200"
+                                    : "border-white/10 bg-white/5 text-white/40"
+                              }`}
+                            >
                               {index + 1}
                             </div>
 
-                            <div className="h-2 flex-1 rounded-full bg-white/10 overflow-hidden">
-                              <div
-                                className="h-full rounded-full bg-blue-400/70"
-                                style={{ width: `${95 - index * 14}%` }}
-                              />
-                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="mb-2 flex items-center justify-between gap-3">
 
+                                <div className="flex items-center gap-2">
+
+                                  <div
+                                    className={`h-2 w-2 rounded-full ${
+                                      index < 2
+                                        ? "bg-blue-400"
+                                        : index === 2
+                                          ? "bg-green-400"
+                                          : "bg-white/20"
+                                    }`}
+                                  />
+
+                                  <p className="truncate text-sm text-white/85">
+                                    {title}
+                                  </p>
+
+                                </div>
+
+                                <p className="shrink-0 text-xs text-white/45">
+                                  {status}
+                                </p>
+
+                              </div>
+
+                              <div className="h-2 rounded-full bg-white/10">
+                                <div
+                                  className={`h-2 rounded-full ${
+                                    index < 2
+                                      ? "w-full bg-blue-400/70"
+                                      : index === 2
+                                        ? "w-2/3 bg-green-400/70"
+                                        : "w-1/4 bg-white/20"
+                                  }`}
+                                />
+                              </div>
+                            </div>
                           </div>
                         ))}
-
                       </div>
-
                     </div>
 
-                    {/* Reporting Strip */}
+                    {/* Operational Impact */}
                     <div className="grid grid-cols-2 gap-3">
+                      <div className="rounded-2xl border border-amber-300/20 bg-amber-300/10 p-4">
+                        <p className="mb-3 text-xs text-amber-100">Bottlenecks Removed</p>
 
-                      <div className="rounded-2xl bg-blue-500/10 border border-blue-400/20 p-4">
-                        <p className="text-xs text-blue-200 mb-2">
-                          Reporting
-                        </p>
-
-                        <div className="space-y-2">
-                          <div className="h-2 rounded-full bg-blue-300/60 w-full" />
-                          <div className="h-2 rounded-full bg-blue-300/30 w-2/3" />
+                        <div className="space-y-2 text-xs text-white/55">
+                          <p>Manual scheduling</p>
+                          <p>Duplicate data entry</p>
+                          <p>Missed follow-ups</p>
                         </div>
                       </div>
 
-                      <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-4">
-                        <p className="text-xs text-zinc-400 mb-2">
-                          Admin Load
-                        </p>
+                      <div className="rounded-2xl border border-green-300/20 bg-green-300/10 p-4">
+                        <p className="mb-3 text-xs text-green-100">Automation Impact</p>
 
-                        <div className="space-y-2">
-                          <div className="h-2 rounded-full bg-white/10 w-full" />
-                          <div className="h-2 rounded-full bg-green-400/50 w-1/2" />
+                        <div className="space-y-2 text-xs text-white/55">
+                          <p>Response time ↓ 68%</p>
+                          <p>Admin workload ↓ 41%</p>
+                          <p>Follow-ups ↑ 92%</p>
                         </div>
                       </div>
-
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
-
-            </div>
-
+           </div>
           </div>
-
         </div>
-
       </section>
 
       {/* =====================================================
