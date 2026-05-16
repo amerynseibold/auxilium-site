@@ -53,7 +53,7 @@ const cogsData = [
 const serviceData = [
   { service: "Sand", yards: 1280 },
   { service: "Gravel", yards: 1640 },
-  { service: "River Rock", yards: 920},
+  { service: "River Rk", yards: 920},
   { service: "Fill Dirt", yards: 740 },
 ]
 
@@ -379,6 +379,14 @@ export default function DashboardDemoPage() {
   const [selectedQuote, setSelectedQuote] = useState<any>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [chartsReady, setChartsReady] = useState(false)
+  const [quoteFilter, setQuoteFilter] = useState("All")
+
+  const filteredQuotes =
+  quoteFilter === "All"
+    ? quoteManagementData
+    : quoteManagementData.filter(
+        (quote) => quote.status === quoteFilter
+      )
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -524,7 +532,7 @@ export default function DashboardDemoPage() {
               TOP UTILITY BAR
           ========================== */}
 
-          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="mb-6 flex flex-col gap-4 lg:mb-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center justify-between lg:hidden">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">
@@ -535,7 +543,7 @@ export default function DashboardDemoPage() {
 
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-zinc-300"
+                className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-zinc-300"
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -548,7 +556,7 @@ export default function DashboardDemoPage() {
               />
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-3 md:flex">
               <button className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-300 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                 Export Report
               </button>
@@ -563,7 +571,7 @@ export default function DashboardDemoPage() {
             </div>
           </div>
 
-          <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-zinc-300">
+          <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-xs leading-5 text-zinc-300 sm:mb-8 sm:px-5 sm:py-4 sm:text-sm sm:leading-6">
             <span className="font-medium">Demo Mode:</span>{" "}
             This dashboard uses sample data to showcase how Auxilium can organize quotes,
             customers, jobs, reporting, and operational workflows for service-based
@@ -580,24 +588,21 @@ export default function DashboardDemoPage() {
                   OVERVIEW HEADER
               ========================== */}
 
-              <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
+              <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between md:pb-8">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
-                    Auxilium Demo
-                  </p>
 
-                  <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+                  <h1 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
                     Operations Command Center
                   </h1>
 
-                  <p className="mt-4 max-w-2xl text-zinc-400">
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
                     A real-time dashboard concept for service businesses to
                     monitor quote volume, revenue, job activity, and customer
                     follow-up.
                   </p>
                 </div>
 
-                <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-400">
+                <div className="hidden rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-400 sm:inline-flex">
                   Last 6 months
                 </div>
               </div>
@@ -656,18 +661,18 @@ export default function DashboardDemoPage() {
                   Right column = operational mix charts
               ========================== */}
 
-              <div className="mt-6 grid min-w-0 gap-6 xl:grid-cols-[2fr_1fr]">
+              <div className="mt-5 grid min-w-0 gap-4 sm:mt-6 sm:gap-6 xl:grid-cols-[2fr_1fr]">
                 {/* =========================
                     LEFT COLUMN: FINANCIAL TRENDS
                 ========================== */}
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {/* Revenue Trend */}
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                     <div className="mb-6 flex items-center justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h2 className="text-lg font-semibold">
+                          <h2 className="text-base font-semibold sm:text-lg">
                             Revenue Trend
                           </h2>
 
@@ -677,15 +682,15 @@ export default function DashboardDemoPage() {
                           </div>
                         </div>
 
-                        <p className="mt-1 text-sm text-zinc-500">
+                        <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                           Monthly quoted and approved revenue • Updated 2 min ago
                         </p>
                       </div>
 
-                      <Activity className="h-5 w-5 text-zinc-500" />
+                      <Activity className="hidden h-5 w-5 text-zinc-500 sm:block" />
                     </div>
 
-                    <div className="h-72 min-h-[288px] min-w-0">
+                    <div className="h-48 min-h-[192px] min-w-0 sm:h-72 sm:min-h-[288px]">
                       {chartsReady && (
                         <ResponsiveContainer
                           width="100%"
@@ -701,14 +706,14 @@ export default function DashboardDemoPage() {
                               stroke="#71717a"
                               tickLine={false}
                               axisLine={false}
-                              tick={{ fontSize: 13 }}
+                              tick={{ fontSize: 11 }}
                             />
 
                             <YAxis
                               stroke="#71717a"
                               tickLine={false}
                               axisLine={false}
-                              tick={{ fontSize: 12 }}
+                              tick={{ fontSize: 11 }}
                               tickFormatter={(value) => formatNumber(Number(value))}
                             />
 
@@ -738,19 +743,19 @@ export default function DashboardDemoPage() {
                   </div>
 
                   {/* COGS Trend */}
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:p-5">
                     <div className="mb-6 flex items-center justify-between">
                       <div>
-                        <h2 className="text-lg font-semibold">COGS Trend</h2>
-                        <p className="text-sm text-zinc-500">
+                        <h2 className="text-base font-semibold sm:text-lg">COGS Trend</h2>
+                        <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                           Estimated material, delivery, and operating costs
                         </p>
                       </div>
 
-                      <TrendingUp className="h-5 w-5 text-zinc-500" />
+                      <TrendingUp className="hidden h-5 w-5 text-zinc-500 sm:block" />
                     </div>
 
-                    <div className="h-64 min-h-[256px] min-w-0">
+                    <div className="h-48 min-h-[192px] min-w-0 sm:h-64 sm:min-h-[256px]">
                       {chartsReady && (
                         <ResponsiveContainer
                           width="100%"
@@ -807,21 +812,21 @@ export default function DashboardDemoPage() {
                     RIGHT COLUMN: OPERATIONAL MIX
                 ========================== */}
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {/* Product Mix */}
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                     <div className="mb-6 flex items-center justify-between">
                       <div>
-                        <h2 className="text-lg font-semibold">Product Mix</h2>
-                        <p className="text-sm text-zinc-500">
-                          Volume by material type
+                        <h2 className="text-base font-semibold sm:text-lg">Product Mix</h2>
+                        <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
+                          Cubic yards dispatched by material
                         </p>
                       </div>
 
-                      <CalendarDays className="h-5 w-5 text-zinc-500" />
+                      <CalendarDays className="hidden h-5 w-5 text-zinc-500 sm:block" />
                     </div>
 
-                    <div className="h-72 min-h-[288px] min-w-0">
+                    <div className="h-48 min-h-[192px] min-w-0 sm:h-72 sm:min-h-[288px]">
                       {chartsReady && (
                         <ResponsiveContainer
                           width="100%"
@@ -850,6 +855,10 @@ export default function DashboardDemoPage() {
                             />
 
                             <Tooltip
+                              formatter={(value) => [
+                                Number(value ?? 0).toLocaleString(),
+                                "Yards",
+                              ]}
                               contentStyle={{
                                 backgroundColor: "#111318",
                                 border: "1px solid rgba(255,255,255,0.08)",
@@ -871,23 +880,23 @@ export default function DashboardDemoPage() {
                   </div>
 
                   {/* Fulfillment Mix */}
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
                     <div className="mb-6 flex items-center justify-between">
                       <div>
-                        <h2 className="text-lg font-semibold">
+                        <h2 className="text-base font-semibold sm:text-lg">
                           Fulfillment Mix
                         </h2>
 
-                        <p className="text-sm text-zinc-500">
+                        <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                           Delivery vs. pickup requests
                         </p>
                       </div>
 
-                      <CalendarDays className="h-5 w-5 text-zinc-500" />
+                      <CalendarDays className="hidden h-5 w-5 text-zinc-500 sm:block" />
                     </div>
 
                     <div className="flex flex-col items-center justify-center">
-                      <div className="h-56 w-full">
+                      <div className="h-40 w-full sm:h-56">
                         {chartsReady && (
                           <ResponsiveContainer
                             width="100%"
@@ -912,8 +921,8 @@ export default function DashboardDemoPage() {
                                 data={fulfillmentData}
                                 cx="50%"
                                 cy="50%"
-                                innerRadius={50}
-                                outerRadius={75}
+                                innerRadius={window.innerWidth < 640 ? 40 : 55}
+                                outerRadius={window.innerWidth < 640 ? 60 : 85}
                                 paddingAngle={4}
                                 dataKey="value"
                               >
@@ -929,7 +938,7 @@ export default function DashboardDemoPage() {
                         )}
                       </div>
 
-                      <div className="mt-2 flex gap-6 text-sm">
+                      <div className="mt-1 flex flex-wrap justify-center gap-4 text-xs sm:mt-2 sm:gap-6 sm:text-sm">
                         <div className="flex items-center gap-2">
                           <div className="h-3 w-3 rounded-full bg-zinc-200" />
                           <span className="text-zinc-400">Delivery 72%</span>
@@ -949,11 +958,11 @@ export default function DashboardDemoPage() {
                   OPERATIONAL SNAPSHOT CARDS
               ========================== */}
 
-              <div className="mt-6 grid gap-6 xl:grid-cols-[2fr_1fr_1fr]">
+              <div className="mt-5 grid gap-4 sm:mt-6 sm:gap-6 xl:grid-cols-[2fr_1fr_1fr]">
                 {/* Quote Pipeline */}
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                  <h2 className="text-lg font-semibold">Quote Pipeline</h2>
-                  <p className="mt-1 text-sm text-zinc-500">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <h2 className="text-base font-semibold sm:text-lg">Quote Pipeline</h2>
+                  <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                     Current status of active opportunities.
                   </p>
 
@@ -983,9 +992,9 @@ export default function DashboardDemoPage() {
                 </div>
 
                 {/* Follow-Up Queue */}
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                  <h2 className="text-lg font-semibold">Follow-Up Queue</h2>
-                  <p className="mt-1 text-sm text-zinc-500">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:p-5">
+                  <h2 className="text-base font-semibold sm:text-lg">Follow-Up Queue</h2>
+                  <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                     Quotes that may need attention.
                   </p>
 
@@ -998,7 +1007,7 @@ export default function DashboardDemoPage() {
                     ].map((item) => (
                       <div
                         key={item}
-                        className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-zinc-300"
+                        className="flex items-start gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-xs leading-5 text-zinc-300 sm:px-4 sm:text-sm"
                       >
                         {item}
                       </div>
@@ -1007,36 +1016,43 @@ export default function DashboardDemoPage() {
                 </div>
 
                 {/* Owner Insights */}
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                  <h2 className="text-lg font-semibold">Owner Insights</h2>
-                  <p className="mt-1 text-sm text-zinc-500">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+                  <h2 className="text-base font-semibold sm:text-lg">Owner Insights</h2>
+                  <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                     Practical signals pulled from daily activity.
                   </p>
 
-                  <div className="mt-5 space-y-4">
+                  <div className="mt-5 space-y-5">
                     <div>
-                      <p className="text-sm text-zinc-400">
+                      <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500">
                         Top revenue driver
                       </p>
-                      <p className="mt-1 text-xl font-semibold text-white">
-                        Gravel Delivery
-                      </p>
+
+                      <div className="mt-2 inline-flex items-center rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
+                        <span className="text-sm font-medium text-zinc-200">
+                          Gravel Delivery
+                        </span>
+                      </div>
                     </div>
 
                     <div>
-                      <p className="text-sm text-zinc-400">
+                      <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500">
                         Most delayed step
                       </p>
-                      <p className="mt-1 text-xl font-semibold text-white">
-                        Customer Follow-Up
-                      </p>
+
+                      <div className="mt-2 inline-flex items-center rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
+                        <span className="text-sm font-medium text-zinc-200">
+                          Customer Follow-Up
+                        </span>
+                      </div>
                     </div>
 
                     <div>
-                      <p className="text-sm text-zinc-400">
+                      <p className="text-[11px] uppercase tracking-[0.28em] text-zinc-500">
                         Suggested action
                       </p>
-                      <p className="mt-1 text-sm leading-6 text-zinc-300">
+
+                      <p className="mt-2 text-sm leading-6 text-zinc-300">
                         Prioritize pending commercial quotes before new
                         low-value requests are assigned.
                       </p>
@@ -1047,16 +1063,18 @@ export default function DashboardDemoPage() {
 
               {/* =========================
                   LIVE ACTIVITY FEED
+                  Mobile optimized spacing + typography
               ========================== */}
 
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
+              <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:mt-6 sm:p-5">
+                
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-base font-semibold sm:text-lg">
                       Live Operational Activity
                     </h2>
 
-                    <p className="mt-1 text-sm text-zinc-500">
+                    <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                       Recent quote, scheduling, and customer actions.
                     </p>
                   </div>
@@ -1067,7 +1085,7 @@ export default function DashboardDemoPage() {
                   </div>
                 </div>
 
-                <div className="mt-6 space-y-4">
+                <div className="mt-5 space-y-3 sm:mt-6 sm:space-y-4">
                   {[
                     {
                       action: "New commercial delivery request submitted",
@@ -1092,47 +1110,58 @@ export default function DashboardDemoPage() {
                   ].map((item) => (
                     <div
                       key={item.customer}
-                      className="flex items-start justify-between rounded-xl border border-white/10 bg-black/20 px-4 py-4"
+                      className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-black/20 px-3 py-3 sm:px-4 sm:py-4"
                     >
-                      <div>
-                        <p className="font-medium text-white">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium leading-5 text-white sm:text-base">
                           {item.action}
                         </p>
 
-                        <p className="mt-1 text-sm text-zinc-500">
+                        <p className="mt-1 text-xs text-zinc-500 sm:text-sm">
                           {item.customer}
                         </p>
                       </div>
 
-                      <p className="text-sm text-zinc-500">{item.time}</p>
+                      <p className="shrink-0 text-right text-xs leading-5 text-zinc-500 sm:text-sm">
+                        {item.time}
+                      </p>
                     </div>
                   ))}
                 </div>
+
               </div>
 
               {/* =========================
                   RECENT QUOTE ACTIVITY TABLE
+                  Mobile optimized horizontal scroll
               ========================== */}
 
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                <div className="mb-5">
-                  <h2 className="text-lg font-semibold">
+              <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:mt-6 sm:p-5">
+                <div className="mb-4 sm:mb-5">
+                  <h2 className="text-base font-semibold sm:text-lg">
                     Recent Quote Activity
                   </h2>
-                  <p className="text-sm text-zinc-500">
+
+                  <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                     Live operational snapshot of customer requests and quote
                     status.
                   </p>
                 </div>
 
-                <div className="overflow-hidden rounded-xl border border-white/10">
-                  <table className="w-full text-left text-sm">
+                <div className="overflow-x-auto rounded-xl border border-white/10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <table className="min-w-[560px] w-full text-left text-xs sm:min-w-[680px] sm:text-sm">
                     <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
                       <tr>
-                        <th className="px-4 py-3 font-medium">Customer</th>
-                        <th className="px-4 py-3 font-medium">Service</th>
-                        <th className="px-4 py-3 font-medium">Status</th>
-                        <th className="px-4 py-3 text-right font-medium">
+                        <th className="px-3 py-3 font-medium sm:px-4">
+                          Customer
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-4">
+                          Service
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-4">
+                          Status
+                        </th>
+                        <th className="px-3 py-3 text-right font-medium sm:px-4">
                           Amount
                         </th>
                       </tr>
@@ -1144,7 +1173,7 @@ export default function DashboardDemoPage() {
                           key={quote.customer}
                           className="group cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
                         >
-                          <td className="px-4 py-4">
+                          <td className="px-3 py-3 sm:px-4 sm:py-4">
                             <div className="flex items-center justify-between gap-4">
                               <span className="font-medium text-white">
                                 {quote.customer}
@@ -1153,15 +1182,18 @@ export default function DashboardDemoPage() {
                               <span className="text-xs font-medium text-blue-400 opacity-0 transition group-hover:opacity-100">
                                 View →
                               </span>
-                            </div>  
+                            </div>
                           </td>
-                          <td className="px-4 py-4 text-zinc-400">
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-4 sm:py-4">
                             {quote.service}
                           </td>
-                          <td className="px-4 py-4">
+
+                          <td className="px-3 py-3 sm:px-4 sm:py-4">
                             <StatusBadge status={quote.status} />
                           </td>
-                          <td className="px-4 py-4 text-right font-medium text-white">
+
+                          <td className="px-3 py-3 text-right font-medium text-white sm:px-4 sm:py-4">
                             {quote.amount}
                           </td>
                         </tr>
@@ -1175,108 +1207,144 @@ export default function DashboardDemoPage() {
 
           {/* =====================================================
               QUOTES SCREEN
+              Mobile optimized table + drawer
           ====================================================== */}
 
           {activeScreen === "Quotes" && (
             <div>
-              <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
+              {/* =========================
+                  QUOTES HEADER
+              ========================== */}
+
+              <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between md:pb-8">
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
                     Quote Management
                   </p>
 
-                  <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                  <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
                     Active Quotes
                   </h1>
 
-                  <p className="mt-4 max-w-2xl text-zinc-400">
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
                     Monitor quote progress, customer activity, revisions,
                     approvals, and operational follow-up.
                   </p>
                 </div>
 
-                <button className="rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200">
+                <button className="hidden rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200 sm:inline-flex">
                   Create Quote
                 </button>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                {["All", "Pending", "Approved", "Paid", "Revision"].map(
-                  (filter) => (
+              {/* =========================
+                  QUOTE FILTERS
+                  Mobile horizontal scroll
+              ========================== */}
+
+              <div className="mt-5 overflow-x-auto [scrollbar-width:none] sm:mt-6 [&::-webkit-scrollbar]:hidden">
+                <div className="flex min-w-max gap-2 sm:gap-3">
+                  {["All", "Pending", "Approved", "Sent", "Paid", "Revision"].map((filter) => (
                     <button
                       key={filter}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06]"
+                      onClick={() => setQuoteFilter(filter)}
+                      className={`rounded-full border px-3 py-2 text-xs transition sm:px-4 sm:text-sm ${
+                        quoteFilter === filter
+                          ? "border-white bg-white text-black"
+                          : "border-white/10 bg-white/[0.04] text-zinc-300 hover:border-white/20 hover:bg-white/[0.06]"
+                      }`}
                     >
                       {filter}
                     </button>
-                  )
-                )}
-              </div>
-
-              <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg">
-               <div className="max-h-[650px] overflow-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
-                    <tr>
-                      <th className="px-5 py-4 font-medium">Quote #</th>
-                      <th className="px-5 py-4 font-medium">Customer</th>
-                      <th className="px-5 py-4 font-medium">Service</th>
-                      <th className="px-5 py-4 font-medium">Status</th>
-                      <th className="px-5 py-4 font-medium">Owner</th>
-                      <th className="px-5 py-4 font-medium">Date</th>
-                      <th className="px-5 py-4 text-right font-medium">
-                        Amount
-                      </th>
-                      <th className="px-5 py-4 text-right font-medium"></th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {quoteManagementData.map((quote) => (
-                      <tr
-                        key={quote.quoteNumber}
-                        onClick={() => setSelectedQuote(quote)}
-                        className="cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
-                      >
-                        <td className="px-5 py-5 font-medium text-white">
-                          {quote.quoteNumber}
-                        </td>
-
-                        <td className="px-5 py-5">{quote.customer}</td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {quote.service}
-                        </td>
-
-                        <td className="px-5 py-5">
-                          <StatusBadge status={quote.status} />
-                        </td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {quote.owner}
-                        </td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {quote.date}
-                        </td>
-
-                        <td className="px-5 py-5 text-right font-medium text-white">
-                          {quote.amount}
-                        </td>
-
-                        <td className="px-5 py-5 text-right">
-                          <button className="rounded-lg p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
-                            <MoreHorizontal className="h-5 w-5" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                  ))}
                 </div>
               </div>
+
+              {/* =========================
+                  QUOTES TABLE
+                  Mobile horizontal scroll
+              ========================== */}
+
+              <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg sm:mt-6">
+                <div className="max-h-[620px] overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <table className="min-w-[860px] w-full text-left text-xs sm:text-sm">
+                    <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
+                      <tr>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Quote #
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Customer
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Service
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Status
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Owner
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Date
+                        </th>
+                        <th className="px-3 py-3 text-right font-medium sm:px-5 sm:py-4">
+                          Amount
+                        </th>
+                        <th className="px-3 py-3 text-right font-medium sm:px-5 sm:py-4" />
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {filteredQuotes.map((quote) => (
+                        <tr
+                          key={quote.quoteNumber}
+                          onClick={() => setSelectedQuote(quote)}
+                          className="cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
+                        >
+                          <td className="px-3 py-3 font-medium text-white sm:px-5 sm:py-5">
+                            {quote.quoteNumber}
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-5 sm:py-5">
+                            {quote.customer}
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {quote.service}
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-5 sm:py-5">
+                            <StatusBadge status={quote.status} />
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {quote.owner}
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {quote.date}
+                          </td>
+
+                          <td className="px-3 py-3 text-right font-medium text-white sm:px-5 sm:py-5">
+                            {quote.amount}
+                          </td>
+
+                          <td className="px-3 py-3 text-right sm:px-5 sm:py-5">
+                            <button className="rounded-lg p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
+                              <MoreHorizontal className="h-4 w-4 sm:h-5 sm:w-5" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               {/* =========================
                   QUOTE DETAIL DRAWER
+                  Mobile full-screen drawer
               ========================== */}
 
               {selectedQuote && (
@@ -1284,40 +1352,37 @@ export default function DashboardDemoPage() {
                   className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm"
                   onClick={() => setSelectedQuote(null)}
                 >
-
-                  {/* Drawer */}
                   <div
-                    className="h-full w-full max-w-xl overflow-y-auto border-l border-white/10 bg-[#0d0f14] p-8 shadow-2xl"
+                    className="h-full w-full max-w-xl overflow-y-auto border-l border-white/10 bg-[#0d0f14] p-5 shadow-2xl sm:p-8"
                     onClick={(event) => event.stopPropagation()}
                   >
-
-                    {/* Header */}
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                    {/* Drawer Header */}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="text-xs uppercase tracking-[0.3em] text-zinc-500 sm:text-sm">
                           Quote Detail
                         </p>
 
-                        <h2 className="mt-3 text-3xl font-semibold text-white">
+                        <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">
                           {selectedQuote.quoteNumber}
                         </h2>
 
-                        <p className="mt-2 text-zinc-400">
+                        <p className="mt-2 text-sm text-zinc-400 sm:text-base">
                           {selectedQuote.customer}
                         </p>
                       </div>
 
                       <button
                         onClick={() => setSelectedQuote(null)}
-                        className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06]"
+                        className="shrink-0 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06] sm:px-4 sm:text-sm"
                       >
                         Close
                       </button>
                     </div>
 
                     {/* Status */}
-                    <div className="mt-8">
-                      <p className="mb-3 text-sm text-zinc-500">
+                    <div className="mt-6 sm:mt-8">
+                      <p className="mb-3 text-xs text-zinc-500 sm:text-sm">
                         Quote Status
                       </p>
 
@@ -1325,68 +1390,65 @@ export default function DashboardDemoPage() {
                     </div>
 
                     {/* Quote Metrics */}
-                    <div className="mt-8 grid grid-cols-2 gap-4">
-
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                        <p className="text-sm text-zinc-500">
+                    <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-4">
+                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+                        <p className="text-xs text-zinc-500 sm:text-sm">
                           Quote Amount
                         </p>
 
-                        <p className="mt-2 text-2xl font-semibold text-white">
+                        <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">
                           {selectedQuote.amount}
                         </p>
                       </div>
 
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                        <p className="text-sm text-zinc-500">
+                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+                        <p className="text-xs text-zinc-500 sm:text-sm">
                           Assigned Owner
                         </p>
 
-                        <p className="mt-2 text-2xl font-semibold text-white">
+                        <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">
                           {selectedQuote.owner}
                         </p>
                       </div>
-
                     </div>
 
-                    {/* Services */}
-                    <div className="mt-8">
-                      <h3 className="text-lg font-semibold text-white">
+                    {/* Scope of Work */}
+                    <div className="mt-6 sm:mt-8">
+                      <h3 className="text-base font-semibold text-white sm:text-lg">
                         Scope of Work
                       </h3>
 
-                      <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                      <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+                        <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
                           <div>
-                            <p className="font-medium text-white">
+                            <p className="text-sm font-medium text-white sm:text-base">
                               {selectedQuote.service}
                             </p>
 
-                            <p className="mt-1 text-sm text-zinc-500">
+                            <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                               Estimated materials and delivery included
                             </p>
                           </div>
 
-                          <p className="font-semibold text-white">
+                          <p className="shrink-0 text-sm font-semibold text-white sm:text-base">
                             {selectedQuote.amount}
                           </p>
                         </div>
 
-                        <div className="mt-4 flex items-center justify-between text-sm text-zinc-400">
+                        <div className="mt-4 flex items-center justify-between text-xs text-zinc-400 sm:text-sm">
                           <span>Tax & Fees</span>
                           <span>Included</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Timeline */}
-                    <div className="mt-8">
-                      <h3 className="text-lg font-semibold text-white">
+                    {/* Activity Timeline */}
+                    <div className="mt-6 sm:mt-8">
+                      <h3 className="text-base font-semibold text-white sm:text-lg">
                         Activity Timeline
                       </h3>
 
-                      <div className="mt-5 space-y-4">
-
+                      <div className="mt-4 space-y-3 sm:mt-5 sm:space-y-4">
                         {[
                           "Quote created and submitted",
                           "Customer requested delivery adjustment",
@@ -1395,59 +1457,67 @@ export default function DashboardDemoPage() {
                         ].map((event) => (
                           <div
                             key={event}
-                            className="flex gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                            className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:gap-4 sm:p-4"
                           >
-                            <div className="mt-1 h-2 w-2 rounded-full bg-white" />
+                            <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-white" />
 
                             <div>
-                              <p className="text-sm text-white">
+                              <p className="text-xs leading-5 text-white sm:text-sm">
                                 {event}
                               </p>
 
-                              <p className="mt-1 text-xs text-zinc-500">
+                              <p className="mt-1 text-[11px] text-zinc-500 sm:text-xs">
                                 Recent activity
                               </p>
                             </div>
                           </div>
                         ))}
-
                       </div>
                     </div>
-
                   </div>
                 </div>
-              )}                    
+              )}
             </div>
           )}
-
-        {/* =====================================================
+          
+          {/* =====================================================
               CUSTOMERS SCREEN
+              Mobile optimized KPI layout + table + drawer
           ====================================================== */}
 
           {activeScreen === "Customers" && (
             <div>
-              <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
+              {/* =========================
+                  CUSTOMERS HEADER
+              ========================== */}
+
+              <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between md:pb-8">
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
                     Customer Intelligence
                   </p>
 
-                  <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                  <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
                     Customer Accounts
                   </h1>
 
-                  <p className="mt-4 max-w-2xl text-zinc-400">
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
                     Track customer activity, quote history, account value, and
                     follow-up needs from one operational view.
                   </p>
                 </div>
 
-                <button className="rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200">
+                <button className="hidden rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200 sm:inline-flex">
                   Add Customer
                 </button>
               </div>
 
-              <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {/* =========================
+                  CUSTOMER KPI CARDS
+                  Mobile: compact 2-column layout
+              ========================== */}
+
+              <div className="mt-6 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:mt-8 md:grid-cols-3 md:gap-4">
                 <KpiCard
                   title="Total Customers"
                   value="73"
@@ -1470,143 +1540,159 @@ export default function DashboardDemoPage() {
                 />
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg">
-               <div className="max-h-[650px] overflow-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
-                    <tr>
-                      <th className="px-5 py-4 font-medium">Customer</th>
-                      <th className="px-5 py-4 font-medium">Type</th>
-                      <th className="px-5 py-4 font-medium">Quotes</th>
-                      <th className="px-5 py-4 font-medium">Lifetime Value</th>
-                      <th className="px-5 py-4 font-medium">Last Activity</th>
-                      <th className="px-5 py-4 font-medium">Status</th>
-                      <th className="px-5 py-4 text-right font-medium"></th>
-                    </tr>
-                  </thead>
+              {/* =========================
+                  CUSTOMERS TABLE
+                  Mobile horizontal scroll
+              ========================== */}
 
-                  <tbody>
-                    {customerData.map((customer) => (
-                      <tr
-                        key={customer.name}
-                        onClick={() => setSelectedCustomer(customer)}
-                        className="cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
-                        >
-                        <td className="px-5 py-5 font-medium text-white">
-                          {customer.name}
-                        </td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {customer.type}
-                        </td>
-
-                        <td className="px-5 py-5">{customer.quotes}</td>
-
-                        <td className="px-5 py-5 font-medium text-white">
-                          {customer.lifetimeValue}
-                        </td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {customer.lastActivity}
-                        </td>
-
-                        <td className="px-5 py-5">
-                          <StatusBadge status={customer.status} />
-                        </td>
-
-                        <td className="px-5 py-5 text-right">
-                          <button className="rounded-lg p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
-                            <MoreHorizontal className="h-5 w-5" />
-                          </button>
-                        </td>
+              <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg sm:mt-6">
+                <div className="max-h-[620px] overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <table className="min-w-[760px] w-full text-left text-xs sm:text-sm">
+                    <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
+                      <tr>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Customer
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Type
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Quotes
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Lifetime Value
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Last Activity
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Status
+                        </th>
+                        <th className="px-3 py-3 text-right font-medium sm:px-5 sm:py-4" />
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+
+                    <tbody>
+                      {customerData.map((customer) => (
+                        <tr
+                          key={customer.name}
+                          onClick={() => setSelectedCustomer(customer)}
+                          className="cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
+                        >
+                          <td className="px-3 py-3 font-medium text-white sm:px-5 sm:py-5">
+                            {customer.name}
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {customer.type}
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-5 sm:py-5">
+                            {customer.quotes}
+                          </td>
+
+                          <td className="px-3 py-3 font-medium text-white sm:px-5 sm:py-5">
+                            {customer.lifetimeValue}
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {customer.lastActivity}
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-5 sm:py-5">
+                            <StatusBadge status={customer.status} />
+                          </td>
+
+                          <td className="px-3 py-3 text-right sm:px-5 sm:py-5">
+                            <button className="rounded-lg p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
+                              <MoreHorizontal className="h-4 w-4 sm:h-5 sm:w-5" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
+
               {/* =========================
                   CUSTOMER DETAIL DRAWER
+                  Mobile full-screen drawer
               ========================== */}
 
               {selectedCustomer && (
                 <div
-                className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm transition-opacity duration-300"
-                onClick={() => setSelectedCustomer(null)}
+                  className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+                  onClick={() => setSelectedCustomer(null)}
                 >
-
-                  {/* Drawer Panel */}
                   <div
-                    className="h-full w-full max-w-xl translate-x-0 overflow-y-auto border-l border-white/10 bg-[#0d0f14] p-8 shadow-2xl transition-transform duration-300 ease-out"
+                    className="h-full w-full max-w-xl translate-x-0 overflow-y-auto border-l border-white/10 bg-[#0d0f14] p-5 shadow-2xl transition-transform duration-300 ease-out sm:p-8"
                     onClick={(event) => event.stopPropagation()}
                   >
-
-                    {/* Header */}
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
+                    {/* Drawer Header */}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="text-xs uppercase tracking-[0.3em] text-zinc-500 sm:text-sm">
                           Customer Detail
                         </p>
 
-                        <h2 className="mt-3 text-3xl font-semibold text-white">
+                        <h2 className="mt-3 text-2xl font-semibold text-white sm:text-3xl">
                           {selectedCustomer.name}
                         </h2>
 
-                        <p className="mt-2 text-zinc-400">
+                        <p className="mt-2 text-sm text-zinc-400 sm:text-base">
                           {selectedCustomer.type} Account
                         </p>
                       </div>
 
                       <button
                         onClick={() => setSelectedCustomer(null)}
-                        className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06]"
+                        className="shrink-0 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06] sm:px-4 sm:text-sm"
                       >
                         Close
                       </button>
                     </div>
 
                     {/* Metrics */}
-                    <div className="mt-8 grid grid-cols-2 gap-4">
-
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                        <p className="text-sm text-zinc-500">
+                    <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-4">
+                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+                        <p className="text-xs text-zinc-500 sm:text-sm">
                           Lifetime Value
                         </p>
 
-                        <p className="mt-2 text-2xl font-semibold text-white">
+                        <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">
                           {selectedCustomer.lifetimeValue}
                         </p>
                       </div>
 
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                        <p className="text-sm text-zinc-500">
+                      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+                        <p className="text-xs text-zinc-500 sm:text-sm">
                           Total Quotes
                         </p>
 
-                        <p className="mt-2 text-2xl font-semibold text-white">
+                        <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">
                           {selectedCustomer.quotes}
                         </p>
                       </div>
-
                     </div>
 
                     {/* Status */}
-                    <div className="mt-8">
-                      <p className="mb-3 text-sm text-zinc-500">
+                    <div className="mt-6 sm:mt-8">
+                      <p className="mb-3 text-xs text-zinc-500 sm:text-sm">
                         Account Status
                       </p>
 
                       <StatusBadge status={selectedCustomer.status} />
                     </div>
 
-                    {/* Notes */}
-                    <div className="mt-8">
-                      <h3 className="text-lg font-semibold text-white">
+                    {/* Operational Notes */}
+                    <div className="mt-6 sm:mt-8">
+                      <h3 className="text-base font-semibold text-white sm:text-lg">
                         Operational Notes
                       </h3>
 
-                      <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                        <p className="leading-7 text-zinc-300">
+                      <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 sm:p-5">
+                        <p className="text-sm leading-6 text-zinc-300 sm:leading-7">
                           Customer has been highly responsive and frequently
                           requests expedited delivery scheduling. Opportunity
                           exists for recurring commercial partnership and
@@ -1615,14 +1701,13 @@ export default function DashboardDemoPage() {
                       </div>
                     </div>
 
-                    {/* Timeline */}
-                    <div className="mt-8">
-                      <h3 className="text-lg font-semibold text-white">
+                    {/* Recent Activity */}
+                    <div className="mt-6 sm:mt-8">
+                      <h3 className="text-base font-semibold text-white sm:text-lg">
                         Recent Activity
                       </h3>
 
-                      <div className="mt-5 space-y-4">
-
+                      <div className="mt-4 space-y-3 sm:mt-5 sm:space-y-4">
                         {[
                           "Quote approved for gravel delivery",
                           "Customer requested revised estimate",
@@ -1631,25 +1716,23 @@ export default function DashboardDemoPage() {
                         ].map((event) => (
                           <div
                             key={event}
-                            className="flex gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                            className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:gap-4 sm:p-4"
                           >
-                            <div className="mt-1 h-2 w-2 rounded-full bg-white" />
+                            <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-white" />
 
                             <div>
-                              <p className="text-sm text-white">
+                              <p className="text-xs leading-5 text-white sm:text-sm">
                                 {event}
                               </p>
 
-                              <p className="mt-1 text-xs text-zinc-500">
+                              <p className="mt-1 text-[11px] text-zinc-500 sm:text-xs">
                                 Within last 30 days
                               </p>
                             </div>
                           </div>
                         ))}
-
                       </div>
                     </div>
-
                   </div>
                 </div>
               )}
@@ -1658,32 +1741,42 @@ export default function DashboardDemoPage() {
 
           {/* =====================================================
               JOBS SCREEN
+              Mobile optimized KPI layout + table
           ====================================================== */}
 
           {activeScreen === "Jobs" && (
             <div>
-              <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
+              {/* =========================
+                  JOBS HEADER
+              ========================== */}
+
+              <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between md:pb-8">
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
                     Job Operations
                   </p>
 
-                  <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                  <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
                     Scheduled Jobs
                   </h1>
 
-                  <p className="mt-4 max-w-2xl text-zinc-400">
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
                     Track scheduled deliveries, crew assignments, completion
                     status, and operational issues from one dispatch-ready view.
                   </p>
                 </div>
 
-                <button className="rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200">
+                <button className="hidden rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200 sm:inline-flex">
                   Schedule Job
                 </button>
               </div>
 
-              <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {/* =========================
+                  JOB KPI CARDS
+                  Mobile: compact 2-column layout
+              ========================== */}
+
+              <div className="mt-6 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:mt-8 md:grid-cols-3 md:gap-4">
                 <KpiCard
                   title="Jobs Scheduled"
                   value="28"
@@ -1706,71 +1799,92 @@ export default function DashboardDemoPage() {
                 />
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg">
-               <div className="max-h-[650px] overflow-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
-                    <tr>
-                      <th className="px-5 py-4 font-medium">Job #</th>
-                      <th className="px-5 py-4 font-medium">Customer</th>
-                      <th className="px-5 py-4 font-medium">Service</th>
-                      <th className="px-5 py-4 font-medium">Scheduled</th>
-                      <th className="px-5 py-4 font-medium">Crew</th>
-                      <th className="px-5 py-4 font-medium">Priority</th>
-                      <th className="px-5 py-4 font-medium">Status</th>
-                      <th className="px-5 py-4 text-right font-medium"></th>
-                    </tr>
-                  </thead>
+              {/* =========================
+                  JOBS TABLE
+                  Mobile horizontal scroll
+              ========================== */}
 
-                  <tbody>
-                    {jobData.map((job) => (
-                      <tr
-                        key={job.jobNumber}
-                        className="border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
-                      >
-                        <td className="px-5 py-5 font-medium text-white">
-                          {job.jobNumber}
-                        </td>
-
-                        <td className="px-5 py-5">{job.customer}</td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {job.service}
-                        </td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {job.scheduledDate}
-                        </td>
-
-                        <td className="px-5 py-5 text-zinc-400">
-                          {job.crew}
-                        </td>
-
-                        <td className="px-5 py-5">
-                          <span
-                            className={`rounded-full border px-3 py-1 text-xs font-medium ${
-                              job.priority === "High"
-                                ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
-                                : "border-zinc-500/20 bg-zinc-500/10 text-zinc-300"
-                            }`}
-                          >
-                            {job.priority}
-                          </span>
-                        </td>
-
-                        <td className="px-5 py-5">
-                          <StatusBadge status={job.status} />
-                        </td>
-
-                        <td className="px-5 py-5 text-right">
-                          <button className="rounded-lg p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
-                            <MoreHorizontal className="h-5 w-5" />
-                          </button>
-                        </td>
+              <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-lg sm:mt-6">
+                <div className="max-h-[620px] overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  <table className="min-w-[860px] w-full text-left text-xs sm:text-sm">
+                    <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
+                      <tr>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Job #
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Customer
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Service
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Scheduled
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Crew
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Priority
+                        </th>
+                        <th className="px-3 py-3 font-medium sm:px-5 sm:py-4">
+                          Status
+                        </th>
+                        <th className="px-3 py-3 text-right font-medium sm:px-5 sm:py-4" />
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+
+                    <tbody>
+                      {jobData.map((job) => (
+                        <tr
+                          key={job.jobNumber}
+                          className="border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
+                        >
+                          <td className="px-3 py-3 font-medium text-white sm:px-5 sm:py-5">
+                            {job.jobNumber}
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-5 sm:py-5">
+                            {job.customer}
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {job.service}
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {job.scheduledDate}
+                          </td>
+
+                          <td className="px-3 py-3 text-zinc-400 sm:px-5 sm:py-5">
+                            {job.crew}
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-5 sm:py-5">
+                            <span
+                              className={`rounded-full border px-2.5 py-1 text-xs font-medium ${
+                                job.priority === "High"
+                                  ? "border-rose-500/20 bg-rose-500/10 text-rose-300"
+                                  : "border-zinc-500/20 bg-zinc-500/10 text-zinc-300"
+                              }`}
+                            >
+                              {job.priority}
+                            </span>
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-5 sm:py-5">
+                            <StatusBadge status={job.status} />
+                          </td>
+
+                          <td className="px-3 py-3 text-right sm:px-5 sm:py-5">
+                            <button className="rounded-lg p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white">
+                              <MoreHorizontal className="h-4 w-4 sm:h-5 sm:w-5" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -1778,33 +1892,63 @@ export default function DashboardDemoPage() {
 
           {/* =====================================================
               FOLLOW-UP SCREEN
+              Mobile optimized KPI layout + activity cards
           ====================================================== */}
-
 
           {activeScreen === "Follow-Up" && (
             <div>
-              <div className="border-b border-white/10 pb-8">
+              {/* =========================
+                  FOLLOW-UP HEADER
+              ========================== */}
+
+              <div className="border-b border-white/10 pb-6 md:pb-8">
                 <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
                   Follow-Up Management
                 </p>
 
-                <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
                   Follow-Up Queue
                 </h1>
 
-                <p className="mt-4 max-w-2xl text-zinc-400">
-                  Prioritize open quotes, delayed responses, revised pricing requests,
-                  and customer outreach before opportunities go cold.
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
+                  Prioritize open quotes, delayed responses, revised pricing
+                  requests, and customer outreach before opportunities go cold.
                 </p>
               </div>
 
-              <div className="mt-8 grid gap-4 md:grid-cols-3">
-                <KpiCard title="Due Today" value="8" detail="Require outreach" icon={FileText} />
-                <KpiCard title="High Value" value="3" detail="Commercial opportunities" icon={DollarSign} />
-                <KpiCard title="Overdue" value="5" detail="Past recommended follow-up" icon={Activity} />
+              {/* =========================
+                  FOLLOW-UP KPI CARDS
+                  Mobile: compact 2-column layout
+              ========================== */}
+
+              <div className="mt-6 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:mt-8 md:grid-cols-3 md:gap-4">
+                <KpiCard
+                  title="Due Today"
+                  value="8"
+                  detail="Require outreach"
+                  icon={FileText}
+                />
+
+                <KpiCard
+                  title="High Value"
+                  value="3"
+                  detail="Commercial opportunities"
+                  icon={DollarSign}
+                />
+
+                <KpiCard
+                  title="Overdue"
+                  value="5"
+                  detail="Past recommended follow-up"
+                  icon={Activity}
+                />
               </div>
 
-              <div className="mt-6 grid gap-4">
+              {/* =========================
+                  FOLLOW-UP TASK CARDS
+              ========================== */}
+
+              <div className="mt-5 grid gap-3 sm:mt-6 sm:gap-4">
                 {[
                   "Call North Ridge Homes about pending mason sand quote.",
                   "Send revised gravel delivery pricing to Oakline Outdoor Living.",
@@ -1813,51 +1957,57 @@ export default function DashboardDemoPage() {
                 ].map((item) => (
                   <div
                     key={item}
-                    className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-zinc-300"
+                    className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-sm leading-6 text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06] sm:p-5"
                   >
-                    {item}
+                    <div className="flex items-start gap-3">
+                      <div className="mt-2 h-2 w-2 shrink-0 rounded-full bg-zinc-400" />
+
+                      <p>{item}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
-
+          
           {/* =====================================================
               REPORTS SCREEN
+              Mobile optimized header
           ====================================================== */}
 
           {activeScreen === "Reports" && (
-            <div>
+            <div className="min-w-0 overflow-hidden">
               {/* =========================
                   REPORTS HEADER
               ========================== */}
 
-              <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-end md:justify-between">
+              <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-end md:justify-between md:pb-8">
                 <div>
                   <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">
                     Business Reporting
                   </p>
 
-                  <h1 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+                  <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl">
                     Reports
                   </h1>
 
-                  <p className="mt-4 max-w-2xl text-zinc-400">
+                  <p className="mt-4 max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
                     Turn quote, customer, job, and financial activity into
                     practical performance visibility for owners and operators.
                   </p>
                 </div>
 
-                <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-zinc-400">
+                <div className="inline-flex w-fit rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-zinc-400 sm:px-4 sm:text-sm">
                   Updated automatically every 15 minutes
                 </div>
               </div>
 
               {/* =========================
                   REPORT KPI CARDS
+                  Mobile: compact 2-column layout
               ========================== */}
 
-              <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="mt-6 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:mt-8 md:grid-cols-2 md:gap-4 xl:grid-cols-4">
                 <KpiCard
                   title="Monthly Revenue"
                   value="$38.9K"
@@ -1889,24 +2039,26 @@ export default function DashboardDemoPage() {
 
               {/* =========================
                   FINANCIAL PERFORMANCE CHART
+                  Mobile optimized chart sizing
               ========================== */}
 
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                <div className="mb-6 flex items-center justify-between">
+              <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:mt-6 sm:p-5">
+                
+                <div className="mb-5 flex items-center justify-between sm:mb-6">
                   <div>
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-base font-semibold sm:text-lg">
                       Revenue vs. COGS
                     </h2>
 
-                    <p className="text-sm text-zinc-500">
+                    <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                       Monthly revenue compared against estimated operating cost.
                     </p>
                   </div>
 
-                  <Activity className="h-5 w-5 text-zinc-500" />
+                  <Activity className="hidden h-5 w-5 text-zinc-500 sm:block" />
                 </div>
 
-                <div className="h-80 min-h-[320px] min-w-0">
+                <div className="h-52 min-h-[208px] min-w-0 sm:h-80 sm:min-h-[320px]">
                   {chartsReady && (
                     <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                       <LineChart
@@ -1918,14 +2070,14 @@ export default function DashboardDemoPage() {
                           stroke="#71717a"
                           tickLine={false}
                           axisLine={false}
-                          tick={{ fontSize: 13 }}
+                          tick={{ fontSize: 11 }}
                         />
 
                         <YAxis
                           stroke="#71717a"
                           tickLine={false}
                           axisLine={false}
-                          tick={{ fontSize: 12 }}
+                          tick={{ fontSize: 11 }}
                           tickFormatter={(value) =>
                             formatNumber(Number(value))
                           }
@@ -1997,19 +2149,20 @@ export default function DashboardDemoPage() {
 
               {/* =========================
                   INSIGHTS + REPORT LIBRARY
+                  Mobile optimized cards, desktop table
               ========================== */}
 
-              <div className="mt-6 grid gap-6 xl:grid-cols-[1fr_2fr]">
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                  <h2 className="text-lg font-semibold">
+              <div className="mt-5 grid min-w-0 gap-4 overflow-hidden sm:mt-6 sm:gap-6 xl:grid-cols-[1fr_2fr]">
+                <div className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:p-5">
+                  <h2 className="text-base font-semibold sm:text-lg">
                     Generated Insights
                   </h2>
 
-                  <p className="mt-1 text-sm text-zinc-500">
+                  <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                     Practical takeaways from recent operational activity.
                   </p>
 
-                  <div className="mt-5 space-y-4">
+                  <div className="mt-4 space-y-3 sm:mt-5 sm:space-y-4">
                     {[
                       "Gravel deliveries generated the highest revenue contribution this period.",
                       "COGS increased in June, but margin remained healthy due to larger job size.",
@@ -2018,27 +2171,54 @@ export default function DashboardDemoPage() {
                     ].map((insight) => (
                       <div
                         key={insight}
-                        className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm leading-6 text-zinc-300"
+                        className="min-w-0 rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-xs leading-5 text-zinc-300 sm:px-4 sm:text-sm sm:leading-6"
                       >
-                        {insight}
+                        <p className="break-words">{insight}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]">
-                  <div className="mb-5">
-                    <h2 className="text-lg font-semibold">
+                <div className="min-w-0 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-lg transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] sm:p-5">
+                  <div className="mb-4 sm:mb-5">
+                    <h2 className="text-base font-semibold sm:text-lg">
                       Report Library
                     </h2>
 
-                    <p className="text-sm text-zinc-500">
+                    <p className="mt-1 text-xs leading-5 text-zinc-500 sm:text-sm">
                       Saved operational and financial reporting views.
                     </p>
                   </div>
 
-                  <div className="overflow-hidden rounded-xl border border-white/10">
-                    <table className="w-full text-left text-sm">
+                  {/* Mobile report cards */}
+                  <div className="space-y-3 sm:hidden">
+                    {savedReports.map((report) => (
+                      <div
+                        key={report.name}
+                        className="rounded-xl border border-white/10 bg-black/20 p-3"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="break-words text-sm font-medium leading-5 text-white">
+                              {report.name}
+                            </p>
+
+                            <p className="mt-1 text-xs text-zinc-500">
+                              {report.type} • {report.updated}
+                            </p>
+                          </div>
+
+                          <div className="shrink-0">
+                            <StatusBadge status={report.status} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Tablet/Desktop report table */}
+                  <div className="hidden overflow-x-auto rounded-xl border border-white/10 [scrollbar-width:none] sm:block [&::-webkit-scrollbar]:hidden">
+                    <table className="w-full min-w-[620px] text-left text-sm">
                       <thead className="sticky top-0 z-10 bg-[#111318] text-zinc-400 backdrop-blur">
                         <tr>
                           <th className="px-4 py-3 font-medium">Report</th>
