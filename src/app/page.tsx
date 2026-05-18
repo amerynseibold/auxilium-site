@@ -1,4 +1,48 @@
+"use client"
+
+import { motion, type Variants } from "framer-motion"
 import Image from "next/image"
+
+const fadeUp: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut",
+    },
+  },
+}
+
+const staggerContainer: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+}
+
+const scrollReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+    filter: "blur(8px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.65,
+      ease: "easeOut",
+    },
+  },
+}
 
 export default function Home() {
   return (
@@ -64,15 +108,60 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-12 items-center">
 
               {/* LEFT: HERO TEXT */}
-              <div className="max-w-3xl">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                animate="visible"
+                className="max-w-3xl"
+              >
 
-                <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-6">
+                <motion.p
+                  variants={fadeUp}
+                  className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-6"
+                >
                   Business Process Modernization
-                </p>
+                </motion.p>
 
-                <h1 className="text-[2.25rem] sm:text-6xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl">
-                  Helping businesses modernize outdated systems and workflows.
-                </h1>
+                <motion.h1
+                  className="text-[2.25rem] sm:text-6xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    hidden: {},
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.08,
+                      },
+                    },
+                  }}
+                >
+                  {"Helping businesses modernize outdated systems and workflows."
+                    .split(" ")
+                    .map((word) => (
+                      <motion.span
+                        key={word}
+                        variants={{
+                          hidden: {
+                            opacity: 0,
+                            y: 28,
+                            filter: "blur(8px)",
+                          },
+                          visible: {
+                            opacity: 1,
+                            y: 0,
+                            filter: "blur(0px)",
+                            transition: {
+                              duration: 0.55,
+                              ease: "easeOut",
+                            },
+                          },
+                        }}
+                        className="inline-block mr-[0.25em]"
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                </motion.h1>
 
                 <p className="mt-8 text-lg md:text-xl text-zinc-300 leading-relaxed max-w-2xl">
                   We build internal tools, quoting systems, dashboards, and workflow
@@ -97,15 +186,24 @@ export default function Home() {
 
                 </div>
 
-              </div>
+              </motion.div>
 
               {/* RIGHT: HERO OPERATIONS VISUAL */}
-              <div className="hidden lg:block">
+              <motion.div
+                initial={{ opacity: 0, x: 40, scale: 0.98 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{
+                  duration: 0.9,
+                  delay: 0.25,
+                  ease: "easeOut",
+                }}
+                className="hidden lg:block"
+              >
                 <div className="relative">
                   {/* Soft dashboard glow */}
-                  <div className="absolute inset-0 rounded-full bg-blue-500/1 blur-[60px]" />
+                  <div className="absolute inset-0 rounded-full bg-blue-500/5 blur-[120px] opacity-40" />
 
-                  <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_0_80px_rgba(33,168,255,0.08)] backdrop-blur-sm">
+                  <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
                     {/* Dashboard Header */}
                     <div className="mb-6 flex items-center justify-between">
                       <div>
@@ -228,7 +326,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
            </div>
           </div>
         </div>
@@ -238,8 +336,17 @@ export default function Home() {
           FEATURED PROJECTS
       ===================================================== */}
 
-      <section id="work" className="max-w-7xl mx-auto px-6 pb-24 md:pb-32 scroll-mt-20">
-        <div className="mb-10 md:mb-16">
+      <section
+        id="work"
+        className="max-w-7xl mx-auto px-6 pb-24 md:pb-32 scroll-mt-20"
+      >
+        <motion.div
+          variants={scrollReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+          className="mb-10 md:mb-16"
+        >
           <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
             Featured Work
           </p>
@@ -247,7 +354,7 @@ export default function Home() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold">
             Real tools for real businesses.
           </h2>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           <a
@@ -383,7 +490,13 @@ export default function Home() {
 
       <section id="services" className="max-w-7xl mx-auto px-6 pt-24 pb-24 md:pt-32 md:pb-32 scroll-mt-20 border-t border-white/5">
 
-        <div className="mb-10 md:mb-16">
+        <motion.div
+          variants={scrollReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+          className="mb-10 md:mb-16"
+        >
 
           <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
             What We Improve
@@ -393,7 +506,7 @@ export default function Home() {
             Reduce friction across your business operations.
           </h2>
 
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
@@ -441,17 +554,59 @@ export default function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
-          <div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+        >
 
-            <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
-              How We Work
-            </p>
+          <motion.p
+            variants={scrollReveal}
+            className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4"
+          >
+            How We Work
+          </motion.p>
 
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-              Practical solutions built around how your business actually operates.
-            </h2>
+          <motion.h2
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.05,
+                },
+              },
+            }}
+          >
+            {"Practical solutions built around how your business actually operates."
+              .split(" ")
+              .map((word) => (
+                <motion.span
+                  key={word}
+                  variants={{
+                    hidden: {
+                      opacity: 0,
+                      y: 24,
+                      filter: "blur(8px)",
+                    },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      filter: "blur(0px)",
+                      transition: {
+                        duration: 0.5,
+                        ease: "easeOut",
+                      },
+                    },
+                  }}
+                  className="inline-block mr-[0.25em]"
+                >
+                  {word}
+                </motion.span>
+              ))}
+          </motion.h2>
 
-          </div>
+        </motion.div>
 
           <div className="space-y-6">
 
@@ -496,7 +651,13 @@ export default function Home() {
 
       <section className="max-w-7xl mx-auto px-6 pt-24 pb-24 md:pt-32 md:pb-32 border-t border-white/5">
 
-        <div className="mb-10 md:mb-16">
+        <motion.div
+          variants={scrollReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+          className="mb-10 md:mb-16"
+        >
 
           <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
             Who We Help
@@ -506,7 +667,7 @@ export default function Home() {
             Built for businesses that have outgrown manual processes.
           </h2>
 
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -551,12 +712,50 @@ export default function Home() {
         <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 md:p-12 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_60px_rgba(33,168,255,0.06)]">
 
           <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
-            Start a Conversation
+            Let's Improve Your Workflow
           </p>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-tight">
-            Have a painful process that needs a better system?
-          </h2>
+          <motion.h2
+            className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-tight"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.045,
+                },
+              },
+            }}
+          >
+            {"Have a painful process that needs a better system?"
+              .split(" ")
+              .map((word, index) => (
+                <motion.span
+                  key={`${word}-${index}`}
+                  variants={{
+                    hidden: {
+                      opacity: 0,
+                      y: 20,
+                      filter: "blur(8px)",
+                    },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      filter: "blur(0px)",
+                      transition: {
+                        duration: 0.45,
+                        ease: "easeOut",
+                      },
+                    },
+                  }}
+                  className="inline-block mr-[0.25em]"
+                >
+                  {word}
+                </motion.span>
+              ))}
+          </motion.h2>
 
           <p className="mt-6 text-lg text-zinc-400 leading-relaxed max-w-2xl">
             Let’s talk through where your business is losing time, duplicating work,
