@@ -358,7 +358,7 @@ export default function Home() {
 
       {/* =====================================================
           FEATURED PROJECTS
-      ===================================================== */}
+      ====================================================== */}
 
       <section
         id="work"
@@ -369,7 +369,7 @@ export default function Home() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
-          className="mb-10 md:mb-16"
+          className="mb-8 md:mb-10"
         >
           <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
             Featured Work
@@ -380,32 +380,32 @@ export default function Home() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           <a
             href="https://snapquote-gilt.vercel.app/"
             target="_blank"
             rel="noreferrer"
-            className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
+            className="group self-start bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Tree Service Tool
             </p>
 
-            <div className="min-h-[96px]">
+            <div className="min-h-[72px]">
               <h3 className="text-3xl font-bold leading-tight">
                 SnapQuote
               </h3>
             </div>
 
-            <div className="relative w-full h-[230px] md:h-[260px] rounded-2xl overflow-hidden border border-white/10 mb-6">
+            <div className="relative w-full h-[190px] md:h-[220px] rounded-2xl overflow-hidden border border-white/10 mb-6">
               <Image
                 src="/snapquote-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="SnapQuote Preview"
                 fill
-                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.03]"
+                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.015]"
               />
-              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-blue-400/30" />
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
 
             <p className="text-base text-zinc-400 leading-relaxed">
@@ -414,39 +414,39 @@ export default function Home() {
               and mobile-friendly workflows.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition-all duration-300 group-hover:gap-3">
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-all duration-300 group-hover:text-white group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
-            </div>            
+            </div>
           </a>
 
           <a
             href="https://bulk-material-demo-app.vercel.app/"
             target="_blank"
             rel="noreferrer"
-            className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
+            className="group self-start bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Material Supplier Tool
             </p>
 
-            <div className="min-h-[96px]">
+            <div className="min-h-[72px]">
               <h3 className="text-3xl font-bold leading-tight">
                 Bulk Material Estimator
               </h3>
             </div>
 
-            <div className="relative w-full h-[230px] md:h-[260px] rounded-2xl overflow-hidden border border-white/10 mb-6">
+            <div className="relative w-full h-[190px] md:h-[220px] rounded-2xl overflow-hidden border border-white/10 mb-6">
               <Image
                 src="/bulk-material-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="Bulk Material Estimator Preview"
                 fill
-                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.03]"
+                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.015]"
               />
-              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-blue-400/30" />
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
 
             <p className="text-base text-zinc-400 leading-relaxed">
@@ -455,7 +455,7 @@ export default function Home() {
               directly online.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition-all duration-300 group-hover:gap-3">
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-all duration-300 group-hover:text-white group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →
@@ -465,40 +465,36 @@ export default function Home() {
 
           <a
             href="/demo/dashboard"
-            className="group h-full bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
+            className="group self-start bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Operations Dashboard
             </p>
 
-            <div className="min-h-[96px]">
+            <div className="min-h-[72px]">
               <h3 className="text-3xl font-bold leading-tight">
                 Operations Command Center
               </h3>
             </div>
 
-            <div className="relative w-full h-[230px] md:h-[260px] rounded-2xl overflow-hidden border border-white/10 mb-6 bg-[#0d0f14]">
-
+            <div className="relative w-full h-[190px] md:h-[220px] rounded-2xl overflow-hidden border border-white/10 mb-6 bg-[#0d0f14]">
               <Image
                 src="/operations-dashboard-preview.png"
                 alt="Operations Dashboard Preview"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-contain bg-[#0d0f14] transition duration-700 group-hover:scale-[1.02]"
+                className="object-contain bg-[#0d0f14] transition duration-700 group-hover:scale-[1.015]"
               />
-              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-blue-400/30" />
 
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0d0f14] via-transparent to-transparent" />
-
             </div>
 
             <p className="text-base text-zinc-400 leading-relaxed">
-              A modern operational dashboard concept for service-based businesses,
-              featuring quote management, customer tracking, job scheduling,
-              reporting, and workflow visibility.
+              A modern operations dashboard concept for service businesses, featuring quote tracking, customer visibility, job scheduling, and reporting.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-blue-400 transition-all duration-300 group-hover:gap-3">
+            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-all duration-300 group-hover:text-white group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →
@@ -508,73 +504,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* =====================================================
-          SERVICES SECTION
-      ===================================================== */}
-
-      <section id="services" className="max-w-7xl mx-auto px-6 pt-24 pb-24 md:pt-32 md:pb-32 scroll-mt-20 border-t border-white/5">
-
-        <motion.div
-          variants={scrollReveal}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
-          className="mb-10 md:mb-16"
-        >
-
-          <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
-            What We Improve
-          </p>
-
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl">
-            Reduce friction across your business operations.
-          </h2>
-
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-          {[
-            {
-              title: "Workflow Automation",
-              body: "Streamline repetitive tasks and reduce manual administrative work.",
-            },
-            {
-              title: "Operational Reporting",
-              body: "Improve visibility with cleaner reporting systems and centralized data.",
-            },
-            {
-              title: "Custom Tools",
-              body: "Build tailored internal tools and customer-facing systems for your business.",
-            },
-            {
-              title: "Process Improvement",
-              body: "Identify inefficiencies and modernize outdated operational workflows.",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
-            >
-              <h3 className="text-2xl font-semibold mb-4">
-                {item.title}
-              </h3>
-
-              <p className="text-base text-zinc-400 leading-relaxed">
-                {item.body}
-              </p>
-            </div>
-          ))}
-
-        </div>
-
-      </section>
 
       {/* =====================================================
           HOW WE WORK SECTION
       ===================================================== */}
 
-      <section id="process" className="max-w-7xl mx-auto px-6 pt-24 pb-24 md:pt-32 md:pb-32 scroll-mt-20 border-t border-white/5">
+      <section id="process" className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
@@ -657,7 +592,7 @@ export default function Home() {
                   {item.title}
                 </h3>
 
-                <p className="text-base text-zinc-400 leading-relaxed">
+                <p className="text-base text-white/55 leading-relaxed">
                   {item.body}
                 </p>
               </div>
@@ -673,7 +608,7 @@ export default function Home() {
           WHO WE HELP SECTION
       ===================================================== */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-24 pb-24 md:pt-32 md:pb-32 border-t border-white/5">
+      <section className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
 
         <motion.div
           variants={scrollReveal}
@@ -711,7 +646,7 @@ export default function Home() {
           ].map((item) => (
             <div
               key={item.title}
-              className="bg-white/[0.03] border border-white/10 rounded-3xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_rgba(33,168,255,0.08)]"
+              className="bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
             >
               <h3 className="text-2xl font-semibold mb-4">
                 {item.title}
@@ -733,7 +668,7 @@ export default function Home() {
 
       <section id="contact" className="max-w-7xl mx-auto px-6 pb-16 scroll-mt-20">
 
-        <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 md:p-12 transition-all duration-300 hover:border-blue-500/30 hover:shadow-[0_0_60px_rgba(33,168,255,0.06)]">
+        <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 md:p-12 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04]">
 
           <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
             Let's Improve Your Workflow
