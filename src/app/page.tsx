@@ -1,6 +1,7 @@
 "use client"
 
 import { motion, type Variants } from "framer-motion"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 
 const fadeUp: Variants = {
@@ -45,6 +46,21 @@ const scrollReveal: Variants = {
 }
 
 export default function Home() {
+
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 24)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
   return (
     <main className="min-h-screen text-white overflow-hidden">
 
@@ -60,14 +76,21 @@ export default function Home() {
               TOP NAV
           ========================== */}
 
-          <div className="flex items-center justify-between gap-4">
+          <div
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+              scrolled
+                ? "backdrop-blur-xl bg-black/40 border-b border-white/10"
+                : "bg-transparent"
+            }`}
+          >
+            <div className="max-w-7xl mx-auto px-6 py-1.5 flex items-center justify-between gap-4">
 
-           <div className="w-[240px] md:w-[320px]"> 
+           <div className="w-[190px] md:w-[255px]"> 
             <Image
               src="/auxilium-logo-tight.png"
               alt="Auxilium Logo"
-              width={320}
-              height={60}
+              width={300}
+              height={40}
               priority
             />
            </div>
@@ -85,7 +108,7 @@ export default function Home() {
                 Process
               </a>
 
-              <a href="#contact" className="border border-white/10 px-5 py-2 rounded-full text-white hover:border-white/30 transition">
+              <a href="#contact" className="border border-white/10 px-5 py-2 rounded-xl text-white hover:border-white/30 transition">
                 Contact
               </a>
             </nav>
@@ -98,6 +121,7 @@ export default function Home() {
             </a>
 
           </div>
+        </div>
 
           {/* =========================
               HERO CONTENT
@@ -105,7 +129,7 @@ export default function Home() {
 
           <div className="pt-12 pb-20 md:pt-20 md:pb-28">
 
-            <div className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 items-center">
 
               {/* LEFT: HERO TEXT */}
               <motion.div
@@ -137,9 +161,9 @@ export default function Home() {
                 >
                   {"Helping businesses modernize outdated systems and workflows."
                     .split(" ")
-                    .map((word) => (
+                    .map((word, index) => (
                       <motion.span
-                        key={word}
+                        key={`${word}-${index}`}
                         variants={{
                           hidden: {
                             opacity: 0,
@@ -172,14 +196,14 @@ export default function Home() {
 
                   <a
                     href="#work"
-                    className="bg-blue-600 hover:bg-blue-500 transition px-7 py-4 rounded-full font-medium text-center shadow-[0_0_30px_rgba(33,168,255,0.25)]"
+                    className="bg-blue-600 hover:bg-blue-500 transition px-6 py-3.5 rounded-xl font-medium text-center shadow-sm"
                   >
                     See the Work
                   </a>
 
                   <a
                     href="#contact"
-                    className="border border-white/10 hover:border-white/30 transition px-7 py-4 rounded-full font-medium text-center"
+                    className="border border-white/10 hover:border-white/30 transition px-6 py-3.5 rounded-xl font-medium text-center"
                   >
                     Start a Conversation
                   </a>
@@ -197,13 +221,13 @@ export default function Home() {
                   delay: 0.25,
                   ease: "easeOut",
                 }}
-                className="hidden lg:block"
+                className="hidden lg:block lg:pt-4"
               >
                 <div className="relative">
                   {/* Soft dashboard glow */}
                   <div className="absolute inset-0 rounded-full bg-blue-500/5 blur-[120px] opacity-40" />
 
-                  <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+                  <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
                     {/* Dashboard Header */}
                     <div className="mb-6 flex items-center justify-between">
                       <div>
@@ -217,22 +241,22 @@ export default function Home() {
                     </div>
 
                     {/* Metrics */}
-                    <div className="mb-6 grid grid-cols-3 gap-3">
+                    <div className="mb-4 grid grid-cols-3 gap-3">
                       {[
                         ["Active Jobs", "18"],
                         ["Time Saved", "12h/wk"],
                         ["Automated", "86%"],
                       ].map(([label, value]) => (
-                        <div key={label} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                          <p className="mb-2 text-xs text-zinc-500">{label}</p>
+                        <div key={label} className="rounded-2xl border border-white/10 bg-black/20 p-3">
+                          <p className="text-xs text-zinc-500">{label}</p>
                           <p className="text-2xl font-semibold">{value}</p>
                         </div>
                       ))}
                     </div>
 
                     {/* Workflow */}
-                    <div className="mb-5 rounded-2xl border border-white/10 bg-black/20 p-4">
-                      <div className="mb-5 flex items-center justify-between">
+                    <div className="mb-4 rounded-2xl border border-white/10 bg-black/20 p-2">
+                      <div className="mb-3 flex items-center justify-between">
                         <p className="text-sm font-medium">Customer Request Workflow</p>
                         <p className="text-xs text-blue-300">5 steps</p>
                       </div>
@@ -766,14 +790,14 @@ export default function Home() {
 
             <a
               href="mailto:hello@auxiliumbusiness.com"
-              className="bg-blue-600 hover:bg-blue-500 transition px-7 py-4 rounded-full font-medium text-center shadow-[0_0_30px_rgba(33,168,255,0.25)]"
+              className="bg-blue-600 hover:bg-blue-500 transition px-6 py-3.5 rounded-xl font-medium text-center shadow-sm"
             >
               Email Auxilium
             </a>
 
             <a
               href="#work"
-              className="border border-white/10 hover:border-white/30 transition px-7 py-4 rounded-full font-medium text-center"
+              className="border border-white/10 hover:border-white/30 transition px-6 py-3.5 rounded-xl font-medium text-center"
             >
               View Examples
             </a>

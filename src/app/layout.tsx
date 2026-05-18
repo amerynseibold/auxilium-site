@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Montserrat } from "next/font/google"
 import "./globals.css"
+import SmoothScroll from "@/components/SmoothScroll"
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.variable} font-sans`}>
-        {children}
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   )
