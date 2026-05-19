@@ -11,6 +11,10 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Auxilium Business Solutions",
   description: "Custom operational tools for modern service businesses.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
 }
 
 export default function RootLayout({
