@@ -113,19 +113,15 @@ export default function Home() {
               TOP NAV
           ========================== */}
 
-          <div
-            className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-              scrolled
-                ? "border-b border-white/10 lg:backdrop-blur-xl lg:bg-black/40"
-                : "lg:bg-transparent"
-            }`}
-            style={{
-              backgroundColor: "#07090d",
-              paddingTop: "env(safe-area-inset-top)",
-            }}
-          >
-            <div className="max-w-7xl mx-auto px-6 py-1.5 flex items-center justify-between gap-4 lg:bg-transparent">
-
+        <div
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+            scrolled
+              ? "backdrop-blur-xl bg-[#07090d]/95 border-b border-white/10"
+              : "bg-[#07090d]/95 md:bg-transparent"
+          }`}
+        >
+          <div className="relative max-w-7xl mx-auto px-6 py-2 md:py-1.5 flex items-center justify-between gap-4">
+            
            <a href="#top"className="w-[190px] md:w-[255px]"> 
             <Image
               src="/auxilium-logo-tight.png"

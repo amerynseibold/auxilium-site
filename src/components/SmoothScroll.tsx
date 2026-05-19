@@ -25,8 +25,10 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       const element = document.querySelector(href)
 
       if (element) {
+        const isMobile = window.innerWidth < 768
+
         lenis.scrollTo(element as HTMLElement, {
-          offset: 0,
+          offset: window.innerWidth < 768 ? -210 : 0,
         })
       }
     }
