@@ -32,6 +32,10 @@ body {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: auto;
+}
+
 
 /* =========================================
    PREMIUM GRAIN TEXTURE
@@ -51,3 +55,4 @@ body::before {
 
   opacity: 0.025;
 }
+

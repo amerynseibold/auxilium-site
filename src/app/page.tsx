@@ -63,6 +63,7 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#07090d] text-white">
+      <div id="top" />
 
       {/* Ambient Background Depth */}
       <div className="pointer-events-none absolute inset-0">
@@ -96,7 +97,7 @@ export default function Home() {
           >
             <div className="max-w-7xl mx-auto px-6 py-1.5 flex items-center justify-between gap-4">
 
-           <div className="w-[190px] md:w-[255px]"> 
+           <a href="#top"className="w-[190px] md:w-[255px]"> 
             <Image
               src="/auxilium-logo-tight.png"
               alt="Auxilium Logo"
@@ -104,19 +105,19 @@ export default function Home() {
               height={40}
               priority
             />
-           </div>
+           </a>
 
             <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
               <a href="#work" className="hover:text-white transition">
                 Work
               </a>
 
-              <a href="#services" className="hover:text-white transition">
-                Services
+              <a href="#approach" className="hover:text-white transition">
+                Approach
               </a>
 
-              <a href="#process" className="hover:text-white transition">
-                Process
+              <a href="#who-we-help" className="hover:text-white transition">
+                Who We Help 
               </a>
 
               <a href="#contact" className="border border-white/10 px-5 py-2 rounded-xl text-white hover:border-white/30 transition">
@@ -520,7 +521,7 @@ export default function Home() {
           HOW WE WORK SECTION
       ===================================================== */}
 
-      <section id="process" className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
+      <section id="approach" className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
@@ -619,7 +620,7 @@ export default function Home() {
           WHO WE HELP SECTION
       ===================================================== */}
 
-      <section className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
+      <section id="who-we-help" className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
 
         <motion.div
           variants={scrollReveal}
