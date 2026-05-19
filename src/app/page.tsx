@@ -62,7 +62,18 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen text-white overflow-hidden">
+    <main className="relative min-h-screen overflow-hidden bg-[#07090d] text-white">
+
+      {/* Ambient Background Depth */}
+      <div className="pointer-events-none absolute inset-0">
+
+        <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-500/[0.05] blur-[140px]" />
+
+        <div className="absolute top-[35%] right-[-15%] h-[420px] w-[420px] rounded-full bg-white/[0.03] blur-[120px]" />
+
+        <div className="absolute bottom-[-10%] left-[20%] h-[400px] w-[400px] rounded-full bg-blue-400/[0.03] blur-[120px]" />
+
+      </div>
 
       {/* =====================================================
           HERO SECTION

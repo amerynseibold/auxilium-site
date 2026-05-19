@@ -31,3 +31,23 @@ body {
 * {
   box-sizing: border-box;
 }
+
+
+/* =========================================
+   PREMIUM GRAIN TEXTURE
+========================================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+
+  background-image:
+    radial-gradient(rgba(255,255,255,0.12) 0.6px, transparent 0.6px);
+
+  background-size: 3px 3px;
+
+  opacity: 0.025;
+}
