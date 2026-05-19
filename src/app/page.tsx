@@ -45,6 +45,9 @@ const scrollReveal: Variants = {
   },
 }
 
+const cardSpotlight =
+  "before:pointer-events-none before:absolute before:inset-0 before:rounded-3xl before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(59,130,246,0.08),transparent_35%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+
 export default function Home() {
 
   const [scrolled, setScrolled] = useState(false)
@@ -52,7 +55,27 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 24)
+
+      const sections = ["work", "approach", "who-we-help", "contact"]
+
+      let currentSection = ""
+
+      sections.forEach((section) => {
+        const element = document.getElementById(section)
+        if (!element) return
+
+        const rect = element.getBoundingClientRect()
+        const sectionMiddle = rect.top + rect.height / 2
+
+        if (sectionMiddle <= window.innerHeight * 0.65) {
+          currentSection = section
+        }
+      })
+
+      setActiveSection(currentSection)
     }
+
+    handleScroll()
 
     window.addEventListener("scroll", handleScroll)
 
@@ -60,6 +83,8 @@ export default function Home() {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
+
+  const [activeSection, setActiveSection] = useState("")
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#07090d] text-white">
@@ -89,13 +114,17 @@ export default function Home() {
           ========================== */}
 
           <div
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+            className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
               scrolled
-                ? "backdrop-blur-xl bg-black/40 border-b border-white/10"
-                : "bg-transparent"
+                ? "border-b border-white/10 lg:backdrop-blur-xl lg:bg-black/40"
+                : "lg:bg-transparent"
             }`}
+            style={{
+              backgroundColor: "#07090d",
+              paddingTop: "env(safe-area-inset-top)",
+            }}
           >
-            <div className="max-w-7xl mx-auto px-6 py-1.5 flex items-center justify-between gap-4">
+            <div className="max-w-7xl mx-auto px-6 py-1.5 flex items-center justify-between gap-4 lg:bg-transparent">
 
            <a href="#top"className="w-[190px] md:w-[255px]"> 
             <Image
@@ -108,21 +137,43 @@ export default function Home() {
            </a>
 
             <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
-              <a href="#work" className="hover:text-white transition">
+              <a
+                href="#work"
+                className={`transition ${
+                  activeSection === "work" ? "text-white" : "hover:text-white"
+                }`}
+              >
                 Work
               </a>
 
-              <a href="#approach" className="hover:text-white transition">
+              <a
+                href="#approach"
+                className={`transition ${
+                  activeSection === "approach" ? "text-white" : "hover:text-white"
+                }`}
+              >
                 Approach
               </a>
 
-              <a href="#who-we-help" className="hover:text-white transition">
-                Who We Help 
+              <a
+                href="#who-we-help"
+                className={`transition ${
+                  activeSection === "who-we-help" ? "text-white" : "hover:text-white"
+                }`}
+              >
+                Who We Help
               </a>
 
-              <a href="#contact" className="border border-white/10 px-5 py-2 rounded-xl text-white hover:border-white/30 transition">
-                Contact
-              </a>
+            <a
+              href="#contact"
+              className={`rounded-xl px-5 py-2 transition-all duration-300 ${
+                activeSection === "contact"
+                  ? "border border-white/20 bg-white/[0.05] text-white"
+                  : "border border-white/8 text-white/60 hover:border-white/20 hover:text-white"
+              }`}
+            >
+              Contact
+            </a>
             </nav>
 
             <a
@@ -153,13 +204,13 @@ export default function Home() {
 
                 <motion.p
                   variants={fadeUp}
-                  className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-6"
+                  className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-6"
                 >
                   Business Process Modernization
                 </motion.p>
 
                 <motion.h1
-                  className="text-[2.25rem] sm:text-6xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl"
+                  className="text-[1.8rem] sm:text-6xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl"
                   initial="hidden"
                   animate="visible"
                   variants={{
@@ -199,23 +250,29 @@ export default function Home() {
                     ))}
                 </motion.h1>
 
-                <p className="mt-8 text-lg md:text-xl text-zinc-300 leading-relaxed max-w-2xl">
+                <p className="mt-6 text-[1rem] md:text-xl text-white/60 leading-relaxed max-w-2xl">
                   We build internal tools, quoting systems, dashboards, and workflow
                   automations that eliminate repetitive admin work for growing businesses.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 mt-10">
+                <div className="flex flex-col sm:flex-row gap-3 mt-8">
 
-                  <a
-                    href="#work"
-                    className="bg-blue-600 hover:bg-blue-500 transition px-6 py-3.5 rounded-xl font-medium text-center shadow-sm"
-                  >
-                    See the Work
-                  </a>
+                    <a
+                      href="#work"
+                      className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3 sm:py-3.5 font-medium text-center transition-all duration-300 hover:-translate-y-[1px] hover:bg-blue-500 active:translate-y-0"
+                    >
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      <span>See the Work</span>
+
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                      </span>
+                    </span>
+                  </a>  
 
                   <a
                     href="#contact"
-                    className="border border-white/10 hover:border-white/30 transition px-6 py-3.5 rounded-xl font-medium text-center"
+                    className="group rounded-xl border border-white/10 px-6 py-3 sm:py-3.5 font-medium text-center text-white/80 transition-all duration-300 hover:-translate-y-[1px] hover:border-white/25 hover:text-white active:translate-y-0"
                   >
                     Start a Conversation
                   </a>
@@ -374,7 +431,7 @@ export default function Home() {
 
       <section
         id="work"
-        className="max-w-7xl mx-auto px-6 pb-24 md:pb-32 scroll-mt-20"
+        className="max-w-7xl mx-auto px-6 pb-24 md:pb-32 scroll-mt-22"
       >
         <motion.div
           variants={scrollReveal}
@@ -383,11 +440,11 @@ export default function Home() {
           viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
           className="mb-8 md:mb-10"
         >
-          <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
+          <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
             Featured Work
           </p>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-[1.02]">
             Real tools for real businesses.
           </h2>
         </motion.div>
@@ -397,7 +454,12 @@ export default function Home() {
             href="https://snapquote-gilt.vercel.app/"
             target="_blank"
             rel="noreferrer"
-            className="group self-start bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
+            onMouseMove={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect()
+              event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
+              event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
+            }}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Tree Service Tool
@@ -420,7 +482,7 @@ export default function Home() {
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
 
-            <p className="text-base text-zinc-400 leading-relaxed">
+            <p className="text-sm sm:text-base text-white/60 leading-relaxed">
               A custom quoting platform designed for tree service businesses,
               featuring dynamic pricing, PDF quote generation, customer history,
               and mobile-friendly workflows.
@@ -438,7 +500,12 @@ export default function Home() {
             href="https://bulk-material-demo-app.vercel.app/"
             target="_blank"
             rel="noreferrer"
-            className="group self-start bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
+            onMouseMove={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect()
+              event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
+              event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
+            }}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Material Supplier Tool
@@ -461,7 +528,7 @@ export default function Home() {
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
 
-            <p className="text-base text-zinc-400 leading-relaxed">
+            <p className="text-sm sm:text-base text-white/60 leading-relaxed">
               A streamlined quote request system for gravel and material suppliers,
               allowing customers to estimate delivery pricing and submit requests
               directly online.
@@ -477,7 +544,12 @@ export default function Home() {
 
           <a
             href="/demo/dashboard"
-            className="group self-start bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
+            onMouseMove={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect()
+              event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
+              event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
+            }}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Operations Dashboard
@@ -502,7 +574,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#0d0f14] via-transparent to-transparent" />
             </div>
 
-            <p className="text-base text-zinc-400 leading-relaxed">
+            <p className="text-sm sm:text-base text-white/60 leading-relaxed">
               A modern operations dashboard concept for service businesses, featuring quote tracking, customer visibility, job scheduling, and reporting.
             </p>
 
@@ -533,7 +605,7 @@ export default function Home() {
 
           <motion.p
             variants={scrollReveal}
-            className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4"
+            className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4"
           >
             How We Work
           </motion.p>
@@ -600,7 +672,7 @@ export default function Home() {
               },
             ].map((item) => (
               <div key={item.title} className="border-l border-blue-500/50 pl-6">
-                <h3 className="text-2xl font-semibold mb-2">
+                <h3 className="text-2xl font-semibold mb-1 md:mb-2">
                   {item.title}
                 </h3>
 
@@ -627,14 +699,14 @@ export default function Home() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
-          className="mb-10 md:mb-16"
+          className="mb-8 md:mb-10"
         >
 
-          <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
+          <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
             Who We Help
           </p>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-[1.02]">
             Built for businesses that have outgrown manual processes.
           </h2>
 
@@ -658,13 +730,13 @@ export default function Home() {
           ].map((item) => (
             <div
               key={item.title}
-              className="bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
+              className="bg-white/[0.03] border border-white/10 rounded-3xl p-4 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
             >
-              <h3 className="text-2xl font-semibold mb-4">
+              <h3 className="text-2xl font-semibold mb-3">
                 {item.title}
               </h3>
 
-              <p className="text-base text-zinc-400 leading-relaxed">
+              <p className="text-base text-white/60 leading-relaxed">
                 {item.body}
               </p>
             </div>
@@ -678,11 +750,11 @@ export default function Home() {
           CONTACT SECTION
       ===================================================== */}
 
-      <section id="contact" className="max-w-7xl mx-auto px-6 pb-16 scroll-mt-20">
+      <section id="contact" className="max-w-7xl mx-auto px-6 pt-20 pb-16 scroll-mt-20">
 
-        <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 md:p-12 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04]">
+        <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-5 md:p-12 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04]">
 
-          <p className="uppercase tracking-[0.35em] text-xs md:text-sm text-blue-400 mb-4">
+          <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
             Let's Improve Your Workflow
           </p>
 
@@ -728,7 +800,7 @@ export default function Home() {
               ))}
           </motion.h2>
 
-          <p className="mt-6 text-lg text-zinc-400 leading-relaxed max-w-2xl">
+          <p className="mt-6 text-lg text-white/60 leading-relaxed max-w-2xl">
             Let’s talk through where your business is losing time, duplicating work,
             or relying on outdated workflows.
           </p>
@@ -737,14 +809,20 @@ export default function Home() {
 
             <a
               href="mailto:hello@auxiliumbusiness.com"
-              className="bg-blue-600 hover:bg-blue-500 transition px-6 py-3.5 rounded-xl font-medium text-center shadow-sm"
+              className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3.5 font-medium text-center transition-all duration-300 hover:-translate-y-[1px] hover:bg-blue-500 active:translate-y-0"
             >
-              Email Auxilium
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <span>Get in Touch</span>
+
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </span>
             </a>
 
             <a
               href="#work"
-              className="border border-white/10 hover:border-white/30 transition px-6 py-3.5 rounded-xl font-medium text-center"
+              className="group rounded-xl border border-white/10 px-6 py-3.5 font-medium text-center text-white/80 transition-all duration-300 hover:-translate-y-[1px] hover:border-white/25 hover:text-white active:translate-y-0"
             >
               View Examples
             </a>
@@ -757,21 +835,28 @@ export default function Home() {
 
       {/* =====================================================
           FOOTER
-      ===================================================== */}
+      ====================================================== */}
 
       <footer className="max-w-7xl mx-auto px-6 pb-10">
-        <div className="border-t border-white/10 pt-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between text-sm text-zinc-500">
+        <div className="border-t border-white/10 pt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between text-sm text-white/55">
           <div>
-            <p>
-              © 2026 Auxilium Business Solutions. All rights reserved.
+            <p className="text-white/55">
+              © 2026 Auxilium Business Solutions.
             </p>
 
-            <p className="mt-2">
-              Business process modernization, automation, and custom operational tools.
+            <p className="mt-2 max-w-xl leading-relaxed">
+              Custom operational tools, workflow automation, and reporting systems for growing businesses.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-5">
+            <a
+              href="mailto:hello@auxiliumbusiness.com"
+              className="transition hover:text-white"
+            >
+              Email
+            </a>
+
             <a
               href="https://github.com/amerynseibold"
               target="_blank"
@@ -785,12 +870,11 @@ export default function Home() {
               href="#work"
               className="transition hover:text-white"
             >
-              Featured Work
+              Work
             </a>
           </div>
         </div>
       </footer>
-
     </main>
   )
 }

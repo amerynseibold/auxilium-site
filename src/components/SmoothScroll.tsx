@@ -26,7 +26,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
       if (element) {
         lenis.scrollTo(element as HTMLElement, {
-          offset: -90,
+          offset: 0,
         })
       }
     }
