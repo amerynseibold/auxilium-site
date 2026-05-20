@@ -12,6 +12,9 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Auxilium Business Solutions",
   description: "Custom operational tools for modern service businesses.",
+  icons: {
+    icon: "/icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black",
