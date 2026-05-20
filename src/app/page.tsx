@@ -109,28 +109,28 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-6 pt-8 pb-4">
 
-          {/* =========================
-              TOP NAV
-          ========================== */}
+        {/* =========================
+            TOP NAV
+        ========================== */}
 
         <div
-          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          className={`md:fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
             scrolled
-              ? "backdrop-blur-xl bg-[#07090d]/95 border-b border-white/10"
-              : "bg-[#07090d]/95 md:bg-transparent"
+              ? "backdrop-blur-xl bg-black/40 border-b border-white/10"
+              : "backdrop-blur-xl bg-[#07090d]/75 border-b border-white/5"
           }`}
         >
+
           <div className="relative max-w-7xl mx-auto px-6 py-2 md:py-1.5 flex items-center justify-between gap-4">
-            
-           <a href="#top"className="w-[190px] md:w-[255px]"> 
-            <Image
-              src="/auxilium-logo-tight.png"
-              alt="Auxilium Logo"
-              width={300}
-              height={40}
-              priority
-            />
-           </a>
+            <a href="#top" className="w-[190px] md:w-[255px]">
+              <Image
+                src="/auxilium-logo-tight.png"
+                alt="Auxilium Logo"
+                width={300}
+                height={40}
+                priority
+              />
+            </a>
 
             <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
               <a
@@ -160,28 +160,27 @@ export default function Home() {
                 Who We Help
               </a>
 
-            <a
-              href="#contact"
-              className={`rounded-xl px-5 py-2 transition-all duration-300 ${
-                activeSection === "contact"
-                  ? "border border-white/20 bg-white/[0.05] text-white"
-                  : "border border-white/8 text-white/60 hover:border-white/20 hover:text-white"
-              }`}
-            >
-              Contact
-            </a>
+              <a
+                href="#contact"
+                className={`rounded-xl px-5 py-2 transition-all duration-300 ${
+                  activeSection === "contact"
+                    ? "border border-white/20 bg-white/[0.05] text-white"
+                    : "border border-white/8 text-white/60 hover:border-white/20 hover:text-white"
+                }`}
+              >
+                Contact
+              </a>
             </nav>
 
             <a
               href="#contact"
-              className="md:hidden border border-white/10 px-4 py-2 rounded-full text-sm text-white hover:border-white/30 transition"
+              className="md:hidden border border-white/10 px-4 py-2 rounded-xl text-sm text-white hover:border-white/30 transition"
             >
               Contact
             </a>
-
           </div>
         </div>
-
+        
           {/* =========================
               HERO CONTENT
           ========================== */}
@@ -833,7 +832,7 @@ export default function Home() {
           FOOTER
       ====================================================== */}
 
-      <footer className="max-w-7xl mx-auto px-6 pb-10">
+      <footer className="max-w-7xl mx-auto px-6 pb-4 md:pb-10">
         <div className="border-t border-white/10 pt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between text-sm text-white/55">
           <div>
             <p className="text-white/55">

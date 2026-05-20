@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next"
+import type { Metadata} from "next"
 import { Montserrat } from "next/font/google"
 import "./globals.css"
 import SmoothScroll from "@/components/SmoothScroll"
@@ -31,11 +31,4 @@ export default function RootLayout({
       </body>
     </html>
   )
-}
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  viewportFit: "cover",
-  themeColor: "#07090d",
 }

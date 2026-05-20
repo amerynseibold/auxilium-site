@@ -11,7 +11,12 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  background-color: #07090d;
+}
+
+body {
+  background-color: #07090d;
 }
 
 body {
@@ -32,16 +37,11 @@ body {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: auto;
-}
-
-html {
+.mobile-safe-nav {
+  padding-top: env(safe-area-inset-top, 0px);
   background: #07090d;
-}
-
-body {
-  background: #07090d;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
 }
 
 
