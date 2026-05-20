@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Auxilium Business Solutions",
   description: "Custom operational tools for modern service businesses.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.ico?v=2",
   },
   appleWebApp: {
     capable: true,
