@@ -1067,7 +1067,7 @@ export default function Home() {
                 </p>
 
                 <h2 id="contact-form-title" className="text-2xl font-bold md:text-3xl">
-                  Tell me what you want to improve.
+                  Tell us what you want to improve.
                 </h2>
               </div>
 
