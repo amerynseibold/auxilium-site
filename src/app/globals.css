@@ -8,6 +8,7 @@
   --accent-blue: #21a8ff;
   --navy: #0a1e5e;
   --silver: #c7cdd6;
+  --mobile-safe-area-shield-height: 24px;
 }
 
 html,
@@ -26,13 +27,6 @@ body {
 
 * {
   box-sizing: border-box;
-}
-
-.mobile-safe-nav {
-  padding-top: env(safe-area-inset-top, 0px);
-  background: rgba(7, 9, 13, 0.95);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
 }
 
 /* =========================================
@@ -57,18 +51,19 @@ body::before {
 @media (max-width: 767px) {
   .mobile-fixed-header {
     top: 0;
-    padding-top: 24px;
+    padding-top: var(--mobile-safe-area-shield-height);
     background: #07090d;
     isolation: isolate;
     transform: translateZ(0);
   }
 
+  /* iPhone Safari needs a hard fixed paint layer for the browser safe-area strip. */
   .mobile-safe-area-shield {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: 24px;
+    height: var(--mobile-safe-area-shield-height);
     background: #07090d;
     pointer-events: none;
     z-index: 2147483647;

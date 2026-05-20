@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
 import {
   BarChart,
@@ -53,7 +54,7 @@ const cogsData = [
 const serviceData = [
   { service: "Sand", yards: 1280 },
   { service: "Gravel", yards: 1640 },
-  { service: "River Rk", yards: 920},
+  { service: "River Rock", yards: 920 },
   { service: "Fill Dirt", yards: 740 },
 ]
 
@@ -175,6 +176,9 @@ const customerData = [
   },
 ]
 
+type Quote = (typeof quoteManagementData)[number]
+type Customer = (typeof customerData)[number]
+
 const jobData = [
   {
     jobNumber: "J-2201",
@@ -271,6 +275,42 @@ const fulfillmentColors = ["#e5e7eb", "#3f3f46"]
 ========================================================= */
 
 const formatNumber = (value: number) => value.toLocaleString("en-US")
+
+const matchesSearch = (
+  query: string,
+  values: Array<string | number>
+) => {
+  const normalizedQuery = query.trim().toLowerCase()
+
+  if (!normalizedQuery) return true
+
+  return values.some((value) =>
+    String(value).toLowerCase().includes(normalizedQuery)
+  )
+}
+
+function ServiceAxisTick({
+  x = 0,
+  y = 0,
+  payload,
+}: {
+  x?: number
+  y?: number
+  payload?: { value: string }
+}) {
+  const label = payload?.value ?? ""
+  const lines = label === "River Rock" ? ["River", "Rock"] : [label]
+
+  return (
+    <text x={x} y={y + 16} textAnchor="middle" fill="#71717a" fontSize={13}>
+      {lines.map((line, index) => (
+        <tspan key={line} x={x} dy={index === 0 ? 0 : 14}>
+          {line}
+        </tspan>
+      ))}
+    </text>
+  )
+}
 
 function KpiCard({
   title,
@@ -375,18 +415,61 @@ function StatusBadge({ status }: { status: string }) {
 
 export default function DashboardDemoPage() {
   const [activeScreen, setActiveScreen] = useState("Overview")
-  const [selectedCustomer, setSelectedCustomer] = useState<any>(null)
-  const [selectedQuote, setSelectedQuote] = useState<any>(null)
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [chartsReady, setChartsReady] = useState(false)
   const [quoteFilter, setQuoteFilter] = useState("All")
+  const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredQuotes =
-  quoteFilter === "All"
+  const filteredRecentQuotes = recentQuotes.filter((quote) =>
+    matchesSearch(searchQuery, [
+      quote.customer,
+      quote.service,
+      quote.status,
+      quote.amount,
+    ])
+  )
+
+  const filteredQuotes = (quoteFilter === "All"
     ? quoteManagementData
     : quoteManagementData.filter(
         (quote) => quote.status === quoteFilter
       )
+  ).filter((quote) =>
+    matchesSearch(searchQuery, [
+      quote.quoteNumber,
+      quote.customer,
+      quote.service,
+      quote.status,
+      quote.amount,
+      quote.date,
+      quote.owner,
+    ])
+  )
+
+  const filteredCustomers = customerData.filter((customer) =>
+    matchesSearch(searchQuery, [
+      customer.name,
+      customer.type,
+      customer.quotes,
+      customer.lifetimeValue,
+      customer.lastActivity,
+      customer.status,
+    ])
+  )
+
+  const filteredJobs = jobData.filter((job) =>
+    matchesSearch(searchQuery, [
+      job.jobNumber,
+      job.customer,
+      job.service,
+      job.scheduledDate,
+      job.crew,
+      job.status,
+      job.priority,
+    ])
+  )
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -396,6 +479,13 @@ export default function DashboardDemoPage() {
     return () => window.clearTimeout(timer)
   }, [])
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    })
+  }, [activeScreen])
+
   return (
     <main className="min-h-screen bg-[#08090d] text-white">
       <div className="flex min-h-screen">
@@ -403,7 +493,7 @@ export default function DashboardDemoPage() {
             SIDEBAR
         ========================== */}
 
-        <aside className="hidden w-72 border-r border-white/10 bg-black/20 p-6 lg:block">
+        <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-white/10 bg-black/20 px-5 py-6 lg:block">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-zinc-500">
               Auxilium
@@ -411,12 +501,12 @@ export default function DashboardDemoPage() {
 
             <h2 className="mt-3 text-xl font-semibold">Command Center</h2>
             
-            <a
+            <Link
               href="/"
               className="mt-4 inline-flex text-sm text-zinc-500 transition hover:text-white"
             >
-              ← Back to Auxilium
-            </a>
+              &larr; Back to Auxilium
+            </Link>
           </div>
 
           <nav className="mt-10 space-y-2 text-sm">
@@ -448,36 +538,23 @@ export default function DashboardDemoPage() {
             ))}
           </nav>
 
-          <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-            <p className="text-sm font-medium text-white">
-              Dashboard Highlights
-            </p>
-
-            <div className="mt-4 space-y-3 text-sm text-zinc-400">
-              <p>• Quote & pipeline tracking</p>
-              <p>• Customer management workflows</p>
-              <p>• Operational reporting views</p>
-              <p>• Mobile-responsive UI system</p>
-              <p>• Interactive management screens</p>
-            </div>
-          </div>
         </aside>
 
         {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden">
-            <div className="h-full w-80 border-r border-white/10 bg-[#0d0f14] p-6 shadow-2xl">
+          <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm lg:hidden">
+            <div className="h-full w-80 border-l border-white/10 bg-[#0d0f14] p-6 shadow-2xl">
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm uppercase tracking-[0.35em] text-zinc-500">
                     Auxilium
                   </p>
                   <h2 className="mt-3 text-xl font-semibold">Command Center</h2>
-                  <a
+                  <Link
                     href="/"
                     className="mt-4 inline-flex text-sm text-zinc-500 transition hover:text-white"
                   >
-                    ← Back to Auxilium
-                  </a>
+                    &larr; Back to Auxilium
+                  </Link>
                 </div>
 
                 <button
@@ -532,7 +609,7 @@ export default function DashboardDemoPage() {
               TOP UTILITY BAR
           ========================== */}
 
-          <div className="mb-6 flex flex-col gap-4 lg:mb-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="sticky top-[var(--mobile-safe-area-shield-height)] z-40 -mx-6 mb-6 flex flex-col gap-4 border-b border-white/10 bg-[#08090d] px-6 py-4 pr-8 lg:static lg:mx-0 lg:mb-8 lg:flex-row lg:items-center lg:justify-between lg:border-b-0 lg:bg-transparent lg:p-0">
             <div className="flex items-center justify-between lg:hidden">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">
@@ -542,15 +619,19 @@ export default function DashboardDemoPage() {
               </div>
 
               <button
+                type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="rounded-xl border border-white/10 bg-white/[0.04] p-2.5 text-zinc-300"
+                className="relative z-10 flex h-12 w-12 touch-manipulation items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-zinc-300 transition hover:border-white/20 hover:bg-white/[0.06]"
+                aria-label="Open dashboard menu"
               >
                 <Menu className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex-1">
+            <div className="hidden flex-1 lg:block">
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Search customers, quotes, jobs..."
                 className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm text-white placeholder:text-zinc-500 outline-none transition-all duration-300 focus:border-white/20"
               />
@@ -835,7 +916,7 @@ export default function DashboardDemoPage() {
                         >
                           <BarChart
                             data={serviceData}
-                            margin={{ top: 10, right: 10, left: -10, bottom: 10 }}
+                            margin={{ top: 10, right: 10, left: -10, bottom: 30 }}
                             barCategoryGap="22%"
                           >
                             <XAxis
@@ -843,7 +924,9 @@ export default function DashboardDemoPage() {
                               stroke="#71717a"
                               tickLine={false}
                               axisLine={false}
-                              tick={{ fontSize: 13 }}
+                              tick={<ServiceAxisTick />}
+                              interval={0}
+                              height={54}
                             />
 
                             <YAxis
@@ -1168,7 +1251,7 @@ export default function DashboardDemoPage() {
                     </thead>
 
                     <tbody>
-                      {recentQuotes.map((quote) => (
+                      {filteredRecentQuotes.map((quote) => (
                         <tr
                           key={quote.customer}
                           className="group cursor-pointer border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
@@ -1198,6 +1281,14 @@ export default function DashboardDemoPage() {
                           </td>
                         </tr>
                       ))}
+
+                      {filteredRecentQuotes.length === 0 && (
+                        <tr>
+                          <td colSpan={4} className="px-3 py-6 text-center text-zinc-500 sm:px-4">
+                            No recent quotes match your search.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1337,6 +1428,14 @@ export default function DashboardDemoPage() {
                           </td>
                         </tr>
                       ))}
+
+                      {filteredQuotes.length === 0 && (
+                        <tr>
+                          <td colSpan={8} className="px-3 py-6 text-center text-zinc-500 sm:px-5">
+                            No quotes match your search.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1573,7 +1672,7 @@ export default function DashboardDemoPage() {
                     </thead>
 
                     <tbody>
-                      {customerData.map((customer) => (
+                      {filteredCustomers.map((customer) => (
                         <tr
                           key={customer.name}
                           onClick={() => setSelectedCustomer(customer)}
@@ -1610,6 +1709,14 @@ export default function DashboardDemoPage() {
                           </td>
                         </tr>
                       ))}
+
+                      {filteredCustomers.length === 0 && (
+                        <tr>
+                          <td colSpan={7} className="px-3 py-6 text-center text-zinc-500 sm:px-5">
+                            No customers match your search.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1835,7 +1942,7 @@ export default function DashboardDemoPage() {
                     </thead>
 
                     <tbody>
-                      {jobData.map((job) => (
+                      {filteredJobs.map((job) => (
                         <tr
                           key={job.jobNumber}
                           className="border-t border-white/10 text-zinc-300 transition hover:bg-white/[0.03]"
@@ -1883,6 +1990,14 @@ export default function DashboardDemoPage() {
                           </td>
                         </tr>
                       ))}
+
+                      {filteredJobs.length === 0 && (
+                        <tr>
+                          <td colSpan={8} className="px-3 py-6 text-center text-zinc-500 sm:px-5">
+                            No jobs match your search.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>

@@ -31,8 +31,10 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       const element = document.querySelector(href)
 
       if (element) {
+        const offset = href === "#work" ? 72 : 0
+
         lenis.scrollTo(element as HTMLElement, {
-          offset: 0,
+          offset,
         })
       }
     }

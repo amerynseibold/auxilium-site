@@ -1,7 +1,7 @@
 "use client"
 
-import { motion, type Variants } from "framer-motion"
-import { useEffect, useState } from "react"
+import { motion, useReducedMotion, type Variants } from "framer-motion"
+import { useEffect, useState, type FormEvent } from "react"
 import Image from "next/image"
 
 const fadeUp: Variants = {
@@ -62,13 +62,76 @@ const mobileScrollReveal: Variants = {
   },
 }
 
+const navReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: -6,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.35,
+      ease: "easeOut",
+    },
+  },
+}
+
+const heroButtonGroup: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+}
+
+const gentleRise: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 16,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: "easeOut",
+    },
+  },
+}
+
+const cardGridReveal: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+}
+
+const processListReveal: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
 const cardSpotlight =
   "before:pointer-events-none before:absolute before:inset-0 before:rounded-3xl before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(59,130,246,0.08),transparent_35%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
 
 export default function Home() {
 
+  const shouldReduceMotion = useReducedMotion()
   const [scrolled, setScrolled] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [activeSection, setActiveSection] = useState("")
+  const [contactFormOpen, setContactFormOpen] = useState(false)
+  const [contactFormStatus, setContactFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle")
+  const [contactFormError, setContactFormError] = useState("")
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)")
@@ -112,10 +175,58 @@ export default function Home() {
     }
   }, [])
 
-  const [activeSection, setActiveSection] = useState("")
   const revealVariant = isMobile ? mobileScrollReveal : scrollReveal
-  const revealInitial = "hidden"
-  const revealWhileInView = "visible"
+  const revealInitial = shouldReduceMotion ? false : "hidden"
+  const revealWhileInView = shouldReduceMotion ? undefined : "visible"
+
+  const openContactForm = () => {
+    setContactFormOpen(true)
+    setContactFormStatus("idle")
+    setContactFormError("")
+  }
+
+  const closeContactForm = () => {
+    setContactFormOpen(false)
+    setContactFormStatus("idle")
+    setContactFormError("")
+  }
+
+  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    setContactFormStatus("submitting")
+    setContactFormError("")
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          company: formData.get("company"),
+          message: formData.get("message"),
+        }),
+      })
+
+      const data = await response.json().catch(() => null)
+
+      if (!response.ok) {
+        throw new Error(data?.error || "Something went wrong. Please try again.")
+      }
+
+      form.reset()
+      setContactFormStatus("success")
+    } catch (error) {
+      setContactFormStatus("error")
+      setContactFormError(error instanceof Error ? error.message : "Something went wrong. Please try again.")
+    }
+  }
 
   return (
     <>
@@ -123,7 +234,12 @@ export default function Home() {
           TOP NAV
       ========================== */}
 
-      <div className="mobile-fixed-header fixed inset-x-0 top-0 z-50 bg-[#07090d]">
+      <motion.div
+        variants={navReveal}
+        initial={shouldReduceMotion ? false : "hidden"}
+        animate="visible"
+        className="mobile-fixed-header fixed inset-x-0 top-0 z-50 bg-[#07090d]"
+      >
         <div
           className={`transition-all duration-500 ${
             scrolled
@@ -170,27 +286,29 @@ export default function Home() {
                 Who We Help
               </a>
 
-              <a
-                href="#contact"
+              <button
+                type="button"
+                onClick={openContactForm}
                 className={`rounded-xl px-5 py-2 transition-all duration-300 ${
-                  activeSection === "contact"
+                  contactFormOpen || activeSection === "contact"
                     ? "border border-white/20 bg-white/[0.05] text-white"
                     : "border border-white/8 text-white/60 hover:border-white/20 hover:text-white"
                 }`}
               >
                 Contact
-              </a>
+              </button>
             </nav>
 
-            <a
-              href="#contact"
+            <button
+              type="button"
+              onClick={openContactForm}
               className="relative -top-1.5 -translate-x-3 md:top-0 md:hidden border border-white/10 px-4 py-2 rounded-xl text-sm text-white hover:border-white/30 transition"
             >
               Contact
-            </a>
+            </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <main className="relative min-h-screen bg-[#07090d] text-white">
       <div id="top" />
@@ -210,7 +328,7 @@ export default function Home() {
           HERO SECTION
       ====================================================== */}
 
-      <section className="relative min-h-[100svh] md:min-h-0">
+      <section className="relative">
 
         <div className="relative max-w-7xl mx-auto px-6 pt-8 pb-4">
 
@@ -283,11 +401,15 @@ export default function Home() {
                   automations that eliminate repetitive admin work for growing businesses.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-3 mt-10 md:mt-8">
+                <motion.div
+                  variants={heroButtonGroup}
+                  className="flex flex-col sm:flex-row gap-3 mt-10 md:mt-8"
+                >
 
-                    <a
+                    <motion.a
+                      variants={gentleRise}
                       href="#work"
-                      className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3 sm:py-3.5 font-medium text-center transition-all duration-300 hover:-translate-y-[1px] hover:bg-blue-500 active:translate-y-0"
+                      className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3 sm:py-3.5 font-medium text-center transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:bg-blue-500 active:translate-y-0"
                     >
                     <span className="relative z-10 flex items-center justify-center gap-2">
                       <span>See the Work</span>
@@ -296,16 +418,18 @@ export default function Home() {
                         →
                       </span>
                     </span>
-                  </a>  
+                  </motion.a>  
 
-                  <a
-                    href="#contact"
-                    className="group rounded-xl border border-white/10 px-6 py-3 sm:py-3.5 font-medium text-center text-white/80 transition-all duration-300 hover:-translate-y-[1px] hover:border-white/25 hover:text-white active:translate-y-0"
+                  <motion.button
+                    type="button"
+                    onClick={openContactForm}
+                    variants={gentleRise}
+                    className="group rounded-xl border border-white/10 px-6 py-3 sm:py-3.5 font-medium text-center text-white/80 transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:border-white/25 md:hover:text-white active:translate-y-0"
                   >
                     Start a Conversation
-                  </a>
+                  </motion.button>
 
-                </div>
+                </motion.div>
 
               </motion.div>
 
@@ -477,8 +601,15 @@ export default function Home() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <a
+        <motion.div
+          variants={cardGridReveal}
+          initial={revealInitial}
+          whileInView={revealWhileInView}
+          viewport={{ once: true, amount: 0.12, margin: "0px 0px -80px 0px" }}
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+        >
+          <motion.a
+            variants={gentleRise}
             href="https://snapquote-gilt.vercel.app/"
             target="_blank"
             rel="noreferrer"
@@ -487,7 +618,7 @@ export default function Home() {
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 touch-pan-y transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Tree Service Tool
@@ -499,13 +630,13 @@ export default function Home() {
               </h3>
             </div>
 
-            <div className="relative w-full h-[190px] md:h-[220px] rounded-2xl overflow-hidden border border-white/10 mb-6">
+            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5">
               <Image
                 src="/snapquote-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="SnapQuote Preview"
                 fill
-                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.015]"
+                className="object-contain bg-white md:object-contain transition duration-700 md:group-hover:scale-[1.015]"
               />
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
@@ -516,15 +647,16 @@ export default function Home() {
               and mobile-friendly workflows.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-all duration-300 group-hover:text-white group-hover:gap-3">
+            <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors duration-300 md:transition-all md:group-hover:text-white md:group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
             </div>
-          </a>
+          </motion.a>
 
-          <a
+          <motion.a
+            variants={gentleRise}
             href="https://bulk-material-demo-app.vercel.app/"
             target="_blank"
             rel="noreferrer"
@@ -533,7 +665,7 @@ export default function Home() {
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 touch-pan-y transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Material Supplier Tool
@@ -545,13 +677,13 @@ export default function Home() {
               </h3>
             </div>
 
-            <div className="relative w-full h-[190px] md:h-[220px] rounded-2xl overflow-hidden border border-white/10 mb-6">
+            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5">
               <Image
                 src="/bulk-material-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="Bulk Material Estimator Preview"
                 fill
-                className="object-contain bg-white md:object-contain transition duration-700 group-hover:scale-[1.015]"
+                className="object-contain bg-white md:object-contain transition duration-700 md:group-hover:scale-[1.015]"
               />
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
@@ -562,22 +694,23 @@ export default function Home() {
               directly online.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-all duration-300 group-hover:text-white group-hover:gap-3">
+            <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors duration-300 md:transition-all md:group-hover:text-white md:group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
             </div>
-          </a>
+          </motion.a>
 
-          <a
+          <motion.a
+            variants={gentleRise}
             href="/demo/dashboard"
             onMouseMove={(event) => {
               const rect = event.currentTarget.getBoundingClientRect()
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 touch-pan-y transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Operations Dashboard
@@ -589,13 +722,13 @@ export default function Home() {
               </h3>
             </div>
 
-            <div className="relative w-full h-[190px] md:h-[220px] rounded-2xl overflow-hidden border border-white/10 mb-6 bg-[#0d0f14]">
+            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5 bg-[#0d0f14]">
               <Image
                 src="/operations-dashboard-preview.png"
                 alt="Operations Dashboard Preview"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-contain bg-[#0d0f14] transition duration-700 group-hover:scale-[1.015]"
+                className="object-contain bg-[#0d0f14] transition duration-700 md:group-hover:scale-[1.015]"
               />
 
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
@@ -606,14 +739,14 @@ export default function Home() {
               A modern operations dashboard concept for service businesses, featuring quote tracking, customer visibility, job scheduling, and reporting.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-all duration-300 group-hover:text-white group-hover:gap-3">
+            <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors duration-300 md:transition-all md:group-hover:text-white md:group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
                 →
               </span>
             </div>
-          </a>
-        </div>
+          </motion.a>
+        </motion.div>
       </section>
 
 
@@ -679,7 +812,13 @@ export default function Home() {
 
         </motion.div>
 
-          <div className="space-y-6">
+          <motion.div
+            variants={processListReveal}
+            initial={revealInitial}
+            whileInView={revealWhileInView}
+            viewport={{ once: true, amount: 0.2, margin: "0px 0px -100px 0px" }}
+            className="space-y-6"
+          >
 
             {[
               {
@@ -699,7 +838,7 @@ export default function Home() {
                 body: "We refine the solution over time so it continues supporting your operations as the business grows.",
               },
             ].map((item) => (
-              <div key={item.title} className="border-l border-blue-500/50 pl-6">
+              <motion.div key={item.title} variants={gentleRise} className="border-l border-blue-500/50 pl-6">
                 <h3 className="text-2xl font-semibold mb-1 md:mb-2">
                   {item.title}
                 </h3>
@@ -707,10 +846,10 @@ export default function Home() {
                 <p className="text-base text-white/55 leading-relaxed">
                   {item.body}
                 </p>
-              </div>
+              </motion.div>
             ))}
 
-          </div>
+          </motion.div>
 
         </div>
 
@@ -758,7 +897,7 @@ export default function Home() {
           ].map((item) => (
             <div
               key={item.title}
-              className="bg-white/[0.03] border border-white/10 rounded-3xl p-4 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045]"
+              className="bg-white/[0.03] border border-white/10 rounded-3xl p-4 md:p-6 transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045]"
             >
               <h3 className="text-2xl font-semibold mb-3">
                 {item.title}
@@ -783,7 +922,7 @@ export default function Home() {
         <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-5 md:p-12 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04]">
 
           <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
-            Let's Improve Your Workflow
+            Let&apos;s Improve Your Workflow
           </p>
 
           <motion.h2
@@ -835,9 +974,10 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
 
-            <a
-              href="mailto:hello@auxiliumbusiness.com"
-              className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3.5 font-medium text-center transition-all duration-300 hover:-translate-y-[1px] hover:bg-blue-500 active:translate-y-0"
+            <button
+              type="button"
+              onClick={openContactForm}
+              className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3.5 font-medium text-center transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:bg-blue-500 active:translate-y-0"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 <span>Get in Touch</span>
@@ -846,11 +986,11 @@ export default function Home() {
                   →
                 </span>
               </span>
-            </a>
+            </button>
 
             <a
               href="#work"
-              className="group rounded-xl border border-white/10 px-6 py-3.5 font-medium text-center text-white/80 transition-all duration-300 hover:-translate-y-[1px] hover:border-white/25 hover:text-white active:translate-y-0"
+              className="group rounded-xl border border-white/10 px-6 py-3.5 font-medium text-center text-white/80 transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:border-white/25 md:hover:text-white active:translate-y-0"
             >
               View Examples
             </a>
@@ -904,6 +1044,137 @@ export default function Home() {
         </div>
       </footer>
       </main>
+
+      {contactFormOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/70 px-4 pb-6 pt-[calc(var(--mobile-safe-area-shield-height)+4.75rem)] backdrop-blur-sm md:items-center md:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="contact-form-title"
+          onClick={closeContactForm}
+        >
+          <motion.div
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="max-h-[calc(100dvh-var(--mobile-safe-area-shield-height)-6rem)] w-full max-w-xl overflow-y-auto rounded-3xl border border-white/10 bg-[#0b0d12] p-5 text-white shadow-2xl md:max-h-[calc(100vh-3rem)] md:p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-6 flex items-start justify-between gap-4">
+              <div>
+                <p className="mb-3 text-xs uppercase tracking-[0.28em] text-blue-400">
+                  Contact Auxilium
+                </p>
+
+                <h2 id="contact-form-title" className="text-2xl font-bold md:text-3xl">
+                  Tell me what you want to improve.
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeContactForm}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 text-xl leading-none text-white/60 transition hover:border-white/25 hover:text-white"
+                aria-label="Close contact form"
+              >
+                x
+              </button>
+            </div>
+
+            {contactFormStatus === "success" ? (
+              <div className="rounded-2xl border border-green-400/20 bg-green-400/10 p-5">
+                <h3 className="text-xl font-semibold text-green-100">
+                  Message sent.
+                </h3>
+
+                <p className="mt-2 text-sm leading-relaxed text-white/65">
+                  Thanks for reaching out. I&apos;ll review it and follow up with you soon.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={closeContactForm}
+                  className="mt-5 rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200"
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-2 block text-sm text-white/65">Name</span>
+                    <input
+                      name="name"
+                      required
+                      autoComplete="name"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
+                      placeholder="Your name"
+                    />
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-2 block text-sm text-white/65">Email</span>
+                    <input
+                      name="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
+                      placeholder="you@company.com"
+                    />
+                  </label>
+                </div>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm text-white/65">Company</span>
+                  <input
+                    name="company"
+                    autoComplete="organization"
+                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
+                    placeholder="Company name"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm text-white/65">What should we improve?</span>
+                  <textarea
+                    name="message"
+                    required
+                    rows={5}
+                    className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
+                    placeholder="Tell me about the workflow, tool, dashboard, or process you have in mind."
+                  />
+                </label>
+
+                {contactFormStatus === "error" && (
+                  <p className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
+                    {contactFormError}
+                  </p>
+                )}
+
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+                  <button
+                    type="button"
+                    onClick={closeContactForm}
+                    className="rounded-xl border border-white/10 px-5 py-3 font-medium text-white/70 transition hover:border-white/25 hover:text-white"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={contactFormStatus === "submitting"}
+                    className="rounded-xl bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {contactFormStatus === "submitting" ? "Sending..." : "Send Message"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </motion.div>
+        </div>
+      )}
     </>
   )
 }
