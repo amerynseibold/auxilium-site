@@ -610,7 +610,7 @@ export default function Home() {
         >
           <motion.a
             variants={gentleRise}
-            href="https://snapquote-gilt.vercel.app/"
+            href="https://snapquote.auxiliumbusiness.com/"
             target="_blank"
             rel="noreferrer"
             onMouseMove={(event) => {
@@ -657,7 +657,7 @@ export default function Home() {
 
           <motion.a
             variants={gentleRise}
-            href="https://bulk-material-demo-app.vercel.app/"
+            href="https://bulkmaterial.auxiliumbusiness.com/"
             target="_blank"
             rel="noreferrer"
             onMouseMove={(event) => {
