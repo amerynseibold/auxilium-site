@@ -1067,7 +1067,7 @@ export default function Home() {
                 </p>
 
                 <h2 id="contact-form-title" className="text-2xl font-bold md:text-3xl">
-                  Tell us what you want to improve.
+                  How can we help?
                 </h2>
               </div>
 
@@ -1137,13 +1137,13 @@ export default function Home() {
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm text-white/65">What should we improve?</span>
+                  <span className="mb-2 block text-sm text-white/65">What’s slowing things down?</span>
                   <textarea
                     name="message"
                     required
                     rows={5}
                     className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
-                    placeholder="Tell me about the workflow, tool, dashboard, or process you have in mind."
+                    placeholder="Tell us about the tasks, processes, or daily headaches that are taking up too much time in your business."
                   />
                 </label>
 
