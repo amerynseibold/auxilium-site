@@ -5,6 +5,12 @@ import Lenis from "lenis"
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 767px)").matches
+
+    if (isMobile) {
+      return
+    }
+
     const lenis = new Lenis({
       duration: 1.1,
       smoothWheel: true,
@@ -25,10 +31,8 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       const element = document.querySelector(href)
 
       if (element) {
-        const isMobile = window.innerWidth < 768
-
         lenis.scrollTo(element as HTMLElement, {
-          offset: window.innerWidth < 768 ? -210 : 0,
+          offset: 0,
         })
       }
     }

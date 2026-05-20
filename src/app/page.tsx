@@ -45,14 +45,41 @@ const scrollReveal: Variants = {
   },
 }
 
+const mobileScrollReveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    filter: "none",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "none",
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+}
+
 const cardSpotlight =
   "before:pointer-events-none before:absolute before:inset-0 before:rounded-3xl before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(59,130,246,0.08),transparent_35%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
 
 export default function Home() {
 
   const [scrolled, setScrolled] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)")
+
+    const handleViewportChange = () => {
+      setIsMobile(mediaQuery.matches)
+    }
+
+    handleViewportChange()
+    mediaQuery.addEventListener("change", handleViewportChange)
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 24)
 
@@ -80,49 +107,32 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll)
 
     return () => {
+      mediaQuery.removeEventListener("change", handleViewportChange)
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
 
   const [activeSection, setActiveSection] = useState("")
+  const revealVariant = isMobile ? mobileScrollReveal : scrollReveal
+  const revealInitial = "hidden"
+  const revealWhileInView = "visible"
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#07090d] text-white">
-      <div id="top" />
+    <>
+      {/* =========================
+          TOP NAV
+      ========================== */}
 
-      {/* Ambient Background Depth */}
-      <div className="pointer-events-none absolute inset-0">
-
-        <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-500/[0.05] blur-[140px]" />
-
-        <div className="absolute top-[35%] right-[-15%] h-[420px] w-[420px] rounded-full bg-white/[0.03] blur-[120px]" />
-
-        <div className="absolute bottom-[-10%] left-[20%] h-[400px] w-[400px] rounded-full bg-blue-400/[0.03] blur-[120px]" />
-
-      </div>
-
-      {/* =====================================================
-          HERO SECTION
-      ====================================================== */}
-
-      <section className="relative">
-
-        <div className="relative max-w-7xl mx-auto px-6 pt-8 pb-4">
-
-        {/* =========================
-            TOP NAV
-        ========================== */}
-
+      <div className="mobile-fixed-header fixed inset-x-0 top-0 z-50 bg-[#07090d]">
         <div
-          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          className={`transition-all duration-500 ${
             scrolled
-              ? "backdrop-blur-xl bg-black/40 border-b border-white/10"
-              : "backdrop-blur-xl bg-[#07090d]/75 border-b border-white/5"
+              ? "backdrop-blur-xl bg-[#07090d] border-b border-white/10"
+              : "backdrop-blur-xl bg-[#07090d] border-b border-white/5"
           }`}
         >
-
-          <div className="relative max-w-7xl mx-auto px-6 py-2 md:py-1.5 flex items-center justify-between gap-4">
-            <a href="#top" className="w-[190px] md:w-[255px]">
+          <div className="relative z-10 max-w-7xl mx-auto px-2 md:px-6 py-1 md:py-1.5 flex items-center justify-between gap-4">
+            <a href="#top" className="relative -top-2 md:top-0 w-[190px] md:w-[255px]">
               <Image
                 src="/auxilium-logo-tight.png"
                 alt="Auxilium Logo"
@@ -174,18 +184,41 @@ export default function Home() {
 
             <a
               href="#contact"
-              className="md:hidden border border-white/10 px-4 py-2 rounded-xl text-sm text-white hover:border-white/30 transition"
+              className="relative -top-1.5 -translate-x-3 md:top-0 md:hidden border border-white/10 px-4 py-2 rounded-xl text-sm text-white hover:border-white/30 transition"
             >
               Contact
             </a>
           </div>
         </div>
-        
+      </div>
+
+      <main className="relative min-h-screen bg-[#07090d] text-white">
+      <div id="top" />
+
+      {/* Ambient Background Depth */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+
+        <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-blue-500/[0.05] blur-[140px]" />
+
+        <div className="absolute top-[35%] right-[-15%] h-[420px] w-[420px] rounded-full bg-white/[0.03] blur-[120px]" />
+
+        <div className="absolute bottom-[-10%] left-[20%] h-[400px] w-[400px] rounded-full bg-blue-400/[0.03] blur-[120px]" />
+
+      </div>
+
+      {/* =====================================================
+          HERO SECTION
+      ====================================================== */}
+
+      <section className="relative min-h-[100svh] md:min-h-0">
+
+        <div className="relative max-w-7xl mx-auto px-6 pt-8 pb-4">
+
           {/* =========================
               HERO CONTENT
           ========================== */}
 
-          <div className="pt-12 pb-20 md:pt-20 md:pb-28">
+          <div className="pt-24 pb-20 md:pt-20 md:pb-28">
 
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 items-center">
 
@@ -199,13 +232,13 @@ export default function Home() {
 
                 <motion.p
                   variants={fadeUp}
-                  className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-6"
+                  className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-7 md:mb-6"
                 >
                   Business Process Modernization
                 </motion.p>
 
                 <motion.h1
-                  className="text-[1.8rem] sm:text-6xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl"
+                  className="text-[2rem] sm:text-6xl md:text-6xl font-bold leading-[1.02] tracking-tight max-w-3xl"
                   initial="hidden"
                   animate="visible"
                   variants={{
@@ -245,12 +278,12 @@ export default function Home() {
                     ))}
                 </motion.h1>
 
-                <p className="mt-6 text-[1rem] md:text-xl text-white/60 leading-relaxed max-w-2xl">
+                <p className="mt-7 md:mt-6 text-[1rem] md:text-xl text-white/60 leading-relaxed max-w-2xl">
                   We build internal tools, quoting systems, dashboards, and workflow
                   automations that eliminate repetitive admin work for growing businesses.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-3 mt-8">
+                <div className="flex flex-col sm:flex-row gap-3 mt-10 md:mt-8">
 
                     <a
                       href="#work"
@@ -426,12 +459,12 @@ export default function Home() {
 
       <section
         id="work"
-        className="max-w-7xl mx-auto px-6 pb-24 md:pb-32 scroll-mt-22"
+        className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-22 border-t border-white/5"
       >
         <motion.div
-          variants={scrollReveal}
-          initial="hidden"
-          whileInView="visible"
+          variants={revealVariant}
+          initial={revealInitial}
+          whileInView={revealWhileInView}
           viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
           className="mb-8 md:mb-10"
         >
@@ -454,7 +487,7 @@ export default function Home() {
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 touch-pan-y transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Tree Service Tool
@@ -500,7 +533,7 @@ export default function Home() {
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 touch-pan-y transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Material Supplier Tool
@@ -544,7 +577,7 @@ export default function Home() {
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-6 touch-pan-y transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Operations Dashboard
@@ -593,13 +626,13 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={revealInitial}
+          whileInView={revealWhileInView}
           viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
         >
 
           <motion.p
-            variants={scrollReveal}
+            variants={revealVariant}
             className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4"
           >
             How We Work
@@ -690,9 +723,9 @@ export default function Home() {
       <section id="who-we-help" className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
 
         <motion.div
-          variants={scrollReveal}
-          initial="hidden"
-          whileInView="visible"
+          variants={revealVariant}
+          initial={revealInitial}
+          whileInView={revealWhileInView}
           viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
           className="mb-8 md:mb-10"
         >
@@ -755,8 +788,8 @@ export default function Home() {
 
           <motion.h2
             className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-tight"
-            initial="hidden"
-            whileInView="visible"
+            initial={revealInitial}
+            whileInView={revealWhileInView}
             viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
             variants={{
               hidden: {},
@@ -870,6 +903,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
-    </main>
+      </main>
+    </>
   )
 }
