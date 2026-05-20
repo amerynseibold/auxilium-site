@@ -114,7 +114,7 @@ export default function Home() {
         ========================== */}
 
         <div
-          className={`md:fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
             scrolled
               ? "backdrop-blur-xl bg-black/40 border-b border-white/10"
               : "backdrop-blur-xl bg-[#07090d]/75 border-b border-white/5"
