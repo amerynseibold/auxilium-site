@@ -38,7 +38,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 })
   }
 
-  const apiKey = process.env.RESEND_API_KEY
+
+const apiKey = process.env.RESEND_API_KEY
 
   if (!apiKey) {
     return NextResponse.json(
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
   }
 
   const toEmail = process.env.CONTACT_TO_EMAIL || defaultInbox
-  const fromEmail = process.env.CONTACT_FROM_EMAIL || "Auxilium Website <onboarding@resend.dev>"
+  const fromEmail = process.env.CONTACT_FROM_EMAIL || "Auxilium Website <hello@auxiliumbusiness.com>"
 
   const response = await fetch(resendApiUrl, {
     method: "POST",
