@@ -330,7 +330,7 @@ export default function Home() {
 
       <section className="relative">
 
-        <div className="relative max-w-7xl mx-auto px-6 pt-8 pb-4">
+        <div className="relative max-w-[1440px] mx-auto px-8 pt-8 pb-4">
 
           {/* =========================
               HERO CONTENT
