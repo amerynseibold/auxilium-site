@@ -1,8 +1,10 @@
 "use client"
 
 import { motion, useReducedMotion, type Variants } from "framer-motion"
-import { useEffect, useState, type FormEvent } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
+import SiteFooter from "@/components/SiteFooter"
+import SiteHeader from "@/components/SiteHeader"
 
 const fadeUp: Variants = {
   hidden: {
@@ -62,21 +64,6 @@ const mobileScrollReveal: Variants = {
   },
 }
 
-const navReveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: -6,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.35,
-      ease: "easeOut",
-    },
-  },
-}
-
 const heroButtonGroup: Variants = {
   hidden: {},
   visible: {
@@ -121,17 +108,12 @@ const processListReveal: Variants = {
 }
 
 const cardSpotlight =
-  "before:pointer-events-none before:absolute before:inset-0 before:rounded-3xl before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(59,130,246,0.08),transparent_35%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
+  "before:pointer-events-none before:absolute before:inset-0 before:rounded-2xl before:bg-[radial-gradient(circle_at_var(--mouse-x)_var(--mouse-y),rgba(59,130,246,0.08),transparent_35%)] before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100"
 
 export default function Home() {
 
   const shouldReduceMotion = useReducedMotion()
-  const [scrolled, setScrolled] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [activeSection, setActiveSection] = useState("")
-  const [contactFormOpen, setContactFormOpen] = useState(false)
-  const [contactFormStatus, setContactFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle")
-  const [contactFormError, setContactFormError] = useState("")
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)")
@@ -143,35 +125,8 @@ export default function Home() {
     handleViewportChange()
     mediaQuery.addEventListener("change", handleViewportChange)
 
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 24)
-
-      const sections = ["work", "approach", "who-we-help", "contact"]
-
-      let currentSection = ""
-
-      sections.forEach((section) => {
-        const element = document.getElementById(section)
-        if (!element) return
-
-        const rect = element.getBoundingClientRect()
-        const sectionMiddle = rect.top + rect.height / 2
-
-        if (sectionMiddle <= window.innerHeight * 0.65) {
-          currentSection = section
-        }
-      })
-
-      setActiveSection(currentSection)
-    }
-
-    handleScroll()
-
-    window.addEventListener("scroll", handleScroll)
-
     return () => {
       mediaQuery.removeEventListener("change", handleViewportChange)
-      window.removeEventListener("scroll", handleScroll)
     }
   }, [])
 
@@ -179,136 +134,9 @@ export default function Home() {
   const revealInitial = shouldReduceMotion ? false : "hidden"
   const revealWhileInView = shouldReduceMotion ? undefined : "visible"
 
-  const openContactForm = () => {
-    setContactFormOpen(true)
-    setContactFormStatus("idle")
-    setContactFormError("")
-  }
-
-  const closeContactForm = () => {
-    setContactFormOpen(false)
-    setContactFormStatus("idle")
-    setContactFormError("")
-  }
-
-  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const form = event.currentTarget
-    const formData = new FormData(form)
-
-    setContactFormStatus("submitting")
-    setContactFormError("")
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          email: formData.get("email"),
-          company: formData.get("company"),
-          message: formData.get("message"),
-        }),
-      })
-
-      const data = await response.json().catch(() => null)
-
-      if (!response.ok) {
-        throw new Error(data?.error || "Something went wrong. Please try again.")
-      }
-
-      form.reset()
-      setContactFormStatus("success")
-    } catch (error) {
-      setContactFormStatus("error")
-      setContactFormError(error instanceof Error ? error.message : "Something went wrong. Please try again.")
-    }
-  }
-
   return (
     <>
-      {/* =========================
-          TOP NAV
-      ========================== */}
-
-      <motion.div
-        variants={navReveal}
-        initial={shouldReduceMotion ? false : "hidden"}
-        animate="visible"
-        className="mobile-fixed-header fixed inset-x-0 top-0 z-50 bg-[#07090d]"
-      >
-        <div
-          className={`transition-all duration-500 ${
-            scrolled
-              ? "backdrop-blur-xl bg-[#07090d] border-b border-white/10"
-              : "backdrop-blur-xl bg-[#07090d] border-b border-white/5"
-          }`}
-        >
-          <div className="relative z-10 max-w-7xl mx-auto px-2 md:px-6 py-1 md:py-1.5 flex items-center justify-between gap-4">
-            <a href="#top" className="relative -top-2 md:top-0 w-[190px] md:w-[255px]">
-              <Image
-                src="/auxilium-logo-tight.png"
-                alt="Auxilium Logo"
-                width={300}
-                height={40}
-                priority
-              />
-            </a>
-
-            <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
-              <a
-                href="#work"
-                className={`transition ${
-                  activeSection === "work" ? "text-white" : "hover:text-white"
-                }`}
-              >
-                Work
-              </a>
-
-              <a
-                href="#approach"
-                className={`transition ${
-                  activeSection === "approach" ? "text-white" : "hover:text-white"
-                }`}
-              >
-                Approach
-              </a>
-
-              <a
-                href="#who-we-help"
-                className={`transition ${
-                  activeSection === "who-we-help" ? "text-white" : "hover:text-white"
-                }`}
-              >
-                Who We Help
-              </a>
-
-              <button
-                type="button"
-                onClick={openContactForm}
-                className={`rounded-xl px-5 py-2 transition-all duration-300 ${
-                  contactFormOpen || activeSection === "contact"
-                    ? "border border-white/20 bg-white/[0.05] text-white"
-                    : "border border-white/8 text-white/60 hover:border-white/20 hover:text-white"
-                }`}
-              >
-                Contact
-              </button>
-            </nav>
-
-            <button
-              type="button"
-              onClick={openContactForm}
-              className="relative -top-1.5 -translate-x-3 md:top-0 md:hidden border border-white/10 px-4 py-2 rounded-xl text-sm text-white hover:border-white/30 transition"
-            >
-              Contact
-            </button>
-          </div>
-        </div>
-      </motion.div>
+      <SiteHeader activePage="home" />
 
       <main className="relative min-h-screen bg-[#07090d] text-white">
       <div id="top" />
@@ -330,15 +158,15 @@ export default function Home() {
 
       <section className="relative">
 
-        <div className="relative max-w-[1440px] mx-auto px-8 pt-8 pb-4">
+        <div className="site-container relative pt-8 pb-4">
 
           {/* =========================
               HERO CONTENT
           ========================== */}
 
-          <div className="pt-24 pb-20 md:pt-20 md:pb-28">
+          <div className="pt-20 pb-14 md:pt-16 md:pb-20 lg:pb-24">
 
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.95fr)_minmax(500px,1fr)] gap-8 xl:gap-10 items-center">
 
               {/* LEFT: HERO TEXT */}
               <motion.div
@@ -408,26 +236,25 @@ export default function Home() {
 
                     <motion.a
                       variants={gentleRise}
-                      href="#work"
-                      className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3 sm:py-3.5 font-medium text-center transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:bg-blue-500 active:translate-y-0"
+                      href="/demos"
+                      className="cta-sheen group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3 sm:py-3.5 font-medium text-center transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:bg-blue-500 md:hover:shadow-[0_14px_34px_rgba(37,99,235,0.22)] active:translate-y-0"
                     >
                     <span className="relative z-10 flex items-center justify-center gap-2">
-                      <span>See the Work</span>
+                      <span>See the Demos</span>
 
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
-                        →
+                        &rarr;
                       </span>
                     </span>
                   </motion.a>  
 
-                  <motion.button
-                    type="button"
-                    onClick={openContactForm}
+                  <motion.a
+                    href="/contact"
                     variants={gentleRise}
                     className="group rounded-xl border border-white/10 px-6 py-3 sm:py-3.5 font-medium text-center text-white/80 transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:border-white/25 md:hover:text-white active:translate-y-0"
                   >
                     Start a Conversation
-                  </motion.button>
+                  </motion.a>
 
                 </motion.div>
 
@@ -448,7 +275,9 @@ export default function Home() {
                   {/* Soft dashboard glow */}
                   <div className="absolute inset-0 rounded-full bg-blue-500/5 blur-[120px] opacity-40" />
 
-                  <div className="relative rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-[0_10px_40px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+                  <div className="premium-panel relative overflow-hidden rounded-2xl p-4 backdrop-blur-sm">
+                    <div className="panel-scanline pointer-events-none absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-blue-300/70 to-transparent" />
+
                     {/* Dashboard Header */}
                     <div className="mb-6 flex items-center justify-between">
                       <div>
@@ -456,7 +285,7 @@ export default function Home() {
                         <h3 className="mt-1 text-2xl font-semibold">Quote Workflow System</h3>
                       </div>
 
-                      <span className="rounded-full border border-green-400/20 bg-green-400/10 px-3 py-1 text-xs text-green-300">
+                      <span className="live-pulse rounded-full border border-green-400/20 bg-green-400/10 px-3 py-1 text-xs text-green-300">
                         Live
                       </span>
                     </div>
@@ -532,7 +361,7 @@ export default function Home() {
 
                               <div className="h-2 rounded-full bg-white/10">
                                 <div
-                                  className={`h-2 rounded-full ${
+                                  className={`progress-glow h-2 rounded-full ${
                                     index < 2
                                       ? "w-full bg-blue-400/70"
                                       : index === 2
@@ -549,7 +378,7 @@ export default function Home() {
 
                     {/* Operational Impact */}
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-2xl border border-amber-300/20 bg-amber-300/10 p-4">
+                      <div className="rounded-xl border border-amber-300/20 bg-amber-300/10 p-4">
                         <p className="mb-3 text-xs text-amber-100">Bottlenecks Removed</p>
 
                         <div className="space-y-2 text-xs text-white/55">
@@ -559,13 +388,13 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="rounded-2xl border border-green-300/20 bg-green-300/10 p-4">
+                      <div className="rounded-xl border border-green-300/20 bg-green-300/10 p-4">
                         <p className="mb-3 text-xs text-green-100">Automation Impact</p>
 
                         <div className="space-y-2 text-xs text-white/55">
-                          <p>Response time ↓ 68%</p>
-                          <p>Admin workload ↓ 41%</p>
-                          <p>Follow-ups ↑ 92%</p>
+                          <p>Response time &darr; 68%</p>
+                          <p>Admin workload &darr; 41%</p>
+                          <p>Follow-ups &uarr; 92%</p>
                         </div>
                       </div>
                     </div>
@@ -583,7 +412,7 @@ export default function Home() {
 
       <section
         id="work"
-        className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-22 border-t border-white/5"
+        className="site-container pt-16 pb-22 md:pt-20 md:pb-28 scroll-mt-22 border-t border-white/5"
       >
         <motion.div
           variants={revealVariant}
@@ -610,6 +439,51 @@ export default function Home() {
         >
           <motion.a
             variants={gentleRise}
+            href="/demo/dashboard"
+            onMouseMove={(event) => {
+              const rect = event.currentTarget.getBoundingClientRect()
+              event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
+              event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
+            }}
+            className={`premium-panel group relative self-start overflow-hidden rounded-2xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
+          >
+            <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
+              Operations Dashboard
+            </p>
+
+            <div className="min-h-[72px]">
+              <h3 className="text-3xl font-bold leading-tight">
+                Operations Command Center
+              </h3>
+            </div>
+
+            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5 bg-[#0d0f14] p-3">
+              <Image
+                src="/operations-dashboard-preview.png"
+                alt="Operations Dashboard Preview"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-contain transition duration-700 md:group-hover:scale-[1.015]"
+              />
+
+              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0d0f14] via-transparent to-transparent" />
+            </div>
+
+            <p className="text-sm sm:text-base text-white/60 leading-relaxed">
+              A modern operations dashboard concept for service businesses, featuring quote tracking, customer visibility, job scheduling, and reporting.
+            </p>
+
+            <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors duration-300 md:transition-all md:group-hover:text-white md:group-hover:gap-3">
+              <span>View Live Demo</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                &rarr;
+              </span>
+            </div>
+          </motion.a>
+
+          <motion.a
+            variants={gentleRise}
             href="https://snapquote.auxiliumbusiness.com/"
             target="_blank"
             rel="noreferrer"
@@ -618,7 +492,7 @@ export default function Home() {
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`premium-panel group relative self-start overflow-hidden rounded-2xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Tree Service Tool
@@ -630,13 +504,13 @@ export default function Home() {
               </h3>
             </div>
 
-            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5">
+            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5 bg-[#0d0f14] p-3">
               <Image
                 src="/snapquote-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="SnapQuote Preview"
                 fill
-                className="object-contain bg-white md:object-contain transition duration-700 md:group-hover:scale-[1.015]"
+                className="object-contain transition duration-700 md:group-hover:scale-[1.015]"
               />
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
@@ -650,7 +524,7 @@ export default function Home() {
             <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors duration-300 md:transition-all md:group-hover:text-white md:group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
-                →
+                &rarr;
               </span>
             </div>
           </motion.a>
@@ -665,7 +539,7 @@ export default function Home() {
               event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
               event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
             }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
+            className={`premium-panel group relative self-start overflow-hidden rounded-2xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
           >
             <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
               Material Supplier Tool
@@ -677,13 +551,13 @@ export default function Home() {
               </h3>
             </div>
 
-            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5">
+            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5 bg-[#0d0f14] p-3">
               <Image
                 src="/bulk-material-preview.png"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 alt="Bulk Material Estimator Preview"
                 fill
-                className="object-contain bg-white md:object-contain transition duration-700 md:group-hover:scale-[1.015]"
+                className="object-contain transition duration-700 md:group-hover:scale-[1.015]"
               />
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
             </div>
@@ -697,52 +571,7 @@ export default function Home() {
             <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors duration-300 md:transition-all md:group-hover:text-white md:group-hover:gap-3">
               <span>View Live Demo</span>
               <span className="transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
-            </div>
-          </motion.a>
-
-          <motion.a
-            variants={gentleRise}
-            href="/demo/dashboard"
-            onMouseMove={(event) => {
-              const rect = event.currentTarget.getBoundingClientRect()
-              event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`)
-              event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`)
-            }}
-            className={`group relative self-start overflow-hidden bg-white/[0.03] border border-white/10 rounded-3xl p-5 md:p-5 touch-pan-y transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045] ${cardSpotlight}`}
-          >
-            <p className="text-blue-400 text-xs md:text-sm tracking-[0.25em] uppercase mb-6">
-              Operations Dashboard
-            </p>
-
-            <div className="min-h-[72px]">
-              <h3 className="text-3xl font-bold leading-tight">
-                Operations Command Center
-              </h3>
-            </div>
-
-            <div className="relative w-full h-[190px] md:h-[185px] xl:h-[195px] rounded-2xl overflow-hidden border border-white/10 mb-5 bg-[#0d0f14]">
-              <Image
-                src="/operations-dashboard-preview.png"
-                alt="Operations Dashboard Preview"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-contain bg-[#0d0f14] transition duration-700 md:group-hover:scale-[1.015]"
-              />
-
-              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0d0f14] via-transparent to-transparent" />
-            </div>
-
-            <p className="text-sm sm:text-base text-white/60 leading-relaxed">
-              A modern operations dashboard concept for service businesses, featuring quote tracking, customer visibility, job scheduling, and reporting.
-            </p>
-
-            <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors duration-300 md:transition-all md:group-hover:text-white md:group-hover:gap-3">
-              <span>View Live Demo</span>
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                →
+                &rarr;
               </span>
             </div>
           </motion.a>
@@ -754,102 +583,105 @@ export default function Home() {
           HOW WE WORK SECTION
       ===================================================== */}
 
-      <section id="approach" className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
+    <section id="approach" className="border-t border-white/5 scroll-mt-24">
+      <div className="site-container pt-16 pb-22 md:pt-20 md:pb-28">
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-
-        <motion.div
-          initial={revealInitial}
-          whileInView={revealWhileInView}
-          viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
-        >
-
-          <motion.p
-            variants={revealVariant}
-            className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4"
-          >
-            How We Work
-          </motion.p>
-
-          <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.05,
-                },
-              },
-            }}
-          >
-            {"Practical solutions built around how your business actually operates."
-              .split(" ")
-              .map((word) => (
-                <motion.span
-                  key={word}
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 24,
-                      filter: "blur(8px)",
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      filter: "blur(0px)",
-                      transition: {
-                        duration: 0.5,
-                        ease: "easeOut",
-                      },
-                    },
-                  }}
-                  className="inline-block mr-[0.25em]"
-                >
-                  {word}
-                </motion.span>
-              ))}
-          </motion.h2>
-
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1fr)] gap-10 lg:gap-12 xl:gap-16 items-start">
 
           <motion.div
-            variants={processListReveal}
             initial={revealInitial}
             whileInView={revealWhileInView}
-            viewport={{ once: true, amount: 0.2, margin: "0px 0px -100px 0px" }}
-            className="space-y-6"
+            viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
           >
 
-            {[
-              {
-                title: "01. Identify",
-                body: "We start by understanding the painful, repetitive, or outdated processes slowing your team down.",
-              },
-              {
-                title: "02. Simplify",
-                body: "We map cleaner workflows, remove unnecessary steps, and define what should be automated or improved.",
-              },
-              {
-                title: "03. Build",
-                body: "We create custom tools, reporting systems, automations, or digital workflows that fit your business.",
-              },
-              {
-                title: "04. Improve",
-                body: "We refine the solution over time so it continues supporting your operations as the business grows.",
-              },
-            ].map((item) => (
-              <motion.div key={item.title} variants={gentleRise} className="border-l border-blue-500/50 pl-6">
-                <h3 className="text-2xl font-semibold mb-1 md:mb-2">
-                  {item.title}
-                </h3>
+            <motion.p
+              variants={revealVariant}
+              className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4"
+            >
+              How We Work
+            </motion.p>
 
-                <p className="text-base text-white/55 leading-relaxed">
-                  {item.body}
-                </p>
-              </motion.div>
-            ))}
+            <motion.h2
+              className="max-w-2xl text-3xl sm:text-4xl md:text-5xl font-bold leading-tight"
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.05,
+                  },
+                },
+              }}
+            >
+              {"Practical solutions built around how your business actually operates."
+                .split(" ")
+                .map((word) => (
+                  <motion.span
+                    key={word}
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 24,
+                        filter: "blur(8px)",
+                      },
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        transition: {
+                          duration: 0.5,
+                          ease: "easeOut",
+                        },
+                      },
+                    }}
+                    className="inline-block mr-[0.25em]"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+            </motion.h2>
 
           </motion.div>
+
+            <motion.div
+              variants={processListReveal}
+              initial={revealInitial}
+              whileInView={revealWhileInView}
+              viewport={{ once: true, amount: 0.2, margin: "0px 0px -100px 0px" }}
+              className="space-y-5 md:space-y-6"
+            >
+
+              {[
+                {
+                  title: "01. Identify",
+                  body: "We start by understanding the painful, repetitive, or outdated processes slowing your team down.",
+                },
+                {
+                  title: "02. Simplify",
+                  body: "We map cleaner workflows, remove unnecessary steps, and define what should be automated or improved.",
+                },
+                {
+                  title: "03. Build",
+                  body: "We create custom tools, reporting systems, automations, or digital workflows that fit your business.",
+                },
+                {
+                  title: "04. Improve",
+                  body: "We refine the solution over time so it continues supporting your operations as the business grows.",
+                },
+              ].map((item) => (
+                <motion.div key={item.title} variants={gentleRise} className="border-l border-blue-500/50 pl-6">
+                  <h3 className="text-2xl font-semibold mb-1 md:mb-2">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-base text-white/55 leading-relaxed">
+                    {item.body}
+                  </p>
+                </motion.div>
+              ))}
+
+            </motion.div>
+
+          </div>
 
         </div>
 
@@ -859,322 +691,167 @@ export default function Home() {
           WHO WE HELP SECTION
       ===================================================== */}
 
-      <section id="who-we-help" className="max-w-7xl mx-auto px-6 pt-18 pb-24 md:pt-24 md:pb-32 scroll-mt-20 border-t border-white/5">
+      <section id="who-we-help" className="border-t border-white/5 scroll-mt-24">
+        <div className="site-container pt-16 pb-22 md:pt-20 md:pb-28">
 
-        <motion.div
-          variants={revealVariant}
-          initial={revealInitial}
-          whileInView={revealWhileInView}
-          viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
-          className="mb-8 md:mb-10"
-        >
+          <motion.div
+            variants={revealVariant}
+            initial={revealInitial}
+            whileInView={revealWhileInView}
+            viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+            className="mb-8 md:mb-10"
+          >
 
-          <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
-            Who We Help
-          </p>
+            <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
+              Who We Help
+            </p>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-[1.02]">
-            Built for businesses that have outgrown manual processes.
-          </h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-[1.02]">
+              Built for businesses that have outgrown manual processes.
+            </h2>
 
-        </motion.div>
+          </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div
+            variants={cardGridReveal}
+            initial={revealInitial}
+            whileInView={revealWhileInView}
+            viewport={{ once: true, amount: 0.18, margin: "0px 0px -80px 0px" }}
+            className="grid grid-cols-1 gap-8 border-t border-white/10 pt-8 md:grid-cols-3 md:gap-10 lg:gap-14"
+          >
 
-          {[
-            {
-              title: "Service Businesses",
-              body: "Contractors, field teams, and growing service companies looking to modernize quoting and operations.",
-            },
-            {
-              title: "Operational Teams",
-              body: "Teams struggling with disconnected workflows, repetitive reporting, and inefficient administrative processes.",
-            },
-            {
-              title: "Growing Companies",
-              body: "Businesses needing scalable systems, automation, and cleaner operational visibility as they grow.",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="bg-white/[0.03] border border-white/10 rounded-3xl p-4 md:p-6 transition-colors duration-300 md:transition-all md:hover:-translate-y-1 md:hover:border-white/20 md:hover:bg-white/[0.045]"
-            >
-              <h3 className="text-2xl font-semibold mb-3">
-                {item.title}
-              </h3>
+            {[
+              {
+                title: "Service Businesses",
+                body: "Contractors, field teams, and growing service companies looking to modernize quoting and operations.",
+              },
+              {
+                title: "Operational Teams",
+                body: "Teams struggling with disconnected workflows, repetitive reporting, and inefficient administrative processes.",
+              },
+              {
+                title: "Growing Companies",
+                body: "Businesses needing scalable systems, automation, and cleaner operational visibility as they grow.",
+              },
+            ].map((item) => (
+              <motion.div
+                key={item.title}
+                variants={gentleRise}
+                className="group transition-transform duration-300 md:hover:-translate-y-1"
+              >
+                <div className="mb-5 h-px w-12 bg-blue-400/60 transition-all duration-300 md:group-hover:w-20" />
 
-              <p className="text-base text-white/60 leading-relaxed">
-                {item.body}
-              </p>
-            </div>
-          ))}
+                <h3 className="text-xl font-semibold mb-3 transition-colors duration-300 md:text-2xl md:group-hover:text-blue-100">
+                  {item.title}
+                </h3>
 
+                <p className="text-base text-white/60 leading-relaxed transition-colors duration-300 md:group-hover:text-white/72">
+                  {item.body}
+                </p>
+              </motion.div>
+            ))}
+
+          </motion.div>
         </div>
-
       </section>
 
       {/* =====================================================
           CONTACT SECTION
       ===================================================== */}
 
-      <section id="contact" className="max-w-7xl mx-auto px-6 pt-20 pb-16 scroll-mt-20">
+      <section id="contact" className="site-container pt-18 pb-12 md:pb-14 scroll-mt-24">
 
-        <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-5 md:p-12 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.04]">
+        <div className="border-y border-white/10 py-10 md:grid md:grid-cols-[minmax(0,1fr)_minmax(260px,340px)] md:items-end md:gap-10 lg:gap-14 md:py-14">
 
-          <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
-            Let&apos;s Improve Your Workflow
-          </p>
+          <div>
+            <p className="uppercase tracking-[0.28em] text-xs md:text-sm text-blue-400 mb-4">
+              Make Your Workday Easier
+            </p>
 
-          <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-tight"
-            initial={revealInitial}
-            whileInView={revealWhileInView}
-            viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  staggerChildren: 0.045,
+            <motion.h2
+              className="text-3xl sm:text-4xl md:text-5xl font-bold max-w-3xl leading-tight"
+              initial={revealInitial}
+              whileInView={revealWhileInView}
+              viewport={{ once: true, amount: 0.2, margin: "0px 0px -120px 0px" }}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.045,
+                  },
                 },
-              },
-            }}
-          >
-            {"Have a painful process that needs a better system?"
-              .split(" ")
-              .map((word, index) => (
-                <motion.span
-                  key={`${word}-${index}`}
-                  variants={{
-                    hidden: {
-                      opacity: 0,
-                      y: 20,
-                      filter: "blur(8px)",
-                    },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      filter: "blur(0px)",
-                      transition: {
-                        duration: 0.45,
-                        ease: "easeOut",
+              }}
+            >
+              {"Have a painful process that needs a better system?"
+                .split(" ")
+                .map((word, index) => (
+                  <motion.span
+                    key={`${word}-${index}`}
+                    variants={{
+                      hidden: {
+                        opacity: 0,
+                        y: 20,
+                        filter: "blur(8px)",
                       },
-                    },
-                  }}
-                  className="inline-block mr-[0.25em]"
-                >
-                  {word}
-                </motion.span>
-              ))}
-          </motion.h2>
+                      visible: {
+                        opacity: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        transition: {
+                          duration: 0.45,
+                          ease: "easeOut",
+                        },
+                      },
+                    }}
+                    className="inline-block mr-[0.25em]"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+            </motion.h2>
 
-          <p className="mt-6 text-lg text-white/60 leading-relaxed max-w-2xl">
-            Let’s talk through where your business is losing time, duplicating work,
-            or relying on outdated workflows.
-          </p>
+            <p className="mt-6 text-lg text-white/60 leading-relaxed max-w-2xl">
+            Tell us what is slowing your team down. We&apos;ll help you turn the repetitive admin work, manual follow-ups, and spreadsheet chaos into a system that saves time every week.
+            </p>
+          </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 mt-10">
+          <div className="mt-10 max-w-sm border-t border-white/10 pt-6 md:mt-0 md:border-l md:border-t-0 md:pl-8 md:pt-0">
+            <p className="mb-5 text-sm leading-relaxed text-white/55">
+              Send a quick note about what is taking too much time. We&apos;ll figure out what can be simplified, automated, or rebuilt.
+            </p>
 
-            <button
-              type="button"
-              onClick={openContactForm}
-              className="group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3.5 font-medium text-center transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:bg-blue-500 active:translate-y-0"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                <span>Get in Touch</span>
+            <div className="flex flex-col sm:flex-row md:flex-col gap-4">
 
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
+              <a
+                href="/contact"
+                className="cta-sheen group relative overflow-hidden rounded-xl bg-blue-600 px-6 py-3.5 font-medium text-center transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:bg-blue-500 md:hover:shadow-[0_14px_34px_rgba(37,99,235,0.22)] active:translate-y-0"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <span>Get in Touch</span>
+
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">
+                    &rarr;
+                  </span>
                 </span>
-              </span>
-            </button>
+              </a>
 
-            <a
-              href="#work"
-              className="group rounded-xl border border-white/10 px-6 py-3.5 font-medium text-center text-white/80 transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:border-white/25 md:hover:text-white active:translate-y-0"
-            >
-              View Examples
-            </a>
+              <a
+                href="/demos"
+                className="group rounded-xl border border-white/10 px-6 py-3.5 font-medium text-center text-white/80 transition-colors duration-300 md:transition-all md:hover:-translate-y-[1px] md:hover:border-white/25 md:hover:text-white active:translate-y-0"
+              >
+                View Demos
+              </a>
 
+            </div>
           </div>
 
         </div>
 
       </section>
 
-      {/* =====================================================
-          FOOTER
-      ====================================================== */}
-
-      <footer className="max-w-7xl mx-auto px-6 pb-4 md:pb-10">
-        <div className="border-t border-white/10 pt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between text-sm text-white/55">
-          <div>
-            <p className="text-white/55">
-              © 2026 Auxilium Business Solutions.
-            </p>
-
-            <p className="mt-2 max-w-xl leading-relaxed">
-              Custom operational tools, workflow automation, and reporting systems for growing businesses.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-5">
-            <a
-              href="mailto:hello@auxiliumbusiness.com"
-              className="transition hover:text-white"
-            >
-              Email
-            </a>
-
-            <a
-              href="https://github.com/amerynseibold"
-              target="_blank"
-              rel="noreferrer"
-              className="transition hover:text-white"
-            >
-              GitHub
-            </a>
-
-            <a
-              href="#work"
-              className="transition hover:text-white"
-            >
-              Work
-            </a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
       </main>
 
-      {contactFormOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/70 px-4 pb-6 pt-[calc(var(--mobile-safe-area-shield-height)+4.75rem)] backdrop-blur-sm md:items-center md:p-6"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="contact-form-title"
-          onClick={closeContactForm}
-        >
-          <motion.div
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="max-h-[calc(100dvh-var(--mobile-safe-area-shield-height)-6rem)] w-full max-w-xl overflow-y-auto rounded-3xl border border-white/10 bg-[#0b0d12] p-5 text-white shadow-2xl md:max-h-[calc(100vh-3rem)] md:p-8"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="mb-6 flex items-start justify-between gap-4">
-              <div>
-                <p className="mb-3 text-xs uppercase tracking-[0.28em] text-blue-400">
-                  Contact Auxilium
-                </p>
-
-                <h2 id="contact-form-title" className="text-2xl font-bold md:text-3xl">
-                  How can we help?
-                </h2>
-              </div>
-
-              <button
-                type="button"
-                onClick={closeContactForm}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 text-xl leading-none text-white/60 transition hover:border-white/25 hover:text-white"
-                aria-label="Close contact form"
-              >
-                x
-              </button>
-            </div>
-
-            {contactFormStatus === "success" ? (
-              <div className="rounded-2xl border border-green-400/20 bg-green-400/10 p-5">
-                <h3 className="text-xl font-semibold text-green-100">
-                  Message sent.
-                </h3>
-
-                <p className="mt-2 text-sm leading-relaxed text-white/65">
-                  Thanks for reaching out. I&apos;ll review it and follow up with you soon.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={closeContactForm}
-                  className="mt-5 rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-zinc-200"
-                >
-                  Close
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <label className="block">
-                    <span className="mb-2 block text-sm text-white/65">Name</span>
-                    <input
-                      name="name"
-                      required
-                      autoComplete="name"
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
-                      placeholder="Your name"
-                    />
-                  </label>
-
-                  <label className="block">
-                    <span className="mb-2 block text-sm text-white/65">Email</span>
-                    <input
-                      name="email"
-                      type="email"
-                      required
-                      autoComplete="email"
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
-                      placeholder="you@company.com"
-                    />
-                  </label>
-                </div>
-
-                <label className="block">
-                  <span className="mb-2 block text-sm text-white/65">Company</span>
-                  <input
-                    name="company"
-                    autoComplete="organization"
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
-                    placeholder="Company name"
-                  />
-                </label>
-
-                <label className="block">
-                  <span className="mb-2 block text-sm text-white/65">What’s slowing things down?</span>
-                  <textarea
-                    name="message"
-                    required
-                    rows={5}
-                    className="w-full resize-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-blue-400/60"
-                    placeholder="Tell us about the tasks, processes, or daily headaches that are taking up too much time in your business."
-                  />
-                </label>
-
-                {contactFormStatus === "error" && (
-                  <p className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
-                    {contactFormError}
-                  </p>
-                )}
-
-                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
-                  <button
-                    type="button"
-                    onClick={closeContactForm}
-                    className="rounded-xl border border-white/10 px-5 py-3 font-medium text-white/70 transition hover:border-white/25 hover:text-white"
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    type="submit"
-                    disabled={contactFormStatus === "submitting"}
-                    className="rounded-xl bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {contactFormStatus === "submitting" ? "Sending..." : "Send Message"}
-                  </button>
-                </div>
-              </form>
-            )}
-          </motion.div>
-        </div>
-      )}
     </>
   )
 }
