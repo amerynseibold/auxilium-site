@@ -136,7 +136,7 @@ export default function DemosPage() {
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className={`transition duration-700 md:group-hover:scale-[1.015] ${
                       project.title === "Operations Command Center"
-                        ? "object-contain bg-[#0d0f14]"
+                        ? "object-cover object-top bg-[#0d0f14]"
                         : "object-contain bg-white"
                     }`}
                   />

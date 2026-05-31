@@ -463,7 +463,7 @@ export default function Home() {
                 alt="Operations Dashboard Preview"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-contain transition duration-700 md:group-hover:scale-[1.015]"
+                className="object-cover object-top transition duration-700 md:group-hover:scale-[1.015]"
               />
 
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-white/10 transition duration-500 group-hover:ring-white/20" />
